@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NetBuff.Misc;
+using NUnit.Framework;
 using Solis.Data;
 using Solis.Packets;
 using Solis.Player;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Solis.Circuit
 {
@@ -14,7 +16,7 @@ namespace Solis.Circuit
         [Header("SETTINGS")]
         public float radius = 3f;
         public float minDistance = 1.24f;
-        [Range(0,1)] [Tooltip("The dot product threshold for player facing the object")]
+        [UnityEngine.Range(0,1)] [Tooltip("The dot product threshold for player facing the object")]
         public float dotThreshold = 0.5f;
         public CharacterTypeFilter playerTypeFilter = CharacterTypeFilter.Both;
 
@@ -22,6 +24,8 @@ namespace Solis.Circuit
         private LayerMask _layerMask;
         private int _originalLayer, _ignoreRaycastLayer = 2;
         private Vector3 _objectCenter;
+        [SerializeField] [Tooltip("The parent object that will be ignored by the raycast, don't add the parent object to the list")]
+        private List<Collider> ignoreColliders = new List<Collider>();
 
 #if UNITY_EDITOR
         private Transform _playerTransform;
@@ -85,6 +89,9 @@ namespace Solis.Circuit
             SetGameLayerRecursive(this.gameObject, _originalLayer);
             if (hit.collider != null)
             {
+                if (hit.collider.transform == gameObject.transform.parent) return true;
+                if (ignoreColliders.Contains(hit.collider)) return true;
+
                 Debug.Log($"{hit.transform.name} is between the {player.CharacterType} and {this.name}", hit.collider.gameObject);
                 return false;
             }
