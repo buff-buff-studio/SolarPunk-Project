@@ -74,6 +74,8 @@ namespace Solis.Circuit
             _playerTransform = player.body;
 #endif
 
+            return true;
+
             // Check if player is facing the object
             var directionToTarget = _objectCenter - player.body.position;
             var dot = Vector3.Dot(player.body.forward, directionToTarget.normalized);

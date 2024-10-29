@@ -266,7 +266,7 @@ namespace Solis.Misc.Props
         {
             transform.position = boxPlace.transform.position;
             transform.rotation = Quaternion.identity;
-            rb.isKinematic = true;
+            //rb.isKinematic = true;
             boxPlace.gameObject.SetActive(false);
             _boxPlace = boxPlace.gameObject;
         }

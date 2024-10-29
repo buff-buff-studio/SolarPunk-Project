@@ -55,6 +55,8 @@ namespace Misc.Props
             if (!playerTypeFilter.Filter(player.CharacterType))
                 return false;
 
+            return true;
+
             // Check if player is facing the object
             var directionToTarget = transform.position - player.body.position;
             var dot = Vector3.Dot(player.body.forward, directionToTarget.normalized);
