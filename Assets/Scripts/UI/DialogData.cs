@@ -60,13 +60,6 @@ namespace UI
         Alert,
         E
     }
-    
-    [Serializable]
-    public struct CharacterAndEmotion
-    {
-        public CharacterTypeEmote characterType;
-        public Emotion emotion;
-    }
 
     [Serializable]
     public class EffectsAndWords
@@ -83,7 +76,7 @@ namespace UI
     [Serializable]
     public class DialogStruct
     {
-        public CharacterAndEmotion characterType;
+        public CharacterTypeEmote characterType;
         
         private TextMeshProUGUI _textField;
         [TextArea]

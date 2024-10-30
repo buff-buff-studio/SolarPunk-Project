@@ -31,21 +31,20 @@ public enum CharacterTypeEmote
     Diluvio = 2,
     None = 3
 }
-[Serializable]
-public struct EmotionsAndImages
-{
-    public Emotion emotion;
-    public Sprite image;
-}
+
 [Serializable]
 public struct CharacterTypeAndImages
 {
     public CharacterTypeEmote characterType;
-    public List<EmotionsAndImages> emotesAndImages;
+    public Sprite image;
 }
 [Serializable]
 public class EmojisStructure
 {
+#if UNITY_EDITOR
+    [HideInInspector]
+    public string EmojiNameDisplay;
+#endif
     public Emojis emoji;
     public string emojiNameDisplay;
     public string emojiNameInSpriteEditor;
@@ -111,7 +110,13 @@ namespace _Scripts.UI
             _instance = this;
             nextImage.TryGetComponent(out nextImageAnimator);
         }
-        
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            emojisStructure.ForEach(c => c.EmojiNameDisplay = c.emoji.ToString());
+        }
+#endif
         #endregion
         
 
@@ -121,7 +126,7 @@ namespace _Scripts.UI
             index.Value = 0;
 
             MulticamCamera.Instance!.SetDialogueFocus(
-                currentDialog.Value.currentDialog.dialogs[index.Value].characterType.characterType);
+                currentDialog.Value.currentDialog.dialogs[index.Value].characterType);
         }
 
         public bool OnClickDialog(PlayerInputPackage playerInputPackage, int i)
@@ -172,7 +177,7 @@ namespace _Scripts.UI
             {
                 if (nextImage.activeSelf) nextImageAnimator.Play("NextDialogClose");
                 IsDialogPlaying = true;
-                _characterThatIsTalking = currentDialog.Value.currentDialog.dialogs[index.Value].characterType.characterType;
+                _characterThatIsTalking = currentDialog.Value.currentDialog.dialogs[index.Value].characterType;
                 TypeWriteText(currentDialog.Value.currentDialog.dialogs[index.Value], () =>
                 {
                     if (nextImage.activeSelf) nextImageAnimator.Play("NextDialogOpen");
@@ -294,14 +299,14 @@ namespace _Scripts.UI
             return matches;
         }
 
-        private void EnterImage(CharacterAndEmotion characterType)
+        private void EnterImage(CharacterTypeEmote characterType)
         {
             characterImage.gameObject.SetActive(true);
-            var choosed = characterTypesAndEmotions.FirstOrDefault(c => c.characterType == characterType.characterType);
-            var sprite = choosed.emotesAndImages.FirstOrDefault(c => c.emotion == characterType.emotion).image;
+            var choosed = characterTypesAndEmotions.FirstOrDefault(c => c.characterType == characterType);
+            var sprite = choosed.image;
             characterImage.sprite = sprite;
-            characterName.text = characterType.characterType.ToString();
-            MulticamCamera.Instance!.SetDialogueFocus(characterType.characterType);
+            characterName.text = characterType.ToString();
+            MulticamCamera.Instance!.SetDialogueFocus(characterType);
         }
 
         public override void OnSceneLoaded(int sceneId)

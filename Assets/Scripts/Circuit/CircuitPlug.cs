@@ -26,6 +26,8 @@ namespace Solis.Circuit
         private ICircuitConnection[] _connections = Array.Empty<ICircuitConnection>();
         #endregion
 
+        public bool IsDataPlug => gameObject.name.Contains("Data", StringComparison.OrdinalIgnoreCase);
+
         #region Public Properties
         /// <summary>
         /// The connections that this plug is connected to

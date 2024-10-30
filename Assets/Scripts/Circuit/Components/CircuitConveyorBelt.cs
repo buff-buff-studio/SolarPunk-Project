@@ -7,18 +7,23 @@ namespace Solis.Circuit.Components
 {
     public class CircuitConveyorBelt : CircuitComponent
     {
-        private Rigidbody _rigidbody;
+        private Rigidbody _rb;
         public float speed = 3f;
-        
+        public float acceleration = 5f;
+        public CircuitPlug input;
+        public CircuitPlug data;
+
         public BoolNetworkValue isOnValue = new BoolNetworkValue();
         public FloatNetworkValue speedValue = new FloatNetworkValue();
+
+        private float _speed;
         
         protected override void OnEnable()
         {
             WithValues(isOnValue, speedValue);
             base.OnEnable();
-            _rigidbody = gameObject.AddComponent<Rigidbody>();
-            _rigidbody.isKinematic = true;
+            _rb = gameObject.AddComponent<Rigidbody>();
+            _rb.isKinematic = true;
             
             if (HasAuthority)
                 speedValue.Value = isOnValue.Value ? speed : 0f;
@@ -27,7 +32,7 @@ namespace Solis.Circuit.Components
         protected override void OnDisable()
         {
             base.OnDisable();
-            Destroy(_rigidbody);
+            Destroy(_rb);
         }
 
         private void OnDrawGizmos()
@@ -54,12 +59,16 @@ namespace Solis.Circuit.Components
 
         public override IEnumerable<CircuitPlug> GetPlugs()
         {
-            yield break;
+            yield return input;
+            yield return data;
         }
 
         protected override void OnRefresh()
         {
-            
+            if (!HasAuthority)
+                return;
+            isOnValue.Value = input.ReadOutput().power > 0.5f;
+            _speed = data.ReadOutput().power < 0.5f ? speed : -speed;
         }
 
         private void FixedUpdate()
@@ -67,12 +76,12 @@ namespace Solis.Circuit.Components
             if (!HasAuthority)
                 return;
 
-            speedValue.Value = Mathf.Lerp(speedValue.Value,  isOnValue.Value ? speed : 0f, Time.fixedDeltaTime * 5f);
+            speedValue.Value = Mathf.Lerp(speedValue.Value,  isOnValue.Value ? _speed : 0f, Time.fixedDeltaTime * acceleration);
 
-            var delta = transform.forward * (speed * Time.fixedDeltaTime);
-            _rigidbody.position -= delta;
+            var delta = transform.forward * (speedValue.Value * Time.fixedDeltaTime);
+            _rb.position -= delta;
             // ReSharper disable once Unity.InefficientPropertyAccess
-            _rigidbody.MovePosition(_rigidbody.position + delta);
+            _rb.MovePosition(_rb.position + delta);
         }
     }
 }

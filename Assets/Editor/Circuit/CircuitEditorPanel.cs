@@ -445,7 +445,12 @@ namespace Editor.Circuit
                             if (distance == 0)
                                 Handles.color = Color.white;
                             else
-                                Handles.color = plug.type is CircuitPlugType.Input ? Color.green : Color.red;
+                            {
+                                if(plug.IsDataPlug)
+                                    Handles.color = Color.cyan;
+                                else
+                                    Handles.color = plug.type is CircuitPlugType.Input ? Color.green : Color.red;
+                            }
                             _DrawSelector(position, 0.15f, plug.acceptMultipleConnections);
                             break;
 
@@ -461,7 +466,8 @@ namespace Editor.Circuit
                     var dot = Vector3.Dot(camDir, (position - camPos).normalized);
                     if (dot < 0)
                         continue;
-                    
+
+                    var plugType = plug.IsDataPlug ? "Data" : plug.type.ToString();
                     var physicalCableHolder = plug.GetComponentInChildren<Rigidbody>();
                     
                     if (physicalCableHolder != null)
@@ -470,7 +476,7 @@ namespace Editor.Circuit
           
                         Handles.BeginGUI();
                         GUI.Box(hRect, GUIContent.none, _styleSceneGUI);
-                        GUI.Label(hRect, $"Physical Connector\nType: {plug.type}", _styleSceneGUIText);
+                        GUI.Label(hRect, $"Physical Connector\nType: {plugType}", _styleSceneGUIText);
                         Handles.EndGUI();
                         continue;
                     }
@@ -488,8 +494,8 @@ namespace Editor.Circuit
                     {
                         var valid = isPhysicalCable.Holder != null && isPhysicalCable.PlugA != null;
                         var text = acceptMultipleConnections
-                            ? $"Type: {plug.type}\nConnections: {plug.Connections.Length}"
-                            : $"Type: {plug.type}\nConnected: {(valid ? "Yes" : "No")}";
+                            ? $"Type: {plugType}\nConnections: {plug.Connections.Length}"
+                            : $"Type: {plugType}\nConnected: {(valid ? "Yes" : "No")}";
                         GUI.Label(rect, text, _styleSceneGUIText);
 
                         var buttonRect = new Rect(rect.x + (width - buttonSize * 4f + 10) / 2f,
@@ -536,8 +542,8 @@ namespace Editor.Circuit
                     else
                     {
                         var text = acceptMultipleConnections
-                            ? $"Type: {plug.type}\nConnections: {plug.Connections.Length}"
-                            : $"Type: {plug.type}\nConnected: {(plug.Connections.Length == 0 ? "No" : "Yes")}";
+                            ? $"Type: {plugType}\nConnections: {plug.Connections.Length}"
+                            : $"Type: {plugType}\nConnected: {(plug.Connections.Length == 0 ? "No" : "Yes")}";
                         GUI.Label(rect, text, _styleSceneGUIText);
                         
                         var buttonRect = new Rect(rect.x + (width - buttonSize * 4f + 10) / 2f,
