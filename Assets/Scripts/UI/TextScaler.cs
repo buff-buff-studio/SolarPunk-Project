@@ -52,6 +52,11 @@ namespace DefaultNamespace
             }
         }
 
+        public void ClearText()
+        {
+            
+        }
+
         private void SetProgress()
         {
             if (!isWriting) return;
