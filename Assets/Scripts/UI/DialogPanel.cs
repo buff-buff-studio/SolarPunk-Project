@@ -194,7 +194,7 @@ namespace _Scripts.UI
                 charactersReady.Value = 0;
                 hasSkipped.Clear();
             }
-         
+            textWriterSingle.ClearText();
             IsDialogPlaying = false;
             orderTextGameObject.SetActive(false);
             nextImage.SetActive(false);
