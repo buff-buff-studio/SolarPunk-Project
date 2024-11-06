@@ -198,16 +198,28 @@ namespace Solis.Player
         
         public FloatNetworkValue grapplingHook = new(0f);
         public Vector3NetworkValue grapplingHookPosition = new(Vector3.zero);
+        public GameObjectNetworkValue grapplingHookRigidbodyObject = new(null);
         #endregion
         
         #region Unity Callbacks
 
         protected virtual void OnEnable()
         {
-            WithValues(isRespawning, isPaused, username, grapplingHookPosition, grapplingHook);
+            WithValues(isRespawning, isPaused, username, grapplingHookPosition, grapplingHook, grapplingHookRigidbodyObject);
             isRespawning.OnValueChanged += _OnRespawningChanged;
             isPaused.OnValueChanged += OnPausedChanged;
-            grapplingHook.OnValueChanged += (old, @new) => grapplingLine.enabled = @new > 0;
+            grapplingHook.OnValueChanged += (old, @new) =>
+            {
+                var hook = grapplingLine.enabled = @new > 0;
+
+                if(HasAuthority)
+                    return;
+                
+                if (hook)
+                    state = State.GrapplingHook;
+                else if (old > 0)
+                    state = State.Normal;
+            };
 
             PauseManager.OnPause += _OnPause;
 
@@ -303,6 +315,11 @@ namespace Solis.Player
 
         private void FixedUpdate()
         {
+            if (IsServer && grapplingHook.Value > 0.975f && grapplingHookRigidbodyObject.Value != null)
+            {
+                Debug.Log("Hooking onto some rigidbody");
+            }
+            
             if (!HasAuthority || !IsOwnedByClient)
             {
                 body.localEulerAngles = new Vector3(0,
@@ -530,6 +547,14 @@ namespace Solis.Player
                     attachedTo = hit.transform;
                     attachedToLocalPoint = attachedTo.InverseTransformPoint(hit.point);
                     state = State.GrapplingHook;
+
+                    if (attachedTo.TryGetComponent(out Rigidbody rigidbody) &&
+                        attachedTo.TryGetComponent(out NetworkIdentity _))
+                    {
+                        grapplingHookRigidbodyObject.Value = rigidbody.gameObject;
+                    }
+                    else
+                        grapplingHookRigidbodyObject.Value = null;
                 }
                 else
                 {
@@ -550,6 +575,11 @@ namespace Solis.Player
             grapplingHook.Value = 0f;
         }
 
+        protected virtual void _HandleGrapplingHookRigidbody()
+        {
+            
+        }
+
         protected virtual void _HandleGrapplingHook()
         {
             var deltaTime = Time.fixedDeltaTime;
@@ -558,33 +588,36 @@ namespace Solis.Player
 
             _HandleGrapplingHookRemote();
 
-            var delta = grapplingHookPosition.Value - transform.position;
-            var direction = delta.normalized;
-            var v = 10 * grapplingHook.Value * direction;
-
-            controller.Move(v * deltaTime);
-            velocity = Vector3.zero;
-                
-            if (delta.magnitude < 0.5f)
+            if (grapplingHookRigidbodyObject.Value == null)
             {
-                _ExitGrapplingHook();
-            }
-            else
-            {
-                var targetRotation = Quaternion.LookRotation(delta);
-                var targetEuler = targetRotation.eulerAngles;
+                var delta = grapplingHookPosition.Value - transform.position;
+                var direction = delta.normalized;
+                var v = 10 * grapplingHook.Value * direction;
 
-                transform.eulerAngles = new Vector3(0,
-                    Mathf.LerpAngle(transform.eulerAngles.y, 0, Time.deltaTime * 20), 0);
-                body.localEulerAngles = new Vector3(0,
-                    Mathf.LerpAngle(body.localEulerAngles.y, targetEuler.y, deltaTime * 20), 0);
+                controller.Move(v * deltaTime);
+                velocity = Vector3.zero;
+
+                if (delta.magnitude < 0.5f)
+                {
+                    _ExitGrapplingHook();
+                }
+                else
+                {
+                    var targetRotation = Quaternion.LookRotation(delta);
+                    var targetEuler = targetRotation.eulerAngles;
+
+                    transform.eulerAngles = new Vector3(0,
+                        Mathf.LerpAngle(transform.eulerAngles.y, 0, Time.deltaTime * 20), 0);
+                    body.localEulerAngles = new Vector3(0,
+                        Mathf.LerpAngle(body.localEulerAngles.y, targetEuler.y, deltaTime * 20), 0);
+                }
             }
         }
 
         protected virtual void _HandleGrapplingHookRemote()
         {
             var start = handPosition.position;
-            grapplingLine.SetPositions(new[] {start, Vector3.Lerp(start, attachedTo.TransformPoint(attachedToLocalPoint), grapplingHook.Value)});
+            grapplingLine.SetPositions(new[] {start, Vector3.Lerp(start, grapplingHookPosition.Value, grapplingHook.Value)});
         }
         
         

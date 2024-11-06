@@ -31,7 +31,7 @@ namespace Solis.Player
         protected override void OnEnable()
         {
             base.OnEnable();
-            WithValues(isRespawning, isPaused, username, grapplingHookPosition, grapplingHook, _isSpecialOn);
+            WithValues(isRespawning, isPaused, username, grapplingHookPosition, grapplingHook, grapplingHookRigidbodyObject, _isSpecialOn);
             _isSpecialOn.OnValueChanged += _OnSpecialValueChanged;
         }
 
