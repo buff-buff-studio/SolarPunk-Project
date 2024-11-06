@@ -30,6 +30,7 @@ namespace Solis.Misc.Multicam
 
         [Header("GAMEPLAY")]
         public CinemachineFreeLook gameplayCamera;
+        protected internal bool PlayerFound;
 
         [Header("CINEMATIC")]
         public CinemachineVirtualCamera cinematicCamera;
@@ -124,6 +125,7 @@ namespace Solis.Misc.Multicam
         {
             gameplayCamera.Follow = follow;
             gameplayCamera.LookAt = lookAt;
+            PlayerFound = true;
 
             if(!cinematicCamera)
             {
