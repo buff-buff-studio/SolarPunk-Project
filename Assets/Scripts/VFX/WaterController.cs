@@ -76,9 +76,14 @@ namespace VFX
             if (array == null)
                 array = new float[21];
 
-            array[0] = pipeExits.Length;
+            var l = 0;
             for (var i = 0; i < pipeExits.Length; i++)
             {
+                if (pipeExits[i] is null)
+                    continue;
+                if (pipeExits[i].gameObject.activeInHierarchy == false)
+                    continue;
+
                 var go = pipeExits[i];
                 var pos = go.transform.position;
                 var idx = i * 4 + 1;
@@ -86,7 +91,10 @@ namespace VFX
                 array[idx + 1] = pos.z;
                 array[idx + 2] = go.radius;
                 array[idx + 3] = go.strength;
+                l++;
             }
+
+            array[0] = l;
 
             Shader.SetGlobalFloatArray(_WaterPipeExit, array);
         }

@@ -1,26 +1,61 @@
 using System.Collections;
 using System.Collections.Generic;
+using NetBuff.Misc;
 using Solis.Circuit;
+using Solis.Packets;
 using UnityEngine;
 
-public class CircuitValve : CircuitComponent
+public class CircuitValve : CircuitInteractive
 {
-     public CircuitPlug input;
+     [Header("REFERENCES")]
+     public BoolNetworkValue isOn = new(false);
+     public CircuitPlug output;
+
+     [Header("SETTINGS")] 
      [SerializeField]
-     private GameObject objectToDisable;
+     private Transform valve;
+     [SerializeField]
+     private float valveAngle = 60;
+
+     protected override void OnEnable()
+     {
+         base.OnEnable();
+         WithValues(isOn);
+
+         isOn.OnValueChanged += _OnValueChanged;
+
+         valve.localEulerAngles = new Vector3(270, 0, isOn.Value ? valveAngle : 0);
+     }
+
+     private void _OnValueChanged(bool oldvalue, bool newvalue)
+     {
+         Refresh();
+     }
+
+     protected void Update()
+     {
+         valve.localEulerAngles = Vector3.Lerp(valve.localEulerAngles, new Vector3(270, 0, isOn.Value ? valveAngle : 0), Time.deltaTime * 2);
+     }
 
      public override CircuitData ReadOutput(CircuitPlug plug)
      {
-         return new CircuitData();
+         return new CircuitData(isOn.Value);
      }
 
      public override IEnumerable<CircuitPlug> GetPlugs()
      {
-         yield return input;
+         yield return output;
      }
 
      protected override void OnRefresh()
      {
-         objectToDisable.SetActive(input.ReadOutput().power > 0);
+     }
+
+     protected override bool OnPlayerInteract(PlayerInteractPacket arg1, int arg2)
+     {
+         if (!PlayerChecker(arg1, out var player))
+             return false;
+         isOn.Value = !isOn.Value;
+         return true;
      }
 }
