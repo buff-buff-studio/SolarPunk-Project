@@ -516,7 +516,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5535532644862191047}
+  m_Father: {fileID: 1320936419674065384}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &8313758403032373377
 LineRenderer:
@@ -1293,9 +1293,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4136800555700545090, guid: a55a3791e379dfa42a63dd01f73de466, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8130503521122144198}
-    - targetCorrespondingSourceObject: {fileID: 4136800555700545090, guid: a55a3791e379dfa42a63dd01f73de466, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8604506512918765903}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6778590176504362698, guid: a55a3791e379dfa42a63dd01f73de466, type: 3}
       insertIndex: -1
@@ -1390,6 +1387,11 @@ MonoBehaviour:
     type: 0
   grapplingHookPosition:
     value: {x: 0, y: 0, z: 0}
+    type: 0
+  grapplingHookRigidbodyObject:
+    value:
+      high: 0
+      low: 0
     type: 0
   diluvioPosition: {fileID: 5022831557093566241}
 --- !u!114 &7701133022374915957
@@ -3730,6 +3732,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0fc0bad2254c54340b2ac61172192917, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8879381284835748142}
+    - targetCorrespondingSourceObject: {fileID: 7280922231851295173, guid: 0fc0bad2254c54340b2ac61172192917, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8604506512918765903}
     - targetCorrespondingSourceObject: {fileID: 7280922231851295173, guid: 0fc0bad2254c54340b2ac61172192917, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7886577095704329190}

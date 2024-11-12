@@ -198,7 +198,7 @@ namespace Solis.Player
         
         public FloatNetworkValue grapplingHook = new(0f);
         public Vector3NetworkValue grapplingHookPosition = new(Vector3.zero);
-        public GameObjectNetworkValue grapplingHookRigidbodyObject = new(null);
+        public NetworkIdNetworkValue grapplingHookRigidbodyObject = new(null);
         #endregion
         
         #region Unity Callbacks
@@ -315,9 +315,12 @@ namespace Solis.Player
 
         private void FixedUpdate()
         {
-            if (IsServer && grapplingHook.Value > 0.975f && grapplingHookRigidbodyObject.Value != null)
+            if (IsServer && grapplingHook.Value > 0.975f && grapplingHookRigidbodyObject.Value != NetworkId.Empty)
             {
-                Debug.Log("Hooking onto some rigidbody");
+                var no = GetNetworkObject(grapplingHookRigidbodyObject.Value);
+                var rb = no.GetComponent<Rigidbody>();
+                //rb.velocity = (transform.position - rb.position).normalized * 10;
+                rb.AddForce((transform.position - rb.position).normalized * 15, ForceMode.Force);
             }
             
             if (!HasAuthority || !IsOwnedByClient)
@@ -541,20 +544,20 @@ namespace Solis.Player
             {
                 //raycast grappling hook
                 var camRay = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0));
-                var ray = new Ray(transform.position + camRay.direction, camRay.direction);
+                var ray = new Ray(transform.position + new Vector3(0, controller.height / 2f, 0) + camRay.direction, camRay.direction);
                 if (Physics.Raycast(ray, out var hit, 100))
                 {
                     attachedTo = hit.transform;
                     attachedToLocalPoint = attachedTo.InverseTransformPoint(hit.point);
                     state = State.GrapplingHook;
+                    
+                    grapplingHookRigidbodyObject.Value = NetworkId.Empty;
 
                     if (attachedTo.TryGetComponent(out Rigidbody rigidbody) &&
-                        attachedTo.TryGetComponent(out NetworkIdentity _))
+                        attachedTo.TryGetComponent(out NetworkIdentity ni))
                     {
-                        grapplingHookRigidbodyObject.Value = rigidbody.gameObject;
+                        grapplingHookRigidbodyObject.Value = ni.Id;
                     }
-                    else
-                        grapplingHookRigidbodyObject.Value = null;
                 }
                 else
                 {
@@ -573,6 +576,7 @@ namespace Solis.Player
             state = State.Normal;
 
             grapplingHook.Value = 0f;
+            grapplingHookRigidbodyObject.Value = NetworkId.Empty;
         }
 
         protected virtual void _HandleGrapplingHookRigidbody()
@@ -583,16 +587,16 @@ namespace Solis.Player
         protected virtual void _HandleGrapplingHook()
         {
             var deltaTime = Time.fixedDeltaTime;
-            grapplingHook.Value = Mathf.Lerp(grapplingHook.Value,  1f, deltaTime * 10f);
+            grapplingHook.Value = Mathf.Lerp(grapplingHook.Value, 1f, deltaTime * 10f);
             grapplingHookPosition.Value = attachedTo.TransformPoint(attachedToLocalPoint);
 
             _HandleGrapplingHookRemote();
 
-            if (grapplingHookRigidbodyObject.Value == null)
+            if (grapplingHookRigidbodyObject.Value == NetworkId.Empty)
             {
                 var delta = grapplingHookPosition.Value - transform.position;
                 var direction = delta.normalized;
-                var v = 10 * grapplingHook.Value * direction;
+                var v = 25 * grapplingHook.Value * direction;
 
                 controller.Move(v * deltaTime);
                 velocity = Vector3.zero;
@@ -616,7 +620,7 @@ namespace Solis.Player
 
         protected virtual void _HandleGrapplingHookRemote()
         {
-            var start = handPosition.position;
+            var start = grapplingLine.transform.position;
             grapplingLine.SetPositions(new[] {start, Vector3.Lerp(start, grapplingHookPosition.Value, grapplingHook.Value)});
         }
         
