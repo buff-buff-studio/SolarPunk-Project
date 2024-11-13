@@ -102,6 +102,7 @@ namespace Solis.Player
 
         [Header("HAND")]
         public Transform handPosition;
+        public Transform boxPlacedPosition;
         public CarryableObject carriedObject;
 
 #if UNITY_EDITOR
@@ -201,7 +202,7 @@ namespace Solis.Player
 
         private protected bool CanJumpCut =>
             IsJumping && (transform.position.y - _startJumpPos) >= JumpCutMinHeight;
-        private bool IsPlayerLocked => _isCinematicRunning || isRespawning.Value;
+        private bool IsPlayerLocked => _isCinematicRunning || isRespawning.Value || _isInteracting;
         private Vector3 HeadOffset => headOffset.position;
         private Animator Animator => animator.Animator;
         #endregion
@@ -462,8 +463,15 @@ namespace Solis.Player
                     debugNextBoxPos, carriedObject.objectSize.extents.x,
                     ~LayerMask.GetMask("Box", "CarriedIgnore", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
 
+                var placed = Physics.OverlapBox(
+                    boxPlacedPosition.position, carriedObject.objectSize.extents, carriedObject.transform.rotation,
+                    ~LayerMask.GetMask("Box", "CarriedIgnore", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
+
                 Gizmos.color = size.Length > 0 ? Color.red : Color.green;
                 Gizmos.DrawWireSphere(debugNextBoxPos, carriedObject.objectSize.extents.x);
+
+                Gizmos.color = placed.Length > 0 ? Color.red : Color.green;
+                Gizmos.DrawWireCube(boxPlacedPosition.position, carriedObject.objectSize.extents);
             }
 
             if (Physics.Raycast(transform.position, Vector3.down, out var hit, 1.1f, groundMask))
@@ -507,7 +515,7 @@ namespace Solis.Player
                 case InteractionType.None:
                     animator.SetFloat("Interaction", 0);
                     Debug.Log("Maybe you're interacting nothing");
-                    return;
+                    break;
                 case InteractionType.Box:
                     animator.SetFloat("Interaction", 1);
                     break;
@@ -686,7 +694,19 @@ namespace Solis.Player
         {
             if (SolisInput.GetKeyDown("Interact") && _interactTimer <= 0 && IsGrounded)
             {
-                //animator.SetTrigger("Punch");
+                if(_isCarrying)
+                {
+                    var size = Physics.OverlapSphere(
+                        boxPlacedPosition.position, carriedObject.objectSize.extents.x,
+                        ~LayerMask.GetMask("Box", "CarriedIgnore", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
+
+                    if (size.Length > 0)
+                    {
+                        Debug.LogWarning(CharacterType.ToString() + " is trying to place a box inside of " + size[0].gameObject.name, size[0]);
+                        return;
+                    }
+                }
+
                 _waitingForInteract = true;
                 _interactTimer = InteractCooldown;
 

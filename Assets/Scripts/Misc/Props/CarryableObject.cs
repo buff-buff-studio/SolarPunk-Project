@@ -22,6 +22,7 @@ namespace Solis.Misc.Props
 
         private PlayerControllerBase playerHolding;
         private Rigidbody rb;
+        private Transform _originalParent;
         
         #endregion
 
@@ -46,6 +47,7 @@ namespace Solis.Misc.Props
             _collider = GetComponentInChildren<Collider>();
             _initialPosition = transform.position;
             objectSize = _collider.GetComponentInChildren<MeshRenderer>().bounds;
+            _originalParent = transform.parent;
         }
 
         protected override void OnEnable()
@@ -72,8 +74,8 @@ namespace Solis.Misc.Props
             var pos = ht.position;
             var fw = ht.forward;
             var dt = Time.deltaTime * 50f;
-            transform.position = Vector3.MoveTowards(transform.position, pos, dt);
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(fw), dt);
+            //transform.position = Vector3.MoveTowards(transform.position, pos, dt);
+            //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(fw), dt);
         }
 
         private void OnTriggerEnter(Collider col)
@@ -101,11 +103,15 @@ namespace Solis.Misc.Props
                     return;
 
                 if (grabPacket.HandId == null)
+                {
                     playerHolding = null;
+                    transform.parent = _originalParent;
+                }
                 else
                 {
                     NetworkId.TryParse(grabPacket.HandId, out var handId);
                     playerHolding = GetNetworkObject((NetworkId)handId).GetComponent<PlayerControllerBase>();
+                    transform.parent = playerHolding.handPosition;
                 }
             }
             else if(packet is PlayerDeathPacket deathPacket)
@@ -167,7 +173,8 @@ namespace Solis.Misc.Props
                 if (playerHolding)
                 {
                     transform.position = playerHolding.handPosition.position;
-                    transform.rotation = playerHolding.handPosition.rotation;
+                    //FAzer com que a face mais proxima do player olhe para ele
+                    transform.rotation = Quaternion.LookRotation(playerHolding.handPosition.forward);
 
                     if (TryGetComponent(out MagneticProp prop))
                         prop.cantBeMagnetized.Value = true;
@@ -223,6 +230,7 @@ namespace Solis.Misc.Props
             isOn.Value = true;
             player.carriedObject = this;
             player.PlayInteraction(InteractionType.Box);
+            transform.parent = player.handPosition;
             ServerBroadcastPacket(new CarryableObjectGrabPacket
             {
                 Id = this.Id,
@@ -236,6 +244,7 @@ namespace Solis.Misc.Props
         {
             playerHolding = null;
             isOn.Value = false;
+            transform.parent = _originalParent;
             CheckIfThereIsPlace();
             ServerBroadcastPacket(new CarryableObjectGrabPacket
             {
