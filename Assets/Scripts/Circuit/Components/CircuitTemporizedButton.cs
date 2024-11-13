@@ -75,6 +75,7 @@ namespace Solis.Circuit.Components
             if (!PlayerChecker(arg1, out var player))
                 return false;
 
+            player.PlayInteraction(InteractionType.Button);
             isOn.Value = true;
             _timeOnCounter = timeOn;
             onToggleComponent?.Invoke();

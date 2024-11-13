@@ -68,6 +68,8 @@ namespace Solis.Circuit.Components
             if (!PlayerChecker(arg1, out var player))
                 return false;
 
+            player.PlayInteraction(InteractionType.Scanner);
+
             if(canBeTurnedOff) isOn.Value = !isOn.Value;
             else isOn.Value = true;
             onToggleComponent?.Invoke();

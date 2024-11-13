@@ -4156,6 +4156,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10b33ec1af834e6ba321eb1a22788411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &3799068514059352170 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8437130702701764430, guid: 9592165b6127f3340abdb74110eb30d3, type: 3}
+  m_PrefabInstance: {fileID: 4490171277030168792}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4168912144533225267 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9592165b6127f3340abdb74110eb30d3, type: 3}
@@ -4176,11 +4181,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2195862425273019967, guid: a55a3791e379dfa42a63dd01f73de466, type: 3}
       propertyPath: id.low
-      value: -117153879
+      value: -10149868
       objectReference: {fileID: 0}
     - target: {fileID: 2195862425273019967, guid: a55a3791e379dfa42a63dd01f73de466, type: 3}
       propertyPath: id.high
-      value: -1774438664
+      value: -86368972
       objectReference: {fileID: 0}
     - target: {fileID: 4136800555700545090, guid: a55a3791e379dfa42a63dd01f73de466, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4345,7 +4350,7 @@ MonoBehaviour:
     type: 0
   magnetReferenceLocalPosition: {x: 0, y: 2, z: 0}
   magnetAnchor: {fileID: 0}
-  handPosition: {fileID: 8118953567111281005}
+  handPosition: {fileID: 3799068514059352170}
   carriedObject: {fileID: 0}
   debugJump: 0
   debugLastJumpMaxHeight: {x: 0, y: 0, z: 0}

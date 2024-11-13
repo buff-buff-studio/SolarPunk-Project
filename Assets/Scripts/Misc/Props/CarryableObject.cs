@@ -208,15 +208,7 @@ namespace Solis.Misc.Props
                 if (playerHolding != player)
                     return false;
 
-                playerHolding = null;
-                isOn.Value = false;
-                player.carriedObject = null;
-                CheckIfThereIsPlace();
-                ServerBroadcastPacket(new CarryableObjectGrabPacket
-                {
-                    Id = this.Id,
-                    HandId = ""
-                });
+                player.PlayInteraction(InteractionType.Box);
 
                 return true;
             }
@@ -230,6 +222,7 @@ namespace Solis.Misc.Props
             playerHolding = player;
             isOn.Value = true;
             player.carriedObject = this;
+            player.PlayInteraction(InteractionType.Box);
             ServerBroadcastPacket(new CarryableObjectGrabPacket
             {
                 Id = this.Id,
@@ -237,6 +230,18 @@ namespace Solis.Misc.Props
             });
 
             return true;
+        }
+
+        public void DropBox()
+        {
+            playerHolding = null;
+            isOn.Value = false;
+            CheckIfThereIsPlace();
+            ServerBroadcastPacket(new CarryableObjectGrabPacket
+            {
+                Id = this.Id,
+                HandId = ""
+            });
         }
 
         private void CheckIfThereIsPlace()

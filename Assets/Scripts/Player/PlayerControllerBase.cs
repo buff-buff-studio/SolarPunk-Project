@@ -23,6 +23,16 @@ using Object = UnityEngine.Object;
 
 namespace Solis.Player
 {
+    public enum InteractionType : int
+    {
+        None = -1,
+        Lever = 0,
+        Button = 1,
+        Scanner = 2,
+        Valve = 3,
+        Box = 4
+    }
+
     /// <summary>
     /// Base class for player controllers.
     /// </summary>
@@ -132,6 +142,11 @@ namespace Solis.Player
         private Vector3 _lastSafePosition;
         private Transform _camera;
 
+        private bool _waitingForInteract;
+        private bool _isInteracting;
+        private InteractionType _lastInteractionType;
+        private bool _isCarrying;
+
         private static readonly int Respawning = Shader.PropertyToID("_Respawning");
 
         #endregion
@@ -188,6 +203,7 @@ namespace Solis.Player
             IsJumping && (transform.position.y - _startJumpPos) >= JumpCutMinHeight;
         private bool IsPlayerLocked => _isCinematicRunning || isRespawning.Value;
         private Vector3 HeadOffset => headOffset.position;
+        private Animator Animator => animator.Animator;
         #endregion
 
         #region TEMP - Grappling Hook
@@ -411,6 +427,17 @@ namespace Solis.Player
                     animator.SetFloat("Running",
                         Mathf.Lerp(animator.GetFloat("Running"), walking ? 1 : 0, Time.deltaTime * 7f));
 
+                    if (_isInteracting)
+                    {
+                        //Ele chama o void OnEndInteract() quando termina a animação da blend tree
+                        var anim = Animator.GetCurrentAnimatorStateInfo(0);
+                        if(anim.normalizedTime >= 1f)
+                        {
+                            _isInteracting = false;
+                            OnEndInteract();
+                        }
+                    }
+
                     if (transform.position.y < -15)
                     {
                         Debug.Log($"Player {this.Id} has died by Falling into the Void");
@@ -470,6 +497,48 @@ namespace Solis.Player
             Gizmos.DrawWireSphere(debugLastJumpMaxHeight, 0.5f);
 #endif
         }
+
+        public void PlayInteraction(InteractionType type)
+        {
+            _lastInteractionType = type;
+            _waitingForInteract = false;
+            switch (type)
+            {
+                case InteractionType.None:
+                    animator.SetFloat("Interaction", 0);
+                    Debug.Log("Maybe you're interacting nothing");
+                    return;
+                case InteractionType.Box:
+                    animator.SetFloat("Interaction", 1);
+                    break;
+                default:
+                    animator.SetFloat("Interaction", 0);
+                    Debug.Log($"Interaction type {type} does not have an specific animation");
+                    break;
+            }
+            animator.SetBool("Interact", true);
+            _isInteracting = true;
+        }
+
+        public void OnEndInteract()
+        {
+            Debug.Log("End Interact");
+            switch (_lastInteractionType)
+            {
+                case InteractionType.Box:
+                    if (_isCarrying)
+                    {
+                        Debug.Log("Dropping Box");
+                        _isCarrying = false;
+                        carriedObject?.DropBox();
+                        carriedObject = null;
+                    }else _isCarrying = true;
+
+                    animator.SetFloat("CarryingBox", _isCarrying ? 1 : 0);
+                    break;
+            }
+            animator.SetBool("Interact", false);
+        }
         #endregion
 
         #region Network Callbacks
@@ -491,7 +560,7 @@ namespace Solis.Player
             {
                 case PlayerBodyLerpPacket bodyLerpPacket:
                     if (clientId == OwnerId)
-                        ServerBroadcastPacketExceptFor(bodyLerpPacket, clientId);
+                        ServerBroadcastPacket(bodyLerpPacket);
                     break;
                 case PlayerDeathPacket deathPacket:
                     if (clientId == OwnerId)
@@ -617,18 +686,23 @@ namespace Solis.Player
         {
             if (SolisInput.GetKeyDown("Interact") && _interactTimer <= 0 && IsGrounded)
             {
-                animator.SetTrigger("Punch");
+                //animator.SetTrigger("Punch");
+                _waitingForInteract = true;
                 _interactTimer = InteractCooldown;
 
-                //Run after
+                SendPacket(new PlayerInteractPacket
+                {
+                    Id = Id
+                }, true);
                 Task.Run(async () =>
                 {
                     await Task.Delay(500);
 
-                    SendPacket(new PlayerInteractPacket
+                    Debug.Log("Interact Timer Ended");
+                    if (_waitingForInteract)
                     {
-                        Id = Id
-                    }, true);
+                        PlayInteraction(InteractionType.None);
+                    }
                 });
             }
             if(DialogPanel.IsDialogPlaying)
