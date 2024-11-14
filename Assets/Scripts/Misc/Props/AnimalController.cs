@@ -174,22 +174,26 @@ namespace Misc.Props
     
     public class AnimalController : MonoBehaviour
     {
-       private AnimalState state;
+       private AnimalState _state;
        public Animator animalAnimator;
        public NavMeshAgent agent;
        public float runRadius = 4;
        public float walkingRadius = 5;
        public LayerMask playerLayer;
+       [SerializeField]private Material[] animalSkins;
+       [SerializeField]private Renderer rend;
+       
        
        private void Start()
        {
            SetState(new IdleState(this));
+           if(animalSkins.Length != 0)
+               rend.material = animalSkins[Random.Range(0, animalSkins.Length)];
        }
 
        private void Update()
        {
-           Debug.Log(state.ToString());
-           state.OnUpdate(Time.deltaTime);
+           _state.OnUpdate(Time.deltaTime);
            var objects = Physics.OverlapSphere(transform.position, runRadius, playerLayer);
            if (objects.Length > 0) 
                SetState(new RunningState(this, objects[0].transform));
@@ -197,15 +201,15 @@ namespace Misc.Props
        
        private void FixedUpdate()
        {
-           state.OnFixedUpdate();
+           _state.OnFixedUpdate();
        }
        
        public void SetState(AnimalState newState)
        {
-           Debug.Log($"Changing state from {state} to {newState}");
-           state?.OnExit();
-           state = newState;
-           state.OnEnter();
+           Debug.Log($"Changing state from {_state} to {newState}");
+           _state?.OnExit();
+           _state = newState;
+           _state.OnEnter();
        }
 
        public void SetDestination(Vector3 newDestination)
