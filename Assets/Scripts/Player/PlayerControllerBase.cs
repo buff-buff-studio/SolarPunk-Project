@@ -270,6 +270,9 @@ namespace Solis.Player
 
             if (IsPlayerLocked)
             {
+                velocity.x = Mathf.MoveTowards(velocity.x, 0, Deceleration);
+                velocity.z = Mathf.MoveTowards(velocity.z, 0, Deceleration);
+                
                 if(DialogPanel.IsDialogPlaying || _isCinematicRunning)
                     if(SolisInput.GetKeyDown("Skip"))
                         SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
@@ -902,10 +905,13 @@ namespace Solis.Player
         {
             Debug.Log("Player ID: " + Id + " died with type: " + death);
             controller.enabled = false;
+            
+            _isCarrying = false;
+            animator.SetFloat("CarryingBox", 0);
+            animator.SetBool("Interact", false);
             if(carriedObject)
             {
-                if(carriedObject.isOn.CheckPermission())
-                    carriedObject.isOn.Value = false;
+                carriedObject._Reset();
                 carriedObject = null;
             }
 
