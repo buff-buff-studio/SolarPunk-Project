@@ -23,6 +23,16 @@ using Object = UnityEngine.Object;
 
 namespace Solis.Player
 {
+    public enum InteractionType : int
+    {
+        None = -1,
+        Lever = 0,
+        Button = 1,
+        Scanner = 2,
+        Valve = 3,
+        Box = 4
+    }
+
     /// <summary>
     /// Base class for player controllers.
     /// </summary>
@@ -92,6 +102,7 @@ namespace Solis.Player
 
         [Header("HAND")]
         public Transform handPosition;
+        public Transform boxPlacedPosition;
         public CarryableObject carriedObject;
 
 #if UNITY_EDITOR
@@ -131,6 +142,11 @@ namespace Solis.Player
 
         private Vector3 _lastSafePosition;
         private Transform _camera;
+
+        private bool _waitingForInteract;
+        private bool _isInteracting;
+        private InteractionType _lastInteractionType;
+        private bool _isCarrying;
 
         private static readonly int Respawning = Shader.PropertyToID("_Respawning");
 
@@ -186,8 +202,9 @@ namespace Solis.Player
 
         private protected bool CanJumpCut =>
             IsJumping && (transform.position.y - _startJumpPos) >= JumpCutMinHeight;
-        private bool IsPlayerLocked => _isCinematicRunning || isRespawning.Value;
+        private bool IsPlayerLocked => _isCinematicRunning || isRespawning.Value || _isInteracting;
         private Vector3 HeadOffset => headOffset.position;
+        private Animator Animator => animator.Animator;
         #endregion
 
         #region TEMP - Grappling Hook
@@ -253,6 +270,9 @@ namespace Solis.Player
 
             if (IsPlayerLocked)
             {
+                velocity.x = Mathf.MoveTowards(velocity.x, 0, Deceleration);
+                velocity.z = Mathf.MoveTowards(velocity.z, 0, Deceleration);
+                
                 if(DialogPanel.IsDialogPlaying || _isCinematicRunning)
                     if(SolisInput.GetKeyDown("Skip"))
                         SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
@@ -411,6 +431,17 @@ namespace Solis.Player
                     animator.SetFloat("Running",
                         Mathf.Lerp(animator.GetFloat("Running"), walking ? 1 : 0, Time.deltaTime * 7f));
 
+                    if (_isInteracting)
+                    {
+                        //Ele chama o void OnEndInteract() quando termina a animação da blend tree
+                        var anim = Animator.GetCurrentAnimatorStateInfo(0);
+                        if(anim.normalizedTime >= 1f)
+                        {
+                            _isInteracting = false;
+                            OnEndInteract();
+                        }
+                    }
+
                     if (transform.position.y < -15)
                     {
                         Debug.Log($"Player {this.Id} has died by Falling into the Void");
@@ -435,8 +466,15 @@ namespace Solis.Player
                     debugNextBoxPos, carriedObject.objectSize.extents.x,
                     ~LayerMask.GetMask("Box", "CarriedIgnore", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
 
+                var placed = Physics.OverlapBox(
+                    boxPlacedPosition.position, carriedObject.objectSize.extents, carriedObject.transform.rotation,
+                    ~LayerMask.GetMask("Box", "CarriedIgnore", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
+
                 Gizmos.color = size.Length > 0 ? Color.red : Color.green;
                 Gizmos.DrawWireSphere(debugNextBoxPos, carriedObject.objectSize.extents.x);
+
+                Gizmos.color = placed.Length > 0 ? Color.red : Color.green;
+                Gizmos.DrawWireCube(boxPlacedPosition.position, carriedObject.objectSize.extents);
             }
 
             if (Physics.Raycast(transform.position, Vector3.down, out var hit, 1.1f, groundMask))
@@ -470,6 +508,48 @@ namespace Solis.Player
             Gizmos.DrawWireSphere(debugLastJumpMaxHeight, 0.5f);
 #endif
         }
+
+        public void PlayInteraction(InteractionType type)
+        {
+            _lastInteractionType = type;
+            _waitingForInteract = false;
+            switch (type)
+            {
+                case InteractionType.None:
+                    animator.SetFloat("Interaction", 0);
+                    Debug.Log("Maybe you're interacting nothing");
+                    break;
+                case InteractionType.Box:
+                    animator.SetFloat("Interaction", 1);
+                    break;
+                default:
+                    animator.SetFloat("Interaction", 0);
+                    Debug.Log($"Interaction type {type} does not have an specific animation");
+                    break;
+            }
+            animator.SetBool("Interact", true);
+            _isInteracting = true;
+        }
+
+        public void OnEndInteract()
+        {
+            Debug.Log("End Interact");
+            switch (_lastInteractionType)
+            {
+                case InteractionType.Box:
+                    if (_isCarrying)
+                    {
+                        Debug.Log("Dropping Box");
+                        _isCarrying = false;
+                        carriedObject?.DropBox();
+                        carriedObject = null;
+                    }else _isCarrying = true;
+
+                    animator.SetFloat("CarryingBox", _isCarrying ? 1 : 0);
+                    break;
+            }
+            animator.SetBool("Interact", false);
+        }
         #endregion
 
         #region Network Callbacks
@@ -491,7 +571,7 @@ namespace Solis.Player
             {
                 case PlayerBodyLerpPacket bodyLerpPacket:
                     if (clientId == OwnerId)
-                        ServerBroadcastPacketExceptFor(bodyLerpPacket, clientId);
+                        ServerBroadcastPacket(bodyLerpPacket);
                     break;
                 case PlayerDeathPacket deathPacket:
                     if (clientId == OwnerId)
@@ -617,18 +697,35 @@ namespace Solis.Player
         {
             if (SolisInput.GetKeyDown("Interact") && _interactTimer <= 0 && IsGrounded)
             {
-                animator.SetTrigger("Punch");
+                if(_isCarrying)
+                {
+                    var size = Physics.OverlapSphere(
+                        boxPlacedPosition.position, carriedObject.objectSize.extents.x,
+                        ~LayerMask.GetMask("Box", "CarriedIgnore", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
+
+                    if (size.Length > 0)
+                    {
+                        Debug.LogWarning(CharacterType.ToString() + " is trying to place a box inside of " + size[0].gameObject.name, size[0]);
+                        return;
+                    }
+                }
+
+                _waitingForInteract = true;
                 _interactTimer = InteractCooldown;
 
-                //Run after
+                SendPacket(new PlayerInteractPacket
+                {
+                    Id = Id
+                }, true);
                 Task.Run(async () =>
                 {
                     await Task.Delay(500);
 
-                    SendPacket(new PlayerInteractPacket
+                    Debug.Log("Interact Timer Ended");
+                    if (_waitingForInteract)
                     {
-                        Id = Id
-                    }, true);
+                        PlayInteraction(InteractionType.None);
+                    }
                 });
             }
             if(DialogPanel.IsDialogPlaying)
@@ -808,10 +905,13 @@ namespace Solis.Player
         {
             Debug.Log("Player ID: " + Id + " died with type: " + death);
             controller.enabled = false;
+            
+            _isCarrying = false;
+            animator.SetFloat("CarryingBox", 0);
+            animator.SetBool("Interact", false);
             if(carriedObject)
             {
-                if(carriedObject.isOn.CheckPermission())
-                    carriedObject.isOn.Value = false;
+                carriedObject._Reset();
                 carriedObject = null;
             }
 
