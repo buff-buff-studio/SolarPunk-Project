@@ -31,6 +31,8 @@ namespace Solis.Misc.Grass
         private Mesh _mesh;
         public Material material;
 
+        public Transform control;
+
         [Header("HEIGHT MAP")] 
         public GrassVolumeMap heightMap;
 
@@ -55,7 +57,9 @@ namespace Solis.Misc.Grass
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireCube(transform.position + size / 2, size);
+            Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+            Gizmos.DrawWireCube(size / 2, size);
+            Gizmos.matrix = Matrix4x4.identity;
         }
 
         private void OnDrawGizmosSelected()
@@ -87,6 +91,9 @@ namespace Solis.Misc.Grass
 
             if (visibilityMap.use && visibilityMap.map != null)
                 mpb.SetTexture(GrassMap, visibilityMap.map);
+            
+            if(control != null)
+                mpb.SetVector("_ControlPos", transform.InverseTransformPoint(control.position));
 
             Graphics.DrawMesh(_mesh, transform.localToWorldMatrix, material, gameObject.layer, null, 0, mpb);
         }
