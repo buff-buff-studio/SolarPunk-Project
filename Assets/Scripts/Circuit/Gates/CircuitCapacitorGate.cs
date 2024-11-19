@@ -19,6 +19,7 @@ namespace Solis.Circuit.Gates
         public BoolNetworkValue deliverPower = new(false);
         public bool canChange = true;
         public bool invisibleOnPlay = false;
+        public bool canTurnOff = true;
         #endregion
 
         #region Unity Callbacks
@@ -43,6 +44,9 @@ namespace Solis.Circuit.Gates
         {
             if (!HasAuthority) return;
             if (output.Connections.Length <= 0) return;
+
+            if(!canTurnOff && deliverPower.Value)
+                return;
 
             if(canChange && data.ReadInputPower() > .5f)
             {
