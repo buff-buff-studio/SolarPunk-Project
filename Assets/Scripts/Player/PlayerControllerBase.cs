@@ -136,6 +136,7 @@ namespace Solis.Player
         
         private bool _isCinematicRunning = true;
 
+        private bool _positionReset;
         private float _respawnTimer;
         private float _interactTimer;
         private float _multiplier;
@@ -707,10 +708,18 @@ namespace Solis.Player
             {
                 isRespawning.Value = false;
                 _respawnTimer = RespawnCooldown;
+                RespawnHUD.Instance.CloseHUD();
             }
             else
             {
                 _respawnTimer = isRespawning.Value ? _respawnTimer - deltaTime : RespawnCooldown;
+                if (RespawnCooldown - _respawnTimer >= .5f && !_positionReset)
+                {
+                    _positionReset = true;
+                    transform.position = _lastSafePosition + Vector3.up;
+                    velocity = Vector3.zero;
+                    landParticles.Play();
+                }
             }
             
             if(IsGrounded) _jumpTimer -= deltaTime;
@@ -931,10 +940,10 @@ namespace Solis.Player
             if (HasAuthority && IsOwnedByClient)
                 isRespawning.Value = true;
 
-            transform.position = _lastSafePosition + Vector3.up;
-            velocity = Vector3.zero;
+            RespawnHUD.Instance.ShowHUD(CharacterType, 1);
 
-            landParticles.Play();
+            velocity = Vector3.zero;
+            _positionReset = false;
 
             _respawnTimer = RespawnCooldown;
         }
