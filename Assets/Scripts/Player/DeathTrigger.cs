@@ -7,42 +7,45 @@ using UnityEngine;
 namespace Solis.Player
 {
     [Icon("Assets/Art/Sprites/Editor/DeathTrigger_ico.png")]
-    [RequireComponent(typeof(BoxCollider))]
+    [RequireComponent(typeof(Collider))]
     public class DeathTrigger : NetworkBehaviour
     {
-        [SerializeField] private PlayerControllerBase.Death _type;
+        [SerializeField] private protected PlayerControllerBase.Death _type;
 
 #if UNITY_EDITOR
-        private BoxCollider _boxCollider;
+        private protected Collider _collider;
 
-        private void OnDrawGizmos()
+        protected virtual void OnDrawGizmos()
         {
             Gizmos.color = _type == PlayerControllerBase.Death.Fall
                 ? new Color(1, 0, 0, .25f)
                 : new Color(1, .25f, 0, .25f);
-            Gizmos.DrawCube(transform.position, transform.localScale);
-            Gizmos.DrawWireCube(transform.position, transform.localScale);
 
-            BoxColliderVolume();
+            if(_collider == null) _collider = gameObject.AddComponent<MeshCollider>();
+
+            switch (_collider.GetType().Name)
+            {
+                case "BoxCollider":
+                    Gizmos.DrawCube(transform.position, transform.localScale);
+                    Gizmos.DrawWireCube(transform.position, transform.localScale);
+                    break;
+                case "SphereCollider":
+                    Gizmos.DrawSphere(transform.position, transform.localScale.x);
+                    break;
+                case "CapsuleCollider":
+                    var capsule = (CapsuleCollider) _collider;
+                    Gizmos.DrawWireCube(transform.position, new Vector3(capsule.radius, capsule.height, capsule.radius));
+                    break;
+                case "MeshCollider":
+                    Gizmos.DrawWireMesh(((MeshCollider) _collider).sharedMesh, transform.position, transform.rotation, transform.localScale);
+                    break;
+            }
         }
 
-        private void BoxColliderVolume()
+        protected virtual void OnValidate()
         {
-            if (_boxCollider == null) _boxCollider = GetComponent<BoxCollider>();
-
-            if (_boxCollider.center != Vector3.zero)
-                transform.position += Vector3.Scale(_boxCollider.center, transform.localScale);
-            if (_boxCollider.size != Vector3.one)
-                transform.localScale = Vector3.Scale(transform.localScale, _boxCollider.size);
-
-            _boxCollider.center = Vector3.zero;
-            _boxCollider.size = Vector3.one;
-        }
-
-        private void OnValidate()
-        {
-            TryGetComponent(out _boxCollider);
-            _boxCollider.isTrigger = true;
+            TryGetComponent(out _collider);
+            _collider.isTrigger = true;
             gameObject.tag = "DeathTrigger";
             gameObject.layer = LayerMask.NameToLayer("Trigger");
         }

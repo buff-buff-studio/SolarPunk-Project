@@ -57,8 +57,6 @@ namespace Solis.Player
 
         protected override void _Special()
         {
-            if(_flyMode) return;
-
             if (SolisInput.GetKeyDown("Jump") && !IsGrounded)
             {
                 if (_specialTimer > 0)

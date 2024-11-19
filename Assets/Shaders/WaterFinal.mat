@@ -12,7 +12,8 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -43,18 +44,25 @@ Material:
     m_Ints: []
     m_Floats:
     - _A: 100
+    - _AlphaClip: 0
+    - _AlphaToMask: 0
     - _B: 1
+    - _Blend: 0
+    - _BlendModePreserveSpecular: 1
     - _BlendNormalA: 0.36
     - _BlendNormalB: 0.65
     - _BorderThickness: 0.036
     - _C: 1
+    - _CastShadows: 1
     - _CausticsSpeed: 0.1
     - _CellSize: 1.5
+    - _Cull: 2
     - _D: 0
     - _Depth: 1.62
     - _DirtyRegionWarp: 0.26
     - _DirtyRegionWarpScale: 14.5
     - _DisplacementMultiplier: 2
+    - _DstBlend: 10
     - _Edge1: -0.17
     - _Edge2: 0.41
     - _EdgeWidth: 0.27
@@ -75,13 +83,16 @@ Material:
     - _OutlineThickness: 0.0034
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _SideScale: 4
     - _SmoothBorders: 0.1
     - _Smoothness: 0.48
     - _SmoothstepValue: 0.1
     - _Softness: 0
+    - _SrcBlend: 5
     - _SubtractEdge1: -0.76
     - _SubtractEdge2: 1
+    - _Surface: 1
     - _TestValue: 0.5
     - _TimeMultiplier: 15
     - _TimeScale: 0.2
@@ -92,6 +103,10 @@ Material:
     - _WaterfallNoiseScale: 0.5
     - _WaveSpeed: 1.5
     - _WaveStrength: 0
+    - _WorkflowMode: 1
+    - _ZTest: 4
+    - _ZWrite: 0
+    - _ZWriteControl: 0
     m_Colors:
     - _BaseColor: {r: 0.32976148, g: 0.53080094, b: 0.5924529, a: 1}
     - _BorderColor: {r: 1, g: 1, b: 1, a: 1}

@@ -79,7 +79,6 @@ namespace Solis.Circuit.Components
         {
             if (!PlayerChecker(arg1, out var player))
                 return false;
-            player.PlayInteraction(InteractionType.Lever);
             isOn.Value = !isOn.Value;
             return true;
         }

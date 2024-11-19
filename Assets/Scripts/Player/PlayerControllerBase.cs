@@ -12,7 +12,6 @@ using Solis.Circuit.Components;
 using Solis.Core;
 using Solis.Data;
 using Solis.Interface.Input;
-using Solis.Misc;
 using Solis.Misc.Integrations;
 using Solis.Misc.Multicam;
 using Solis.Misc.Props;
@@ -24,16 +23,6 @@ using Object = UnityEngine.Object;
 
 namespace Solis.Player
 {
-    public enum InteractionType : int
-    {
-        None = -1,
-        Lever = 0,
-        Button = 1,
-        Scanner = 2,
-        Valve = 3,
-        Box = 4
-    }
-
     /// <summary>
     /// Base class for player controllers.
     /// </summary>
@@ -56,8 +45,7 @@ namespace Solis.Player
         public enum Death
         {
             Stun,
-            Fall,
-            Void
+            Fall
         }
         #endregion
 
@@ -104,7 +92,6 @@ namespace Solis.Player
 
         [Header("HAND")]
         public Transform handPosition;
-        public Transform boxPlacedPosition;
         public CarryableObject carriedObject;
 
 #if UNITY_EDITOR
@@ -136,28 +123,16 @@ namespace Solis.Player
         
         private bool _isCinematicRunning = true;
 
-        private bool _positionReset;
         private float _respawnTimer;
         private float _interactTimer;
         private float _multiplier;
 
         private bool _isColliding;
-        private LayerMask _defaultExcludeMask;
 
         private Vector3 _lastSafePosition;
         private Transform _camera;
 
-        private bool _waitingForInteract;
-        private bool _isInteracting;
-        private InteractionType _lastInteractionType;
-        private bool _isCarrying;
-
         private static readonly int Respawning = Shader.PropertyToID("_Respawning");
-
-        //Cheats
-        private bool _godMode;
-        private protected bool _flyMode;
-        private bool _noClip;
 
         #endregion
 
@@ -211,9 +186,8 @@ namespace Solis.Player
 
         private protected bool CanJumpCut =>
             IsJumping && (transform.position.y - _startJumpPos) >= JumpCutMinHeight;
-        private bool IsPlayerLocked => _isCinematicRunning || isRespawning.Value || _isInteracting;
+        private bool IsPlayerLocked => _isCinematicRunning || isRespawning.Value;
         private Vector3 HeadOffset => headOffset.position;
-        private Animator Animator => animator.Animator;
         #endregion
 
         #region TEMP - Grappling Hook
@@ -250,8 +224,6 @@ namespace Solis.Player
             _multiplier = FallMultiplier;
             dustParticles.Stop();
 
-            _defaultExcludeMask = controller.excludeLayers;
-
             if (controller == null) TryGetComponent(out controller);
             InvokeRepeating(nameof(_Tick), 0, 1f / tickRate);
         }
@@ -279,24 +251,8 @@ namespace Solis.Player
 
             _Timer();
 
-            if(SolisInput.GetKeyDown("Cheat"))
-            {
-                if (CheatsManager.IsCheatsEnabled)
-                {
-                    CheatsManager.Instance.DisableCheats();
-                    SetCheatsValue();
-                }
-                else
-                {
-                    CheatsManager.Instance.EnableCheats(this);
-                }
-            }
-
             if (IsPlayerLocked)
             {
-                velocity.x = Mathf.MoveTowards(velocity.x, 0, Deceleration);
-                velocity.z = Mathf.MoveTowards(velocity.z, 0, Deceleration);
-                
                 if(DialogPanel.IsDialogPlaying || _isCinematicRunning)
                     if(SolisInput.GetKeyDown("Skip"))
                         SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
@@ -425,32 +381,23 @@ namespace Solis.Player
                         var boxNextPos = _isColliding ?
                             carriedObject.transform.position + ((new Vector3(move.x, 0, move.z) * (Time.fixedDeltaTime * data.nextMoveMultiplier))/2f) :
                             carriedObject.transform.position;
+                        var size = Physics.OverlapSphere(
+                            boxNextPos, carriedObject.objectSize.extents.x,
+                            ~LayerMask.GetMask("Box", "CarriedIgnore", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
 
-#if UNITY_EDITOR
+                        #if UNITY_EDITOR
                         debugNextBoxPos = boxNextPos;
-#endif
+                        #endif
 
-                        if(!_noClip)
+                        if (size.Length > 0)
                         {
-                            var size = Physics.OverlapSphere(
-                                boxNextPos, carriedObject.objectSize.extents.x,
-                                ~LayerMask.GetMask("Box", "CarriedIgnore",
-                                    (CharacterType == CharacterType.Human ? "Human" : "Robot")),
-                                QueryTriggerInteraction.Ignore);
+                            walking = false;
+                            velocity.x = velocity.z = 0;
+                            move = Vector3.zero;
+                            _isColliding = true;
 
-                            if (size.Length > 0)
-                            {
-                                walking = false;
-                                velocity.x = velocity.z = 0;
-                                move = Vector3.zero;
-                                _isColliding = true;
-
-                                Debug.Log(
-                                    CharacterType.ToString() + " is carrying a box that is colliding with: " +
-                                    string.Join(", ", size.ToList().Select(x => x.name)), size[0]);
-                            }
-                            else _isColliding = false;
-                        }
+                            Debug.Log(CharacterType.ToString() + " is carrying a box that is colliding with: " + string.Join(", ", size.ToList().Select(x => x.name)), size[0]);
+                        }else _isColliding = false;
                     }
 
                     controller.Move(new Vector3(move.x, velocity.y, move.z) * Time.fixedDeltaTime);
@@ -460,26 +407,17 @@ namespace Solis.Player
                     }
 
                     animator.SetBool("Grounded", !_isFalling && IsGrounded);
-                    animator.SetBool("Falling", _isFalling || (_flyMode && !IsGrounded));
+                    animator.SetBool("Falling", _isFalling);
                     animator.SetFloat("Running",
                         Mathf.Lerp(animator.GetFloat("Running"), walking ? 1 : 0, Time.deltaTime * 7f));
 
-                    if (_isInteracting)
-                    {
-                        //Ele chama o void OnEndInteract() quando termina a animação da blend tree
-                        var anim = Animator.GetCurrentAnimatorStateInfo(0);
-                        if(anim.normalizedTime >= 1f)
-                        {
-                            _isInteracting = false;
-                            OnEndInteract();
-                        }
-                    }
-
                     if (transform.position.y < -15)
                     {
+                        Debug.Log($"Player {this.Id} has died by Falling into the Void");
+
                         SendPacket(new PlayerDeathPacket()
                         {
-                            Type = Death.Void,
+                            Type = Death.Fall,
                             Id = this.Id
                         });
                     }
@@ -497,15 +435,8 @@ namespace Solis.Player
                     debugNextBoxPos, carriedObject.objectSize.extents.x,
                     ~LayerMask.GetMask("Box", "CarriedIgnore", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
 
-                var placed = Physics.OverlapBox(
-                    boxPlacedPosition.position, carriedObject.objectSize.extents, carriedObject.transform.rotation,
-                    ~LayerMask.GetMask("Box", "CarriedIgnore", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
-
                 Gizmos.color = size.Length > 0 ? Color.red : Color.green;
                 Gizmos.DrawWireSphere(debugNextBoxPos, carriedObject.objectSize.extents.x);
-
-                Gizmos.color = placed.Length > 0 ? Color.red : Color.green;
-                Gizmos.DrawWireCube(boxPlacedPosition.position, carriedObject.objectSize.extents);
             }
 
             if (Physics.Raycast(transform.position, Vector3.down, out var hit, 1.1f, groundMask))
@@ -539,48 +470,6 @@ namespace Solis.Player
             Gizmos.DrawWireSphere(debugLastJumpMaxHeight, 0.5f);
 #endif
         }
-
-        public void PlayInteraction(InteractionType type)
-        {
-            _lastInteractionType = type;
-            _waitingForInteract = false;
-            switch (type)
-            {
-                case InteractionType.None:
-                    animator.SetFloat("Interaction", 0);
-                    Debug.Log("Maybe you're interacting nothing");
-                    break;
-                case InteractionType.Box:
-                    animator.SetFloat("Interaction", 1);
-                    break;
-                default:
-                    animator.SetFloat("Interaction", 0);
-                    Debug.Log($"Interaction type {type} does not have an specific animation");
-                    break;
-            }
-            animator.SetBool("Interact", true);
-            _isInteracting = true;
-        }
-
-        public void OnEndInteract()
-        {
-            Debug.Log("End Interact");
-            switch (_lastInteractionType)
-            {
-                case InteractionType.Box:
-                    if (_isCarrying)
-                    {
-                        Debug.Log("Dropping Box");
-                        _isCarrying = false;
-                        carriedObject?.DropBox();
-                        carriedObject = null;
-                    }else _isCarrying = true;
-
-                    animator.SetFloat("CarryingBox", _isCarrying ? 1 : 0);
-                    break;
-            }
-            animator.SetBool("Interact", false);
-        }
         #endregion
 
         #region Network Callbacks
@@ -602,7 +491,7 @@ namespace Solis.Player
             {
                 case PlayerBodyLerpPacket bodyLerpPacket:
                     if (clientId == OwnerId)
-                        ServerBroadcastPacket(bodyLerpPacket);
+                        ServerBroadcastPacketExceptFor(bodyLerpPacket, clientId);
                     break;
                 case PlayerDeathPacket deathPacket:
                     if (clientId == OwnerId)
@@ -708,18 +597,10 @@ namespace Solis.Player
             {
                 isRespawning.Value = false;
                 _respawnTimer = RespawnCooldown;
-                RespawnHUD.Instance.CloseHUD();
             }
             else
             {
                 _respawnTimer = isRespawning.Value ? _respawnTimer - deltaTime : RespawnCooldown;
-                if (RespawnCooldown - _respawnTimer >= .5f && !_positionReset)
-                {
-                    _positionReset = true;
-                    transform.position = _lastSafePosition + Vector3.up;
-                    velocity = Vector3.zero;
-                    landParticles.Play();
-                }
             }
             
             if(IsGrounded) _jumpTimer -= deltaTime;
@@ -734,37 +615,20 @@ namespace Solis.Player
 
         private void _Interact()
         {
-            if (SolisInput.GetKeyDown("Interact") && _interactTimer <= 0 && (IsGrounded || _flyMode))
+            if (SolisInput.GetKeyDown("Interact") && _interactTimer <= 0 && IsGrounded)
             {
-                if(_isCarrying)
-                {
-                    var size = Physics.OverlapSphere(
-                        boxPlacedPosition.position, carriedObject.objectSize.extents.x,
-                        ~LayerMask.GetMask("Box", "CarriedIgnore", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
-
-                    if (size.Length > 0)
-                    {
-                        Debug.LogWarning(CharacterType.ToString() + " is trying to place a box inside of " + size[0].gameObject.name, size[0]);
-                        return;
-                    }
-                }
-
-                _waitingForInteract = true;
+                animator.SetTrigger("Punch");
                 _interactTimer = InteractCooldown;
 
-                SendPacket(new PlayerInteractPacket
-                {
-                    Id = Id
-                }, true);
+                //Run after
                 Task.Run(async () =>
                 {
                     await Task.Delay(500);
 
-                    Debug.Log("Interact Timer Ended");
-                    if (_waitingForInteract)
+                    SendPacket(new PlayerInteractPacket
                     {
-                        PlayInteraction(InteractionType.None);
-                    }
+                        Id = Id
+                    }, true);
                 });
             }
             if(DialogPanel.IsDialogPlaying)
@@ -784,21 +648,10 @@ namespace Solis.Player
 
             velocity.x = Mathf.MoveTowards(velocity.x, target.x, accelerationValue);
             velocity.z = Mathf.MoveTowards(velocity.z, target.y, accelerationValue);
-
-            if (_flyMode)
-            {
-                var moveYInput = SolisInput.GetAxis("Fly");
-                var targetY = moveYInput * maxSpeedTarget;
-                var accelOrDecelY = (Mathf.Abs(moveYInput) > 0.01f);
-                var accelerationValueY = ((accelOrDecelY ? Acceleration : Deceleration)) * Time.deltaTime;
-
-                velocity.y = Mathf.MoveTowards(velocity.y, targetY, accelerationValueY);
-            }
         }
 
         private void _Jump()
         {
-            if(_flyMode) return;
             if (InputJump && CanJump)
             {
                 animator.SetTrigger("Jumping");
@@ -862,7 +715,6 @@ namespace Solis.Player
 
         private void _Gravity()
         {
-            if (_flyMode) return;
             if (IsGrounded)
             {
                 _multiplier = FallMultiplier;
@@ -940,10 +792,10 @@ namespace Solis.Player
             if (HasAuthority && IsOwnedByClient)
                 isRespawning.Value = true;
 
-            RespawnHUD.Instance.ShowHUD(CharacterType, 1);
-
+            transform.position = _lastSafePosition + Vector3.up;
             velocity = Vector3.zero;
-            _positionReset = false;
+
+            landParticles.Play();
 
             _respawnTimer = RespawnCooldown;
         }
@@ -952,97 +804,35 @@ namespace Solis.Player
 
         #region Public Methods
 
-        public void Respawn()
-        {
-            if(CheatsManager.IsCheatsEnabled)
-                _Respawn();
-        }
-
         public void PlayerDeath(Death death)
         {
             Debug.Log("Player ID: " + Id + " died with type: " + death);
+            controller.enabled = false;
+            if(carriedObject)
+            {
+                if(carriedObject.isOn.CheckPermission())
+                    carriedObject.isOn.Value = false;
+                carriedObject = null;
+            }
+
+            if (HasAuthority && IsOwnedByClient)
+            {
+                SolisInput.Instance.RumblePulse(0.25f, 0.75f, 0.25f);
+            }
 
             switch (death)
             {
                 case Death.Stun:
                     Debug.Log("Death Smash");
-                    DeathReset();
                     break;
                 case Death.Fall:
-                    if(_godMode) return;
-                    DeathReset();
                     _Respawn();
                     AudioSystem.PlayVfxStatic("Death");
-                    break;
-                case Death.Void:
-                    if(_godMode && _flyMode) return;
-                    DeathReset();
-                    _Respawn();
-                    AudioSystem.PlayVfxStatic("Death");
-                    Debug.Log($"Player {this.Id} has died by Falling into the Void");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(death), death, null);
             }
             controller.enabled = true;
-        }
-
-        private void DeathReset()
-        {
-            controller.enabled = false;
-
-            _isCarrying = false;
-            animator.SetFloat("CarryingBox", 0);
-            animator.SetBool("Interact", false);
-            if(carriedObject)
-            {
-                carriedObject._Reset();
-                carriedObject = null;
-            }
-            if (HasAuthority && IsOwnedByClient)
-            {
-                SolisInput.Instance.RumblePulse(0.25f, 0.75f, 0.25f);
-            }
-        }
-
-        protected internal void SetCheatsValue(int id = -1, bool value = false)
-        {
-            if(!CheatsManager.IsCheatsEnabled)
-            {
-                _godMode = _flyMode = _noClip = false;
-                controller.excludeLayers = _defaultExcludeMask;
-                Debug.LogWarning("Cheats are not enabled");
-                return;
-            }
-
-            switch (id)
-            {
-                case -1:
-                    SetCheatsValue(0);
-                    SetCheatsValue(1);
-                    SetCheatsValue(2);
-                    break;
-                case 0:
-                    _godMode = value;
-                    Debug.Log("God Mode: " + _godMode);
-                    break;
-                case 1:
-                    _flyMode = value;
-                    if (_flyMode)
-                    {
-                        velocity.y = 0;
-                        _inJumpState = false;
-                        _isFalling = false;
-                        _isJumpingEnd = true;
-                    }
-                    Debug.Log("Fly Mode: " + _flyMode);
-                    break;
-                case 2:
-                    _noClip = value;
-                    controller.excludeLayers = _noClip ? ~0 : _defaultExcludeMask;
-                    Debug.Log("No Clip: " + _noClip);
-                    break;
-            }
         }
 
         #endregion

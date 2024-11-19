@@ -22,7 +22,6 @@ namespace Solis.Misc.Props
 
         private PlayerControllerBase playerHolding;
         private Rigidbody rb;
-        private Transform _originalParent;
         
         #endregion
 
@@ -47,7 +46,6 @@ namespace Solis.Misc.Props
             _collider = GetComponentInChildren<Collider>();
             _initialPosition = transform.position;
             objectSize = _collider.GetComponentInChildren<MeshRenderer>().bounds;
-            _originalParent = transform.parent;
         }
 
         protected override void OnEnable()
@@ -74,8 +72,8 @@ namespace Solis.Misc.Props
             var pos = ht.position;
             var fw = ht.forward;
             var dt = Time.deltaTime * 50f;
-            //transform.position = Vector3.MoveTowards(transform.position, pos, dt);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(fw), dt);
+            transform.position = Vector3.MoveTowards(transform.position, pos, dt);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(fw), dt);
         }
 
         private void OnTriggerEnter(Collider col)
@@ -103,15 +101,11 @@ namespace Solis.Misc.Props
                     return;
 
                 if (grabPacket.HandId == null)
-                {
                     playerHolding = null;
-                    transform.parent = _originalParent;
-                }
                 else
                 {
                     NetworkId.TryParse(grabPacket.HandId, out var handId);
                     playerHolding = GetNetworkObject((NetworkId)handId).GetComponent<PlayerControllerBase>();
-                    transform.SetParent(playerHolding.handPosition, true);
                 }
             }
             else if(packet is PlayerDeathPacket deathPacket)
@@ -142,12 +136,11 @@ namespace Solis.Misc.Props
                 _Reset();
             }
         }
-
-        internal void _Reset()
+        
+        private void _Reset()
         {
             transform.position = _initialPosition + Vector3.up;
             transform.rotation = Quaternion.identity;
-            transform.parent = _originalParent;
             rb.velocity = Vector3.zero;
             if (playerHolding)
             {
@@ -174,8 +167,7 @@ namespace Solis.Misc.Props
                 if (playerHolding)
                 {
                     transform.position = playerHolding.handPosition.position;
-                    //FAzer com que a face mais proxima do player olhe para ele
-                    AlignRotationToNearest90();
+                    transform.rotation = playerHolding.handPosition.rotation;
 
                     if (TryGetComponent(out MagneticProp prop))
                         prop.cantBeMagnetized.Value = true;
@@ -203,24 +195,6 @@ namespace Solis.Misc.Props
             rb.isKinematic = isOn.Value;
             rb.velocity = Vector3.zero;
         }
-        
-        private float SnapToNearest90(float angle)
-        {
-            return Mathf.Round(angle / 90.0f) * 90.0f;
-        }
-
-        public void AlignRotationToNearest90()
-        {
-            Vector3 currentRotation = transform.localEulerAngles;
-        
-            // Alinha cada eixo ao múltiplo de 90° mais próximo
-            currentRotation.x = SnapToNearest90(currentRotation.x);
-            currentRotation.y = SnapToNearest90(currentRotation.y);
-            currentRotation.z = SnapToNearest90(currentRotation.z);
-
-            // Define a nova rotação ajustada
-            transform.localRotation = Quaternion.Euler(currentRotation);
-        }
 
         protected override bool OnPlayerInteract(PlayerInteractPacket arg1, int arg2)
         {
@@ -234,7 +208,15 @@ namespace Solis.Misc.Props
                 if (playerHolding != player)
                     return false;
 
-                player.PlayInteraction(InteractionType.Box);
+                playerHolding = null;
+                isOn.Value = false;
+                player.carriedObject = null;
+                CheckIfThereIsPlace();
+                ServerBroadcastPacket(new CarryableObjectGrabPacket
+                {
+                    Id = this.Id,
+                    HandId = ""
+                });
 
                 return true;
             }
@@ -246,10 +228,8 @@ namespace Solis.Misc.Props
                 return false;
 
             playerHolding = player;
-            transform.SetParent(player.handPosition, true);
             isOn.Value = true;
             player.carriedObject = this;
-            player.PlayInteraction(InteractionType.Box);
             ServerBroadcastPacket(new CarryableObjectGrabPacket
             {
                 Id = this.Id,
@@ -257,19 +237,6 @@ namespace Solis.Misc.Props
             });
 
             return true;
-        }
-
-        public void DropBox()
-        {
-            playerHolding = null;
-            isOn.Value = false;
-            transform.parent = _originalParent;
-            CheckIfThereIsPlace();
-            ServerBroadcastPacket(new CarryableObjectGrabPacket
-            {
-                Id = this.Id,
-                HandId = ""
-            });
         }
 
         private void CheckIfThereIsPlace()

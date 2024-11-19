@@ -106,11 +106,6 @@ namespace Solis.Interface.Input
             return Instance._input.actions[actionName].ReadValue<Vector2>();
         }
 
-        public static float GetAxis(string actionName)
-        {
-            return Instance._input.actions[actionName].ReadValue<float>();
-        }
-
         /// <summary>
         /// Checks if the specified input action is currently pressed.
         /// </summary>
