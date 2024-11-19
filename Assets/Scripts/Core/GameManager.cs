@@ -311,6 +311,16 @@ namespace Solis.Core
         {
             _RespawnPlayerForClient(client); 
         }
+
+        [ServerOnly]
+        public void RespawnAllPlayers()
+        {
+            foreach (var clientId in NetworkManager.Instance.GetConnectedClients())
+            {
+                Debug.Log("Respawning player for client: " + clientId);
+                _RespawnPlayerForClient(clientId);
+            }
+        }
         #endregion
 
         #region Public Methods - Save

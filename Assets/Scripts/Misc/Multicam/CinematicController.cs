@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using Cinemachine;
 using NetBuff.Components;
-using NetBuff.Interface;
 using NetBuff.Misc;
 using Solis.Packets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
+using Solis.Core;
+using Solis.Interface.Input;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
@@ -84,6 +85,12 @@ namespace Solis.Misc.Multicam
         private void Update()
         {
             if(!IsPlaying) return;
+
+#if UNITY_EDITOR
+            if (!MulticamCamera.Instance.PlayerFound && SolisInput.GetKeyDown("Skip"))
+                Stop();
+#endif
+
             if (!animation.isPlaying) Stop();
 
             if (!CurrentRoll.CurrentFrame.invoked)
@@ -120,6 +127,15 @@ namespace Solis.Misc.Multicam
 
         public void Stop()
         {
+#if UNITY_EDITOR
+            if (!MulticamCamera.Instance.PlayerFound)
+            {
+                Debug.LogWarning("No player found. Respawn all players, if you have permission.");
+                if (IsServer)
+                    GameManager.Instance.RespawnAllPlayers();
+            }
+#endif
+
             MulticamCamera.Instance.ChangeCameraState(MulticamCamera.CameraState.Gameplay, CurrentRoll.blend, CurrentRoll.blendTime);
 
             animation.Stop();
