@@ -30,6 +30,8 @@ Shader "Custom/Grass"
 		
 		_HeightMap("Height Map", 2D) = "black" {}
 		_HeightMapMax("Height Map Max", Range(0, 100)) = 25
+		
+		_ControlPos("Control Position", Vector) = (0, 0, 0, 0)
 	}
 
 	SubShader
@@ -91,6 +93,8 @@ Shader "Custom/Grass"
 				sampler2D _HeightMap;
 				float4 _HeightMap_ST;
 				float  _HeightMapMax;
+
+				float3 _ControlPos;
 			CBUFFER_END
 
 			float _effectorData[41];
@@ -194,7 +198,7 @@ Shader "Custom/Grass"
 			float tessellationEdgeFactor(VertexInput vert0, VertexInput vert1)
 			{
 				const float3 edge_center = (vert0.vertex.xyz + vert1.vertex.xyz) * 0.5f;
-				const float view_dist = saturate(distance(edge_center, _WorldSpaceCameraPos) / _CameraFar);
+				const float view_dist = saturate(distance(edge_center, _ControlPos) / _CameraFar);
 				
 				const float3 v0 = vert0.vertex.xyz;
 				const float3 v1 = vert1.vertex.xyz;
@@ -261,7 +265,11 @@ Shader "Custom/Grass"
 					return;	
 				
 				float3 pos = input[0].vertex.xyz;
-				const float view_dist = saturate(distance(pos, _WorldSpaceCameraPos) / _CameraFar);
+				
+				pos.x += (rand(pos.yzx) - 0.5f) * 0.5f;
+				pos.z += (rand(pos.zxy) - 0.5f) * 0.5f;
+				
+				const float view_dist = saturate(distance(pos, _ControlPos) / _CameraFar);
 				const float blade_segments = lerp(max_blades, 1, view_dist);
 				
 				const float3 normal = input[0].normal;
