@@ -114,6 +114,9 @@ namespace Solis.Circuit
                     case CircuitPalmScanner scanner:
                         scanner.isOn.Value = false;
                         break;
+                    case CircuitValve valve:
+                        valve.isOn.Value = false;
+                        break;
                 }
             }
         }

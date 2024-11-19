@@ -19,6 +19,7 @@ namespace Solis.Circuit
         #region Inspector Fields
         public CircuitPlugType type;
         public bool acceptMultipleConnections;
+        public bool inputSelfPowered = false;
         #endregion
 
         #region Private Fields
@@ -145,6 +146,11 @@ namespace Solis.Circuit
                     return read;
 
                 case CircuitPlugType.Input:
+                    if (inputSelfPowered)
+                    {
+                        return new CircuitData(1);
+                    }
+
                     var other = GetOtherPlug(connection);
 
                     if (ReferenceEquals(other, null))
@@ -162,6 +168,9 @@ namespace Solis.Circuit
                 .Select((connection, i) => GetOtherPlug(i))
                 .Where(other => !ReferenceEquals(other, null))
                 .Sum(other => other.Owner.ReadOutput(other).power);
+
+            if (inputSelfPowered)
+                result += 1;
 
             return result;
         }
