@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   acceptMultipleConnections: 0
+  inputSelfPowered: 0
 --- !u!1 &6257850528112448252
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   acceptMultipleConnections: 1
+  inputSelfPowered: 0
 --- !u!1001 &5222549747345619631
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -253,8 +255,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id:
-    high: 773441277
-    low: -893993699
+    high: -1142271095
+    low: -1613690605
   ownerId: -1
   prefabId:
     high: 0
