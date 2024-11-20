@@ -1,5 +1,6 @@
 ﻿ using System;
  using System.Linq;
+ using Solis.Circuit.Connections;
  using Solis.Circuit.Interfaces;
 using UnityEngine;
 
@@ -68,6 +69,32 @@ namespace Solis.Circuit
                     _owner = GetComponentInParent<CircuitComponent>();
 
                 return _owner;
+            }
+        }
+
+        public Color Color
+        {
+            get
+            {
+                if (Connection == null) return Color.clear;
+
+                var connection = Connection as MonoBehaviour;
+                if (connection!.TryGetComponent(out CircuitWirelessConnection wirelessConnection))
+                    return wirelessConnection.color;
+                else if (connection!.TryGetComponent(out CircuitStandardCableConnection standardCable))
+                    return standardCable.color;
+
+                return Color.clear;
+            }
+            set
+            {
+                if (Connection == null) return;
+
+                var connection = Connection as MonoBehaviour;
+                if (connection!.TryGetComponent(out CircuitWirelessConnection wirelessConnection))
+                    wirelessConnection.color = value;
+                else if (connection!.TryGetComponent(out CircuitStandardCableConnection standardCable))
+                    standardCable.color = value;
             }
         }
         #endregion
