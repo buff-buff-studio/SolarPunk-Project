@@ -31,8 +31,6 @@ namespace Solis.Misc.Grass
         private Mesh _mesh;
         public Material material;
 
-        public Transform control;
-
         [Header("HEIGHT MAP")] 
         public GrassVolumeMap heightMap;
 
@@ -92,8 +90,18 @@ namespace Solis.Misc.Grass
             if (visibilityMap.use && visibilityMap.map != null)
                 mpb.SetTexture(GrassMap, visibilityMap.map);
             
-            if(control != null)
-                mpb.SetVector("_ControlPos", transform.InverseTransformPoint(control.position));
+            #if UNITY_EDITOR
+            if(!Application.isPlaying)
+            {
+                var sceneViewCamera = UnityEditor.SceneView.lastActiveSceneView?.camera;
+                if(sceneViewCamera != null)
+                    mpb.SetVector("_ControlPos", transform.InverseTransformPoint(sceneViewCamera.transform.position));
+            }
+            else
+            #endif
+            
+            if(Camera.main != null)
+                mpb.SetVector("_ControlPos", transform.InverseTransformPoint(Camera.main.transform.position));
 
             Graphics.DrawMesh(_mesh, transform.localToWorldMatrix, material, gameObject.layer, null, 0, mpb);
         }
