@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   acceptMultipleConnections: 1
+  inputSelfPowered: 0
 --- !u!114 &2342047865637409841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,8 +61,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id:
-    high: -1779572582
-    low: 2051711192
+    high: 1597258300
+    low: -222865989
   ownerId: -1
   prefabId:
     high: 0
@@ -134,8 +135,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id:
-    high: 2061269156
-    low: 1198910158
+    high: 2127010569
+    low: -284938375
   ownerId: -1
   prefabId:
     high: 0
@@ -209,6 +210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   acceptMultipleConnections: 0
+  inputSelfPowered: 0
 --- !u!114 &1331232833334155004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,8 +224,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id:
-    high: -153205853
-    low: 79061471
+    high: 797850658
+    low: -441424991
   ownerId: -1
   prefabId:
     high: 0
@@ -431,11 +433,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7244527652965113699, guid: 476b9ac074c185a4cb46b5a41701a233, type: 3}
       propertyPath: id.low
-      value: 407900875
+      value: -75470791
       objectReference: {fileID: 0}
     - target: {fileID: 7244527652965113699, guid: 476b9ac074c185a4cb46b5a41701a233, type: 3}
       propertyPath: id.high
-      value: 1488874827
+      value: -1303915382
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
