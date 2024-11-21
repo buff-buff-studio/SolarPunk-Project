@@ -756,16 +756,16 @@ namespace Solis.Player
                 {
                     Id = Id
                 }, true);
-                Task.Run(async () =>
-                {
-                    await Task.Delay(500);
-
-                    Debug.Log("Interact Timer Ended");
-                    if (_waitingForInteract)
-                    {
-                        PlayInteraction(InteractionType.None);
-                    }
-                });
+                // Task.Run(async () =>
+                // {
+                //     await Task.Delay(500);
+                //
+                //     Debug.Log("Interact Timer Ended");
+                //     if (_waitingForInteract)
+                //     {
+                //         PlayInteraction(InteractionType.None);
+                //     }
+                // });
             }
             if(DialogPanel.IsDialogPlaying)
                 if(SolisInput.GetKeyDown("Skip"))
