@@ -400,8 +400,7 @@ namespace Solis.Player
                     else dustParticles.Stop();
 
                     var move = Quaternion.Euler(0, te.y, 0) * velocity;
-                    if (_interactTimer > 0)
-                        move = Vector3.zero;
+                    //if (_interactTimer > 0) move = Vector3.zero;
 
                     var walking = velocityXZ.magnitude > 0.1f;
                     var nextPos = transform.position + (new Vector3(move.x, 0, move.z) * (Time.fixedDeltaTime * data.nextMoveMultiplier));

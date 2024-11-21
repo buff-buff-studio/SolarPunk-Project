@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -50,6 +51,21 @@ namespace Solis.Circuit.Gates
 
             _UpdateMaterial();
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            var color = new Color(colorPassword.x, colorPassword.y, colorPassword.z);
+            var mesh = GetComponentInChildren<MeshFilter>();
+
+            Gizmos.color = color;
+            Gizmos.DrawWireMesh(mesh.sharedMesh, mesh.transform.position, mesh.transform.rotation, mesh.transform.localScale * 1.1f);
+
+            input.Color = color;
+            output.Color = color;
+        }
+#endif
+
         #endregion
 
         #region Abstract Methods Implementation
