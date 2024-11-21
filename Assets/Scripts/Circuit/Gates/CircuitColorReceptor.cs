@@ -57,7 +57,7 @@ namespace Solis.Circuit.Gates
         {
             if(input.ReadOutput().power > 0)
             {
-                var data = (Vector3)input.ReadOutput().additionalData;
+                _dataColor = (Vector3)input.ReadOutput().additionalData;
                 if(_dataColor == colorPassword)
                 {
                     return new CircuitData(true);
