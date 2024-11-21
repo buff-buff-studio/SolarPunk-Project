@@ -1042,7 +1042,7 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1001 &704451253
+--- !u!1001 &661411154
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1053,10 +1053,6 @@ PrefabInstance:
     - target: {fileID: 107231516087654645, guid: b80a4118c439ee946b5011ee2f936097, type: 3}
       propertyPath: m_Name
       value: MegalevelGrass
-      objectReference: {fileID: 0}
-    - target: {fileID: 4985193183381891241, guid: b80a4118c439ee946b5011ee2f936097, type: 3}
-      propertyPath: visibilityMap.map
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8913714434531605441, guid: b80a4118c439ee946b5011ee2f936097, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4920,5 +4916,5 @@ SceneRoots:
   - {fileID: 1301192106}
   - {fileID: 1156751966}
   - {fileID: 887517931}
-  - {fileID: 704451253}
   - {fileID: 201320508}
+  - {fileID: 661411154}
