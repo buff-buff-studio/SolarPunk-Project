@@ -74,7 +74,7 @@ namespace Solis.Circuit.Gates
             if(input.ReadOutput().power > 0)
             {
                 _dataColor = (Vector3)input.ReadOutput().additionalData;
-                if(_dataColor == colorPassword)
+                if(_dataColor == colorPassword || _dataColor == new Vector3(-1, -1, -1))
                 {
                     return new CircuitData(true);
                 }
@@ -85,7 +85,7 @@ namespace Solis.Circuit.Gates
         
         protected override void OnRefresh()
         {
-            
+            _UpdateMaterial();
         }
 
         public override IEnumerable<CircuitPlug> GetPlugs()
@@ -117,7 +117,7 @@ namespace Solis.Circuit.Gates
             for (int i = 0; i < meshRenderers.Length; i++)
             {
                 if(meshRenderers[i] == null) continue;
-                var materials = meshRenderers[i].sharedMaterials;
+                var materials = meshRenderers[i].materials;
                 if(materials.Length <= materialsIndex[i]) continue;
                 var material = materials[materialsIndex[i]];
                 material.SetColor(EmissionColor, color);

@@ -23,6 +23,7 @@ namespace Solis.Circuit.Gates
         public int materialIndex;
 
         [Header("SETTINGS")]
+        public int powerToBreak = 2;
         public bool invisibleOnPlay = false;
         #endregion
 
@@ -47,8 +48,20 @@ namespace Solis.Circuit.Gates
         public override CircuitData ReadOutput(CircuitPlug plug)
         {
             _UpdateMaterial();
-            var power = input.ReadOutput().power;
-            return power <= 0 ? new CircuitData(false) : new CircuitData(power, new Vector3(rData.ReadOutput().power, gData.ReadOutput().power, bData.ReadOutput().power));
+
+            var count = input.Connections.Length;
+            var power = 0f;
+            for(var i = 0; i < count; i++)
+                power += input.ReadOutput(i).power;
+
+            if (power <= 0)
+                return new CircuitData(false);
+            else if (power >= powerToBreak)
+                return new CircuitData(power,
+                    new Vector3(-1, -1, -1));
+            else
+                return new CircuitData(power,
+                    new Vector3(rData.ReadOutput().power, gData.ReadOutput().power, bData.ReadOutput().power));
         }
         
         protected override void OnRefresh()

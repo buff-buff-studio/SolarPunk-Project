@@ -43,7 +43,6 @@ namespace Solis.Misc
             _pauseManager = GetComponentInParent<PauseManager>();
             IsCheatsEnabled = false;
 
-            _nextPhase.SetActive(IsServer);
             _noClip.SetActive(false);
 
             DisableCheats();
@@ -144,6 +143,19 @@ namespace Solis.Misc
         {
             if (!IsCheatsEnabled) return;
 
+            if(!IsServer) return;
+
+            GameManager.Instance.SaveData.currentLevel++;
+            GameManager.Instance.LoadLevel();
+        }
+
+        public void PreviousPhase()
+        {
+            if (!IsCheatsEnabled) return;
+
+            if(!IsServer) return;
+
+            GameManager.Instance.SaveData.currentLevel--;
             GameManager.Instance.LoadLevel();
         }
     }

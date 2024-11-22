@@ -77,7 +77,11 @@ public class PauseManager : WindowManager
                 n.username.OnValueChanged += NinaUserUpdate;
                 NinaUserUpdate("", n.username.Value);
                 ninaPing.text = n.OwnerId == 1 ? "Host" : "";
-            }else ninaUsername.text = "Waiting for player...";
+            }else
+            {
+                ninaUsername.text = "Waiting for player...";
+                ninaPing.text = "'-'";
+            }
         }
         if (string.IsNullOrEmpty(ramUsernameText))
         {
@@ -87,7 +91,11 @@ public class PauseManager : WindowManager
                 r.username.OnValueChanged += RAMUserUpdate;
                 RAMUserUpdate("", r.username.Value);
                 ramPing.text = r.OwnerId == 1 ? "Host" : "";
-            }else ramUsername.text = "Waiting for player...";
+            }else
+            {
+                ramUsername.text = "Waiting for player...";
+                ramPing.text = "'-'";
+            }
         }
 
         if(ramPing.text == "Host") ramPing.transform.parent.SetAsFirstSibling();
