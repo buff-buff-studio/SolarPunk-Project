@@ -19,7 +19,6 @@ namespace Solis.Circuit.Components
         public Color colorOn = Color.green;
         
         [Header("REFERENCES")]
-        public BoolNetworkValue isOn = new(false);
         public CircuitPlug output;
         public Image palm;
         public ParticleSystem fx;
@@ -30,8 +29,6 @@ namespace Solis.Circuit.Components
         {
             base.OnEnable();
             WithValues(isOn);
-            
-            isOn.OnValueChanged += _OnValueChanged;
             
             palm.color = isOn.Value ? colorOn : colorOff;
         }
@@ -68,8 +65,6 @@ namespace Solis.Circuit.Components
             if (!PlayerChecker(arg1, out var player))
                 return false;
 
-            player.PlayInteraction(InteractionType.Scanner);
-
             if(canBeTurnedOff) isOn.Value = !isOn.Value;
             else isOn.Value = true;
             onToggleComponent?.Invoke();
@@ -77,10 +72,11 @@ namespace Solis.Circuit.Components
             return true;
         }
         
-        private void _OnValueChanged(bool old, bool @new)
+        protected override void _OnValueChanged(bool old, bool @new)
         {
+            if(_lastPlayerInteracted) _lastPlayerInteracted.PlayInteraction(InteractionType.Lever);
+            base._OnValueChanged(old, @new);
             if(@new && fx != null) fx.Play();
-            Refresh();
         }
         #endregion
     }

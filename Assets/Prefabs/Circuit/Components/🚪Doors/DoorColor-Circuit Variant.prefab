@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 4206354393476990072}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: -0.0000011920929, y: 0.91400003, z: -0.15756416}
+  m_LocalPosition: {x: -0.00000037252903, y: 0.91400003, z: -0.15756357}
   m_LocalScale: {x: 0.625, y: 0.6666667, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -67,9 +67,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3091077175650938616, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5fdf8d0d9fab44241a4df612ad0b38e9, type: 2}
+    - target: {fileID: 3465050821197746933, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5fdf8d0d9fab44241a4df612ad0b38e9, type: 2}
+    - target: {fileID: 3812293603567129275, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: fe2178e062572d94cae16c2903c8287a, type: 2}
     - target: {fileID: 4011247800578907868, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.513506
+      value: -1.7836285
       objectReference: {fileID: 0}
     - target: {fileID: 4011247800578907868, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -77,7 +89,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4011247800578907868, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 20.316872
+      value: -0.09188843
       objectReference: {fileID: 0}
     - target: {fileID: 4011247800578907868, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -85,7 +97,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4011247800578907868, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4011247800578907868, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
       propertyPath: m_LocalRotation.y
@@ -93,7 +105,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4011247800578907868, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4011247800578907868, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -117,12 +129,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7607824450606554974, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
       propertyPath: id.low
-      value: -1473748316
+      value: -548048873
       objectReference: {fileID: 0}
     - target: {fileID: 7607824450606554974, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
       propertyPath: id.high
-      value: -981558103
+      value: -20744918
       objectReference: {fileID: 0}
+    - target: {fileID: 8744346833328832248, guid: 7fab38867263d7141a24ba3df523a12b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5fdf8d0d9fab44241a4df612ad0b38e9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -168,6 +184,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 644272234036997398}
     m_Modifications:
+    - target: {fileID: 45439728289637269, guid: a67e69d0499a9684b8437851a285b5f0, type: 3}
+      propertyPath: colorIntensity
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 45439728289637269, guid: a67e69d0499a9684b8437851a285b5f0, type: 3}
       propertyPath: colorPassword.x
       value: 0
@@ -234,11 +254,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7174901997221908533, guid: a67e69d0499a9684b8437851a285b5f0, type: 3}
       propertyPath: id.low
-      value: 1201349127
+      value: -1221536711
       objectReference: {fileID: 0}
     - target: {fileID: 7174901997221908533, guid: a67e69d0499a9684b8437851a285b5f0, type: 3}
       propertyPath: id.high
-      value: 1576229659
+      value: 132584772
       objectReference: {fileID: 0}
     - target: {fileID: 7897315411561596486, guid: a67e69d0499a9684b8437851a285b5f0, type: 3}
       propertyPath: m_LocalScale.y

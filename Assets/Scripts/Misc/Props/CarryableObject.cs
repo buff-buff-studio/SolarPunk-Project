@@ -31,6 +31,7 @@ namespace Solis.Misc.Props
         private Vector3 _initialPosition;
         private Collider _collider;
         private ICarryableObject _carryableObjectImplementation;
+        private MagneticProp _magneticProp;
 
         private static readonly Collider[] _objects = new Collider[10];
         private GameObject _boxPlace;
@@ -48,6 +49,7 @@ namespace Solis.Misc.Props
             _initialPosition = transform.position;
             objectSize = _collider.GetComponentInChildren<MeshRenderer>().bounds;
             _originalParent = transform.parent;
+            TryGetComponent(out _magneticProp);
         }
 
         protected override void OnEnable()
@@ -64,18 +66,6 @@ namespace Solis.Misc.Props
             base.OnDisable();
             CancelInvoke(nameof(_PosCheck));
             isOn.OnValueChanged -= _OnValueChanged;
-        }
-
-        private void Update()
-        {
-            if(!isOn.Value && !playerHolding) return;
-            
-            var ht = playerHolding.handPosition;
-            var pos = ht.position;
-            var fw = ht.forward;
-            var dt = Time.deltaTime * 50f;
-            //transform.position = Vector3.MoveTowards(transform.position, pos, dt);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(fw), dt);
         }
 
         private void OnTriggerEnter(Collider col)
@@ -97,39 +87,54 @@ namespace Solis.Misc.Props
                 return;
 #endif
 
-            if (packet is CarryableObjectGrabPacket grabPacket)
+            switch (packet)
             {
-                if (HasAuthority)
-                    return;
-
-                if (grabPacket.HandId == null)
+                case CarryableObjectGrabPacket grabPacket:
                 {
-                    playerHolding = null;
-                    transform.parent = _originalParent;
-                }
-                else
-                {
-                    NetworkId.TryParse(grabPacket.HandId, out var handId);
-                    playerHolding = GetNetworkObject((NetworkId)handId).GetComponent<PlayerControllerBase>();
-                    transform.SetParent(playerHolding.handPosition, true);
-                }
-            }
-            else if(packet is PlayerDeathPacket deathPacket)
-            {
-                if (HasAuthority)
-                    return;
+                    if (HasAuthority)
+                        return;
 
-                if (playerHolding && playerHolding.Id == deathPacket.Id && isOn.Value)
-                {
-                    _Reset();
-                }
-            }else if (packet is SnapSyncPacket snapSyncPacket)
-            {
-                if (HasAuthority)
-                    return;
+                    if (grabPacket.HandId == null)
+                    {
+                        playerHolding = null;
+                        transform.parent = _originalParent;
+                    }
+                    else if (!grabPacket.IsCarrying)
+                    {
+                        playerHolding.PlayInteraction(InteractionType.Box);
+                    }
+                    else
+                    {
+                        NetworkId.TryParse(grabPacket.HandId, out var handId);
+                        playerHolding = GetNetworkObject((NetworkId)handId).GetComponent<PlayerControllerBase>();
+                        playerHolding.PlayInteraction(InteractionType.Box);
+                        playerHolding.carriedObject = this;
+                        transform.SetParent(playerHolding.handPosition, true);
+                    }
 
-                transform.position = snapSyncPacket.Position;
-                transform.eulerAngles = snapSyncPacket.Rotation;
+                    break;
+                }
+                case PlayerDeathPacket deathPacket:
+                {
+                    if (HasAuthority)
+                        return;
+
+                    if (playerHolding && playerHolding.Id == deathPacket.Id && isOn.Value)
+                    {
+                        _Reset();
+                    }
+
+                    break;
+                }
+                case SnapSyncPacket snapSyncPacket:
+                {
+                    if (HasAuthority)
+                        return;
+
+                    transform.position = snapSyncPacket.Position;
+                    transform.eulerAngles = snapSyncPacket.Rotation;
+                    break;
+                }
             }
         }
         
@@ -176,9 +181,6 @@ namespace Solis.Misc.Props
                     transform.position = playerHolding.handPosition.position;
                     //FAzer com que a face mais proxima do player olhe para ele
                     AlignRotationToNearest90();
-
-                    if (TryGetComponent(out MagneticProp prop))
-                        prop.cantBeMagnetized.Value = true;
                     
                     if(_boxPlace!= null) _boxPlace.SetActive(true);
                 }
@@ -189,12 +191,7 @@ namespace Solis.Misc.Props
                 var newPos = new Vector3(pPos.x, transform.position.y, pPos.z);
                 transform.position = newPos + (pBody.forward*1.25f);
                 playerHolding.carriedObject = null;
-            }
-            else
-            {
-                Debug.Log("Demagnetized");
-                if (TryGetComponent(out MagneticProp prop))
-                    prop.cantBeMagnetized.Value = false;
+                transform.parent = _originalParent;
             }
 
             playerHolding = isOn.Value ? playerHolding : null;
@@ -234,7 +231,15 @@ namespace Solis.Misc.Props
                 if (playerHolding != player)
                     return false;
 
-                player.PlayInteraction(InteractionType.Box);
+                playerHolding.PlayInteraction(InteractionType.Box);
+                if(_magneticProp)
+                    _magneticProp.cantBeMagnetized.Value = false;
+                ServerBroadcastPacket(new CarryableObjectGrabPacket
+                {
+                    Id = this.Id,
+                    HandId = player.Id.ToString(),
+                    IsCarrying = false
+                });
 
                 return true;
             }
@@ -246,14 +251,16 @@ namespace Solis.Misc.Props
                 return false;
 
             playerHolding = player;
-            transform.SetParent(player.handPosition, true);
             isOn.Value = true;
-            player.carriedObject = this;
             player.PlayInteraction(InteractionType.Box);
+            player.carriedObject = this;
+            transform.SetParent(player.handPosition, true);
+            if(_magneticProp) _magneticProp.cantBeMagnetized.Value = true;
             ServerBroadcastPacket(new CarryableObjectGrabPacket
             {
                 Id = this.Id,
-                HandId = player.Id.ToString()
+                HandId = player.Id.ToString(),
+                IsCarrying = true
             });
 
             return true;
@@ -261,14 +268,17 @@ namespace Solis.Misc.Props
 
         public void DropBox()
         {
+            Debug.Log("Dropped");
             playerHolding = null;
             isOn.Value = false;
             transform.parent = _originalParent;
             CheckIfThereIsPlace();
-            ServerBroadcastPacket(new CarryableObjectGrabPacket
+            if(HasAuthority)
+                ServerBroadcastPacket(new CarryableObjectGrabPacket
             {
                 Id = this.Id,
-                HandId = ""
+                HandId = "",
+                IsCarrying = false
             });
         }
 

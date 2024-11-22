@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using NetBuff.Misc;
 using Solis.Circuit;
 using Solis.Packets;
+using Solis.Player;
 using UnityEngine;
 
 public class CircuitValve : CircuitInteractive
 {
      [Header("REFERENCES")]
-     public BoolNetworkValue isOn = new(false);
      public CircuitPlug output;
 
      [Header("SETTINGS")] 
@@ -25,11 +25,6 @@ public class CircuitValve : CircuitInteractive
          isOn.OnValueChanged += _OnValueChanged;
 
          valve.localEulerAngles = new Vector3(270, 0, isOn.Value ? valveAngle : 0);
-     }
-
-     private void _OnValueChanged(bool oldvalue, bool newvalue)
-     {
-         Refresh();
      }
 
      protected void Update()
@@ -57,5 +52,11 @@ public class CircuitValve : CircuitInteractive
              return false;
          isOn.Value = !isOn.Value;
          return true;
+     }
+
+     protected override void _OnValueChanged(bool oldvalue, bool newvalue)
+     {
+         if(_lastPlayerInteracted) _lastPlayerInteracted.PlayInteraction(InteractionType.Lever);
+         base._OnValueChanged(oldvalue, newvalue);
      }
 }
