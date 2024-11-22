@@ -541,6 +541,8 @@ namespace Solis.Player
 
         public void PlayInteraction(InteractionType type)
         {
+            if (!HasAuthority || !IsOwnedByClient) return;
+
             _lastInteractionType = type;
             _waitingForInteract = false;
             switch (type)
@@ -727,7 +729,6 @@ namespace Solis.Player
         private void _OnPause(bool isPaused)
         {
             if (!this.isPaused.CheckPermission()) return;
-            Debug.Log(gameObject.name + " is paused: " + isPaused);
             this.isPaused.Value = isPaused;
         }
 
@@ -931,7 +932,7 @@ namespace Solis.Player
                 BodyRotation = body.localEulerAngles.y,
                 BodyPosition = new Vector3(pos.x, pos.y, pos.z)
             };
-            ServerBroadcastPacketExceptFor(packet, OwnerId);
+            SendPacket(packet);
         }
 
         private void _Respawn()

@@ -24,6 +24,8 @@ namespace Solis.Circuit.Gates
 
         [Header("SETTINGS")]
         public int powerToBreak = 2;
+        [Range(1,5)]
+        public float colorIntensity = 1.5f;
         public bool invisibleOnPlay = false;
         #endregion
 
@@ -94,6 +96,7 @@ namespace Solis.Circuit.Gates
             color.r = rData.ReadOutput().IsPowered ? 1 : 0;
             color.g = gData.ReadOutput().IsPowered ? 1 : 0;
             color.b = bData.ReadOutput().IsPowered ? 1 : 0;
+            color *= Mathf.Pow(2,colorIntensity);
 
             meshRenderer.materials[materialIndex].SetColor(EmissionColor, color*1.5f);
         }

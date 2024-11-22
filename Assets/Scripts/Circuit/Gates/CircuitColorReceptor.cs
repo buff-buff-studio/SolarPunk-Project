@@ -26,6 +26,8 @@ namespace Solis.Circuit.Gates
 
         [Header("SETTINGS")]
         public Vector3 colorPassword;
+        [Range(1,5)]
+        public float colorIntensity = 1.5f;
         public bool invisibleOnPlay = false;
         #endregion
 
@@ -114,13 +116,14 @@ namespace Solis.Circuit.Gates
             if(meshRenderers.Length != materialsIndex.Length)
                 return;
 
+            var colHDR = color * Mathf.Pow(2,colorIntensity);
             for (int i = 0; i < meshRenderers.Length; i++)
             {
                 if(meshRenderers[i] == null) continue;
                 var materials = meshRenderers[i].materials;
                 if(materials.Length <= materialsIndex[i]) continue;
                 var material = materials[materialsIndex[i]];
-                material.SetColor(EmissionColor, color);
+                material.SetColor(EmissionColor, colHDR);
             }
         }
         #endregion

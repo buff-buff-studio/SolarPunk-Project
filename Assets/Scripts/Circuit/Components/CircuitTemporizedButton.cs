@@ -19,10 +19,6 @@ namespace Solis.Circuit.Components
         public Vector3 knobOff = new(0, 0.25f, 0f);
 
         [Space]
-        [Header("STATE")]
-        public BoolNetworkValue isOn = new(false);
-
-        [Space]
         [Header("REFERENCES")]
         public CircuitPlug output;
         public Transform knob;
@@ -37,10 +33,7 @@ namespace Solis.Circuit.Components
         protected override void OnEnable()
         {
             WithValues(isOn);
-            
             base.OnEnable();
-            
-            isOn.OnValueChanged += _OnValueChanged;
         }
         
         private void FixedUpdate()
@@ -75,16 +68,16 @@ namespace Solis.Circuit.Components
             if (!PlayerChecker(arg1, out var player))
                 return false;
 
-            player.PlayInteraction(InteractionType.Button);
             isOn.Value = true;
             _timeOnCounter = timeOn;
             onToggleComponent?.Invoke();
             return true;
         }
         
-        private void _OnValueChanged(bool old, bool @new)
+        protected override void _OnValueChanged(bool old, bool @new)
         {
-            Refresh();
+            if(_lastPlayerInteracted) _lastPlayerInteracted.PlayInteraction(InteractionType.Lever);
+            base._OnValueChanged(old, @new);
         }
         #endregion
     }
