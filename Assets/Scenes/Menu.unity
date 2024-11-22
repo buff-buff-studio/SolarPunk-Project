@@ -661,7 +661,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'V: 0.6.5'
+  m_text: 'V: 0.8.5'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
   m_sharedMaterial: {fileID: 6976116800014725505, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
@@ -2823,7 +2823,7 @@ MonoBehaviour:
   m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: fdadb7b91cf828b4aa270c7ff4a15688, type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
-  m_CursorLockBehavior: 0
+  m_CursorLockBehavior: 1
 --- !u!1 &462611046
 GameObject:
   m_ObjectHideFlags: 0
@@ -3455,6 +3455,7 @@ MonoBehaviour:
   speed: -50
   acceleration: 0.1
   audioSource: {fileID: 0}
+  pitchSpeedBase: 130
 --- !u!114 &579108598
 MonoBehaviour:
   m_ObjectHideFlags: 0

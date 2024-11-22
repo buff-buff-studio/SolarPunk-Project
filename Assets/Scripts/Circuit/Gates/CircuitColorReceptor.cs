@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ namespace Solis.Circuit.Gates
 
         [Header("SETTINGS")]
         public Vector3 colorPassword;
+        [Range(1,5)]
+        public float colorIntensity = 1.5f;
         public bool invisibleOnPlay = false;
         #endregion
 
@@ -50,6 +53,21 @@ namespace Solis.Circuit.Gates
 
             _UpdateMaterial();
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            var color = new Color(colorPassword.x, colorPassword.y, colorPassword.z);
+            var mesh = GetComponentInChildren<MeshFilter>();
+
+            Gizmos.color = color;
+            Gizmos.DrawWireMesh(mesh.sharedMesh, mesh.transform.position, mesh.transform.rotation, mesh.transform.localScale * 1.1f);
+
+            input.Color = color;
+            output.Color = color;
+        }
+#endif
+
         #endregion
 
         #region Abstract Methods Implementation
@@ -57,8 +75,8 @@ namespace Solis.Circuit.Gates
         {
             if(input.ReadOutput().power > 0)
             {
-                var data = (Vector3)input.ReadOutput().additionalData;
-                if(_dataColor == colorPassword)
+                _dataColor = (Vector3)input.ReadOutput().additionalData;
+                if(_dataColor == colorPassword || _dataColor == new Vector3(-1, -1, -1))
                 {
                     return new CircuitData(true);
                 }
@@ -69,7 +87,7 @@ namespace Solis.Circuit.Gates
         
         protected override void OnRefresh()
         {
-            
+            _UpdateMaterial();
         }
 
         public override IEnumerable<CircuitPlug> GetPlugs()
@@ -98,13 +116,14 @@ namespace Solis.Circuit.Gates
             if(meshRenderers.Length != materialsIndex.Length)
                 return;
 
+            var colHDR = color * Mathf.Pow(2,colorIntensity);
             for (int i = 0; i < meshRenderers.Length; i++)
             {
                 if(meshRenderers[i] == null) continue;
-                var materials = meshRenderers[i].sharedMaterials;
+                var materials = meshRenderers[i].materials;
                 if(materials.Length <= materialsIndex[i]) continue;
                 var material = materials[materialsIndex[i]];
-                material.SetColor(EmissionColor, color);
+                material.SetColor(EmissionColor, colHDR);
             }
         }
         #endregion

@@ -53,16 +53,17 @@ namespace Misc.Props
 
             // Check if player is allowed to interact with object
             if (!playerTypeFilter.Filter(player.CharacterType))
+            {
+                Debug.LogWarning($"{player.CharacterType} is not allowed to interact with the object", this);
                 return false;
-
-            return true;
+            }
 
             // Check if player is facing the object
             var directionToTarget = transform.position - player.body.position;
             var dot = Vector3.Dot(player.body.forward, directionToTarget.normalized);
             if (dot < dotThreshold)
             {
-                Debug.Log("Player is not facing the object, dot: " + dot);
+                Debug.LogWarning($"{player.CharacterType} is not facing the object, dot: " + dot, this);
                 return false;
             }
 
@@ -76,6 +77,7 @@ namespace Misc.Props
                 return false;
             }
 
+            Debug.LogWarning($"{player.CharacterType} is allowed to interact with the object", this);
             return true;
         }
 

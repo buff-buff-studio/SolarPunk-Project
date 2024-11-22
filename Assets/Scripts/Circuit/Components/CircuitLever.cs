@@ -14,7 +14,6 @@ namespace Solis.Circuit.Components
     {
         #region Inspector Fields
         [Header("REFERENCES")]
-        public BoolNetworkValue isOn = new(false);
         public CircuitPlug output;
         public Transform handle;
         
@@ -27,8 +26,6 @@ namespace Solis.Circuit.Components
         {
             base.OnEnable();
             WithValues(isOn);
-
-            isOn.OnValueChanged += _OnValueChanged;
 
             handle.localEulerAngles = new Vector3(isOn.Value ? handleAngle : 0, 0, 0);
         }
@@ -79,16 +76,16 @@ namespace Solis.Circuit.Components
         {
             if (!PlayerChecker(arg1, out var player))
                 return false;
-            player.PlayInteraction(InteractionType.Lever);
             isOn.Value = !isOn.Value;
             return true;
         }
 
-        private void _OnValueChanged(bool old, bool @new)
+        protected override void _OnValueChanged(bool old, bool @new)
         {
-            Refresh();
-            onToggleComponent?.Invoke();
+            if(_lastPlayerInteracted) _lastPlayerInteracted.PlayInteraction(InteractionType.Lever);
+            base._OnValueChanged(old, @new);
         }
+
         #endregion
     }
 }

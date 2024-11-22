@@ -400,8 +400,7 @@ namespace Solis.Player
                     else dustParticles.Stop();
 
                     var move = Quaternion.Euler(0, te.y, 0) * velocity;
-                    if (_interactTimer > 0)
-                        move = Vector3.zero;
+                    //if (_interactTimer > 0) move = Vector3.zero;
 
                     var walking = velocityXZ.magnitude > 0.1f;
                     var nextPos = transform.position + (new Vector3(move.x, 0, move.z) * (Time.fixedDeltaTime * data.nextMoveMultiplier));
@@ -542,6 +541,8 @@ namespace Solis.Player
 
         public void PlayInteraction(InteractionType type)
         {
+            if (!HasAuthority || !IsOwnedByClient) return;
+
             _lastInteractionType = type;
             _waitingForInteract = false;
             switch (type)
@@ -728,7 +729,6 @@ namespace Solis.Player
         private void _OnPause(bool isPaused)
         {
             if (!this.isPaused.CheckPermission()) return;
-            Debug.Log(gameObject.name + " is paused: " + isPaused);
             this.isPaused.Value = isPaused;
         }
 
@@ -756,16 +756,16 @@ namespace Solis.Player
                 {
                     Id = Id
                 }, true);
-                Task.Run(async () =>
-                {
-                    await Task.Delay(500);
-
-                    Debug.Log("Interact Timer Ended");
-                    if (_waitingForInteract)
-                    {
-                        PlayInteraction(InteractionType.None);
-                    }
-                });
+                // Task.Run(async () =>
+                // {
+                //     await Task.Delay(500);
+                //
+                //     Debug.Log("Interact Timer Ended");
+                //     if (_waitingForInteract)
+                //     {
+                //         PlayInteraction(InteractionType.None);
+                //     }
+                // });
             }
             if(DialogPanel.IsDialogPlaying)
                 if(SolisInput.GetKeyDown("Skip"))
@@ -932,7 +932,7 @@ namespace Solis.Player
                 BodyRotation = body.localEulerAngles.y,
                 BodyPosition = new Vector3(pos.x, pos.y, pos.z)
             };
-            ServerBroadcastPacketExceptFor(packet, OwnerId);
+            SendPacket(packet);
         }
 
         private void _Respawn()
