@@ -416,6 +416,7 @@ Shader "Custom/Grass"
             	//const float view_dist = distance(i.pos, _ControlPos); //saturate(distance(i.pos, _ControlPos) / _CameraFar);
                 //return 1;
             	discard;
+            	return 0;
 			}
 
 			ENDHLSL
