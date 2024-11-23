@@ -220,7 +220,7 @@ GameObject:
   - component: {fileID: 4591328941396549588}
   - component: {fileID: 1372217443083950505}
   m_Layer: 5
-  m_Name: Toggle
+  m_Name: ToggleFly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -317,7 +317,7 @@ GameObject:
   - component: {fileID: 6653070002375171143}
   - component: {fileID: 7880034150913985726}
   m_Layer: 5
-  m_Name: Toggle
+  m_Name: ToggleGod
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1974,7 +1974,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4417587181763774196823010e935eca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _noClip: {fileID: 3340766520737337647}
+  _godMode: {fileID: 7880034150913985726}
+  _flyMode: {fileID: 1372217443083950505}
+  _noClip: {fileID: 8184655660262945682}
   _nextPhase: {fileID: 838287921317894730}
   _boxPrefab: {fileID: 5543034213146780115, guid: fc0603dbfd745f147be6d59f1004342c, type: 3}
 --- !u!225 &4638511789300283823
@@ -2382,7 +2384,7 @@ GameObject:
   - component: {fileID: 7362183374077159214}
   - component: {fileID: 8184655660262945682}
   m_Layer: 5
-  m_Name: Toggle
+  m_Name: ToggleClip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
