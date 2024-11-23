@@ -16,7 +16,7 @@ namespace Misc.Props
         public float dotThreshold = 0.5f;
         public CharacterTypeFilter playerTypeFilter = CharacterTypeFilter.Both;
 
-        private LayerMask _layerMask;
+        private protected LayerMask _layerMask;
         private int _originalLayer, _ignoreRaycastLayer = 2;
 
         protected virtual void OnEnable()

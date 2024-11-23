@@ -254,6 +254,8 @@ namespace Solis.Player
 
             if (controller == null) TryGetComponent(out controller);
             InvokeRepeating(nameof(_Tick), 0, 1f / tickRate);
+
+            CheatsManager.Instance?.ChangeScene(this);
         }
 
         private void OnDisable()
@@ -433,7 +435,7 @@ namespace Solis.Player
                         {
                             var size = Physics.OverlapSphere(
                                 boxNextPos, carriedObject.objectSize.extents.x,
-                                ~LayerMask.GetMask("Box", "CarriedIgnore",
+                                ~LayerMask.GetMask("Box", "CarriedIgnore", "PressurePlate",
                                     (CharacterType == CharacterType.Human ? "Human" : "Robot")),
                                 QueryTriggerInteraction.Ignore);
 
@@ -740,7 +742,7 @@ namespace Solis.Player
                 {
                     var size = Physics.OverlapSphere(
                         boxPlacedPosition.position, carriedObject.objectSize.extents.x,
-                        ~LayerMask.GetMask("Box", "CarriedIgnore", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
+                        ~LayerMask.GetMask("Box", "CarriedIgnore", "PressurePlate", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
 
                     if (size.Length > 0)
                     {
@@ -778,15 +780,10 @@ namespace Solis.Player
         {
             var moveInput = (!isPaused.Value && !DialogPanel.IsDialogPlaying) ? MoveInput.normalized : Vector2.zero;
             var maxSpeedTarget = _inJumpState ? MaxSpeed * AccelInJumpMultiplier : MaxSpeed;
-            var target = moveInput * maxSpeedTarget;
-            var accelOrDecel = (Mathf.Abs(moveInput.magnitude) > 0.01f);
-            var accelerationValue = ((accelOrDecel ? Acceleration : Deceleration)) * Time.deltaTime;
-
-            velocity.x = Mathf.MoveTowards(velocity.x, target.x, accelerationValue);
-            velocity.z = Mathf.MoveTowards(velocity.z, target.y, accelerationValue);
 
             if (_flyMode)
             {
+                maxSpeedTarget = 14;
                 var moveYInput = SolisInput.GetAxis("Fly");
                 var targetY = moveYInput * maxSpeedTarget;
                 var accelOrDecelY = (Mathf.Abs(moveYInput) > 0.01f);
@@ -794,6 +791,13 @@ namespace Solis.Player
 
                 velocity.y = Mathf.MoveTowards(velocity.y, targetY, accelerationValueY);
             }
+
+            var target = moveInput * maxSpeedTarget;
+            var accelOrDecel = (Mathf.Abs(moveInput.magnitude) > 0.01f);
+            var accelerationValue = ((accelOrDecel ? Acceleration : Deceleration)) * Time.deltaTime;
+
+            velocity.x = Mathf.MoveTowards(velocity.x, target.x, accelerationValue);
+            velocity.z = Mathf.MoveTowards(velocity.z, target.y, accelerationValue);
         }
 
         private void _Jump()
@@ -938,9 +942,10 @@ namespace Solis.Player
         private void _Respawn()
         {
             if (HasAuthority && IsOwnedByClient)
+            {
                 isRespawning.Value = true;
-
-            RespawnHUD.Instance.ShowHUD(CharacterType, 1);
+                RespawnHUD.Instance.ShowHUD(CharacterType, 1);
+            }
 
             velocity = Vector3.zero;
             _positionReset = false;

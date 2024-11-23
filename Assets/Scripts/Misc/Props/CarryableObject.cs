@@ -59,6 +59,10 @@ namespace Solis.Misc.Props
             
             InvokeRepeating(nameof(_PosCheck), 0, 1f);
             isOn.OnValueChanged += _OnValueChanged;
+
+            _layerMask = ~(playerTypeFilter != CharacterTypeFilter.Both
+                ? LayerMask.GetMask("Ignore Raycast", playerTypeFilter == CharacterTypeFilter.Human ? "Human" : "Robot", "PressurePlate")
+                : LayerMask.GetMask("Ignore Raycast", "Human", "Robot", "PressurePlate"));
         }
 
         protected override void OnDisable()
@@ -172,7 +176,7 @@ namespace Solis.Misc.Props
             var pBody = playerHolding ? playerHolding.body : null;
             _collider.excludeLayers = !isOn.Value
                 ? 0
-                : LayerMask.GetMask("Trigger", playerHolding!.CharacterType == CharacterType.Human ? "Human" : "Robot");
+                : LayerMask.GetMask("Trigger", playerHolding!.CharacterType == CharacterType.Human ? "Human" : "Robot", "PressurePlate");
             
             if (isOn.Value)
             {
@@ -272,9 +276,10 @@ namespace Solis.Misc.Props
             playerHolding = null;
             isOn.Value = false;
             transform.parent = _originalParent;
+            if(!HasAuthority) return;
+
             CheckIfThereIsPlace();
-            if(HasAuthority)
-                ServerBroadcastPacket(new CarryableObjectGrabPacket
+            ServerBroadcastPacket(new CarryableObjectGrabPacket
             {
                 Id = this.Id,
                 HandId = "",
