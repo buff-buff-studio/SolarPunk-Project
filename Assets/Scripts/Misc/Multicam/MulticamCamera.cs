@@ -37,6 +37,7 @@ namespace Solis.Misc.Multicam
         public GameObject cinematicCanvas;
         public TextMeshProUGUI skipCinematicText;
         private List<int> _hasSkipped = new List<int>();
+        private IntNetworkValue _skipCount = new IntNetworkValue(0);
 
         [Header("DIALOGUE")]
         public CinemachineVirtualCamera dialogueCamera;
@@ -54,6 +55,8 @@ namespace Solis.Misc.Multicam
             else Destroy(this);
 
             _cinemachineBrain = mainCamera.GetComponent<CinemachineBrain>();
+            WithValues(_skipCount);
+            _skipCount.OnValueChanged += OnSkipCountChange;
         }
 
         private void OnEnable()
@@ -76,22 +79,23 @@ namespace Solis.Misc.Multicam
                 if (arg1.Key != KeyCode.Return) return false;
                 if (_hasSkipped.Contains(arg2)) return false;
                 _hasSkipped.Add(arg2);
-                skipCinematicText.text = $"{_hasSkipped.Count}/2";
-
+                _skipCount.Value = _hasSkipped.Count;
 #if UNITY_EDITOR
-                if (_hasSkipped.Count >= 1)
-                {
-                    CinematicController.Instance.Stop();
-                    return true;
-                }
+                if (_hasSkipped.Count >= 1) return true;
 #endif
-                
-                if (_hasSkipped.Count < 2) return false;
-                CinematicController.Instance.Stop();
-                return true;
+                return _hasSkipped.Count >= 2;
             }
 
             return false;
+        }
+
+        private void OnSkipCountChange(int old, int @new)
+        {
+            skipCinematicText.text = $"{@new}/2";
+#if UNITY_EDITOR
+            if (@new >= 1) CinematicController.Instance.Stop();
+#endif
+            if (@new >= 2) CinematicController.Instance.Stop();
         }
 
         #region Public Methods

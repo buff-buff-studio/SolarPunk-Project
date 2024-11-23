@@ -626,6 +626,10 @@ namespace Solis.Player
                     if (deathPacket.Id == Id && !isRespawning.Value)
                         PlayerDeath(deathPacket.Type);
                     break;
+                case InteractObjectPacket interactObjectPacket:
+                    if (interactObjectPacket.Id == Id)
+                        PlayInteraction(interactObjectPacket.Interaction);
+                    break;
             }
         }
         #endregion

@@ -51,12 +51,14 @@ public class CircuitValve : CircuitInteractive
          if (!PlayerChecker(arg1, out var player))
              return false;
          isOn.Value = !isOn.Value;
-         return true;
-     }
 
-     protected override void _OnValueChanged(bool oldvalue, bool newvalue)
-     {
-         if(_lastPlayerInteracted) _lastPlayerInteracted.PlayInteraction(InteractionType.Lever);
-         base._OnValueChanged(oldvalue, newvalue);
+         player.PlayInteraction(InteractionType.Lever);
+         ServerBroadcastPacket(new InteractObjectPacket()
+         {
+             Id = arg1.Id,
+             Interaction = InteractionType.Lever
+         });
+
+         return true;
      }
 }

@@ -67,14 +67,19 @@ namespace Solis.Circuit.Components
 
             if(canBeTurnedOff) isOn.Value = !isOn.Value;
             else isOn.Value = true;
-            onToggleComponent?.Invoke();
+            
+            player.PlayInteraction(InteractionType.Lever);
+            ServerBroadcastPacket(new InteractObjectPacket()
+            {
+                Id = arg1.Id,
+                Interaction = InteractionType.Lever
+            });
 
             return true;
         }
         
         protected override void _OnValueChanged(bool old, bool @new)
         {
-            if(_lastPlayerInteracted) _lastPlayerInteracted.PlayInteraction(InteractionType.Lever);
             base._OnValueChanged(old, @new);
             if(@new && fx != null) fx.Play();
         }

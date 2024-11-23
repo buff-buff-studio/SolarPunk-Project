@@ -49,8 +49,6 @@ namespace Solis.Circuit.Gates
         #region Abstract Methods Implementation
         public override CircuitData ReadOutput(CircuitPlug plug)
         {
-            _UpdateMaterial();
-
             var count = input.Connections.Length;
             var power = 0f;
             for(var i = 0; i < count; i++)
@@ -68,7 +66,7 @@ namespace Solis.Circuit.Gates
         
         protected override void OnRefresh()
         {
-            
+            _UpdateMaterial();
         }
 
         public override IEnumerable<CircuitPlug> GetPlugs()
@@ -93,10 +91,13 @@ namespace Solis.Circuit.Gates
             if(meshRenderer == null) return;
 
             var color = Color.black;
-            color.r = rData.ReadOutput().IsPowered ? 1 : 0;
-            color.g = gData.ReadOutput().IsPowered ? 1 : 0;
-            color.b = bData.ReadOutput().IsPowered ? 1 : 0;
-            color *= Mathf.Pow(2,colorIntensity);
+            if (input.ReadOutput().IsPowered)
+            {
+                color.r = rData.ReadOutput().IsPowered ? 1 : 0;
+                color.g = gData.ReadOutput().IsPowered ? 1 : 0;
+                color.b = bData.ReadOutput().IsPowered ? 1 : 0;
+                color *= Mathf.Pow(2, colorIntensity);
+            }
 
             meshRenderer.materials[materialIndex].SetColor(EmissionColor, color*1.5f);
         }
