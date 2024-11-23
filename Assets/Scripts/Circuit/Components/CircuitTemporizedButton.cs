@@ -70,15 +70,17 @@ namespace Solis.Circuit.Components
 
             isOn.Value = true;
             _timeOnCounter = timeOn;
-            onToggleComponent?.Invoke();
+
+            player.PlayInteraction(InteractionType.Lever);
+            ServerBroadcastPacket(new InteractObjectPacket()
+            {
+                Id = arg1.Id,
+                Interaction = InteractionType.Lever
+            });
+
             return true;
         }
-        
-        protected override void _OnValueChanged(bool old, bool @new)
-        {
-            if(_lastPlayerInteracted) _lastPlayerInteracted.PlayInteraction(InteractionType.Lever);
-            base._OnValueChanged(old, @new);
-        }
+
         #endregion
     }
 }

@@ -77,13 +77,13 @@ namespace Solis.Circuit.Components
             if (!PlayerChecker(arg1, out var player))
                 return false;
             isOn.Value = !isOn.Value;
+            player.PlayInteraction(InteractionType.Lever);
+            ServerBroadcastPacket(new InteractObjectPacket()
+            {
+                Id = arg1.Id,
+                Interaction = InteractionType.Lever
+            });
             return true;
-        }
-
-        protected override void _OnValueChanged(bool old, bool @new)
-        {
-            if(_lastPlayerInteracted) _lastPlayerInteracted.PlayInteraction(InteractionType.Lever);
-            base._OnValueChanged(old, @new);
         }
 
         #endregion

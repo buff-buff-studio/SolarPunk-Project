@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   acceptMultipleConnections: 1
+  inputSelfPowered: 0
 --- !u!1 &6477830491867255062
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,12 +118,12 @@ MonoBehaviour:
       m_Calls: []
   radius: 3
   minDistance: 1.24
-  dotThreshold: 0.5
+  dotThreshold: 0.3
   playerTypeFilter: 3
-  ignoreColliders: []
   isOn:
     value: 0
     type: 0
+  ignoreColliders: []
   output: {fileID: 5593689402084669569}
   valve: {fileID: 5592274692788123778}
   valveAngle: 180
