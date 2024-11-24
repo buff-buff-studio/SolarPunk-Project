@@ -29,11 +29,13 @@ namespace Solis.Circuit.Gates
         public bool invisibleOnPlay = false;
         #endregion
 
+        private float power;
+
         #region Unity Callbacks
         protected override void OnEnable()
         {
             base.OnEnable();
-            _UpdateMaterial();
+            UpdateMaterial();
             if(invisibleOnPlay)
             {
                 transform.GetChild(0).gameObject.SetActive(false);
@@ -50,7 +52,7 @@ namespace Solis.Circuit.Gates
         public override CircuitData ReadOutput(CircuitPlug plug)
         {
             var count = input.Connections.Length;
-            var power = 0f;
+            power = 0;
             for(var i = 0; i < count; i++)
                 power += input.ReadOutput(i).power;
 
@@ -66,7 +68,7 @@ namespace Solis.Circuit.Gates
         
         protected override void OnRefresh()
         {
-            _UpdateMaterial();
+            UpdateMaterial();
         }
 
         public override IEnumerable<CircuitPlug> GetPlugs()
@@ -81,7 +83,7 @@ namespace Solis.Circuit.Gates
         #endregion
 
         #region Private Methods
-        private void _UpdateMaterial()
+        public void UpdateMaterial()
         {
 #if UNITY_EDITOR
             if(PrefabStageUtility.GetCurrentPrefabStage() != null)
@@ -91,7 +93,7 @@ namespace Solis.Circuit.Gates
             if(meshRenderer == null) return;
 
             var color = Color.black;
-            if (input.ReadOutput().IsPowered)
+            if (power > 0)
             {
                 color.r = rData.ReadOutput().IsPowered ? 1 : 0;
                 color.g = gData.ReadOutput().IsPowered ? 1 : 0;
