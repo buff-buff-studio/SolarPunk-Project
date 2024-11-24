@@ -5,14 +5,13 @@ using UnityEngine;
 
 namespace Solis.Circuit.Components
 {
-    [RequireComponent(typeof(NetworkAnimator))]
     public class CircuitAnimator : CircuitComponent
     {
         #region Inspector Fields
         [Header("REFERENCES")]
         public CircuitPlug input;
         public Animator animator;
-        
+
         [Header("STATE")]
         public BoolNetworkValue isOpen = new(false);
 
@@ -58,10 +57,10 @@ namespace Solis.Circuit.Components
         #endregion
 
         #region Private Methods
-        private void _OnValueChanged(bool old, bool now)
+        private void _OnValueChanged(bool old, bool @new)
         {
-            animator.SetBool(IsOn, now);
-            if (now) onToggleComponent.Invoke();
+            animator.SetBool(IsOn, @new);
+            if (@new) onToggleComponent.Invoke();
         }
         #endregion
     }
