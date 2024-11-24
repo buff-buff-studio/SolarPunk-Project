@@ -38,7 +38,7 @@ namespace Misc.Props
         }
         public override void OnEnter()
         {
-            _timeToNextState = Random.Range(2, 6);
+            _timeToNextState = Random.Range(3, 6);
         }
 
         public override void OnUpdate(float deltaTime)
@@ -102,12 +102,16 @@ namespace Misc.Props
 
         private Vector3 GenerateRandomDestination()
         {
-            int maxAttempts = 10;
+            int maxAttempts = 20;
             for (int i = 0; i < maxAttempts; i++)
             {
-                Vector3 randomPoint = Random.insideUnitCircle * animalController.walkingRadius;
-                if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 20, NavMesh.GetAreaFromName(animalController.walkArea))) return hit.position;
+                //Vector3 randomPoint = Random.insideUnitCircle * animalController.walkingRadius;
+                Vector3 randomPoint = animalController.transform.position + new Vector3(Random.insideUnitCircle.x, 0, Random.insideUnitCircle.y) * animalController.walkingRadius;
+                if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 5, NavMesh.AllAreas)) return hit.position;
             }
+            #if UNITY_EDITOR
+            Debug.Log("Not found a valid destination.");
+            #endif
             return animalController.transform.position;
         }
 
@@ -155,7 +159,7 @@ namespace Misc.Props
                 Vector3 awayPosition = animalController.transform.position + awayDirection * animalController.runRadius;
                 Vector3 randomAwayPosition = awayPosition + randomPoint;
         
-                if (NavMesh.SamplePosition(randomAwayPosition, out NavMeshHit hit, 20, NavMesh.GetAreaFromName(animalController.walkArea))) return hit.position;
+                if (NavMesh.SamplePosition(randomAwayPosition, out NavMeshHit hit, 5, NavMesh.AllAreas)) return hit.position;
             }
             return animalController.transform.position;
         }
@@ -207,7 +211,9 @@ namespace Misc.Props
        
        public void SetState(AnimalState newState)
        {
+           #if UNITY_EDITOR
            Debug.Log($"Changing state from {_state} to {newState}");
+           #endif
            _state?.OnExit();
            _state = newState;
            _state.OnEnter();
@@ -223,8 +229,9 @@ namespace Misc.Props
        {
            if (agent.pathPending || !(agent.remainingDistance <= 0.5f) ||
                agent.remainingDistance == Mathf.Infinity) return false;
-           
+           #if UNITY_EDITOR
            Debug.Log("Agent has reached the destination.");
+           #endif
            return true;
        }
     }
