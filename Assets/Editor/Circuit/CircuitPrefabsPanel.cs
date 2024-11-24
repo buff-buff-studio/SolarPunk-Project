@@ -75,8 +75,9 @@ namespace Editor.Circuit
                     folders.Add(folder.Substring(folder.LastIndexOf('/') + 1));
                 }
             }
-            
-            _currentCategory = folders[0];
+
+            if(string.IsNullOrEmpty(_currentCategory) && folders.Count > 0)
+                _currentCategory = folders[0];
 
             var dropdown = new DropdownField("", folders, folders.IndexOf(_currentCategory))
             {

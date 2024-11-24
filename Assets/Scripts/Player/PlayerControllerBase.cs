@@ -78,6 +78,7 @@ namespace Solis.Player
         [Header("BODY REFERENCES")]
         public Transform body;
         public Transform lookAt;
+        public Transform focus;
         public Transform dialogueLookAt;
         public Transform headOffset;
         public new SkinnedMeshRenderer renderer;
@@ -152,6 +153,8 @@ namespace Solis.Player
         private InteractionType _lastInteractionType;
         private bool _isCarrying;
 
+        private bool _isFocused;
+
         private static readonly int Respawning = Shader.PropertyToID("_Respawning");
 
         //Cheats
@@ -207,11 +210,11 @@ namespace Solis.Player
         private Vector2 MoveInput => SolisInput.GetVector2("Move");
         private bool InputJump => SolisInput.GetKeyDown("Jump");
         private bool InputJumpUp => SolisInput.GetKeyUp("Jump");
-        private bool CanJump => !IsJumping && (IsGrounded || _coyoteTimer > 0) && _jumpTimer <= 0 && !isPaused.Value && !DialogPanel.IsDialogPlaying;
+        private bool CanJump => !IsJumping && (IsGrounded || _coyoteTimer > 0) && _jumpTimer <= 0 && !isPaused.Value && !DialogPanel.IsDialogPlaying && !_isFocused;
 
         private protected bool CanJumpCut =>
             IsJumping && (transform.position.y - _startJumpPos) >= JumpCutMinHeight;
-        private bool IsPlayerLocked => _isCinematicRunning || isRespawning.Value || _isInteracting;
+        private bool IsPlayerLocked => _isCinematicRunning || isRespawning.Value || _isInteracting || _isFocused;
         private Vector3 HeadOffset => headOffset.position;
         private Animator Animator => animator.Animator;
         #endregion
@@ -286,7 +289,10 @@ namespace Solis.Player
             {
                 velocity.x = Mathf.MoveTowards(velocity.x, 0, Deceleration);
                 velocity.z = Mathf.MoveTowards(velocity.z, 0, Deceleration);
-                
+
+                if(state == State.Normal)
+                    _Focus();
+
                 if(DialogPanel.IsDialogPlaying || _isCinematicRunning)
                     if(SolisInput.GetKeyDown("Skip"))
                         SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
@@ -300,6 +306,7 @@ namespace Solis.Player
                     _Jump();
                     _Interact();
                     _Special();
+                    _Focus();
                     GrapplingHook();
                     break;
                 case State.Magnetized:
@@ -589,7 +596,7 @@ namespace Solis.Player
             if (!HasAuthority)
                 return;
 
-            _camera = MulticamCamera.Instance.SetPlayerTarget(transform, lookAt);
+            _camera = MulticamCamera.Instance.SetPlayerTarget(transform, lookAt, focus);
             username.Value = NetworkManager.Instance.Name;
 
             if (DiscordController.Instance)
@@ -713,6 +720,25 @@ namespace Solis.Player
             if(DialogPanel.IsDialogPlaying)
                 if(SolisInput.GetKeyDown("Skip"))
                     SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
+        }
+
+        private void _Focus()
+        {
+            if (SolisInput.GetKeyDown("Focus") && !IsPlayerLocked)
+            {
+                SetFocus(true);
+            }
+            else if (SolisInput.GetKeyUp("Focus") && _isFocused)
+            {
+                SetFocus(false);
+            }
+        }
+
+        private void SetFocus(bool focus)
+        {
+            Debug.Log("Focus: " + focus);
+            MulticamCamera.Instance.SetFocus(focus);
+            _isFocused = focus;
         }
         
         protected virtual void _Special() { }
@@ -885,6 +911,7 @@ namespace Solis.Player
             if (HasAuthority && IsOwnedByClient)
             {
                 isRespawning.Value = true;
+                SetFocus(false);
                 RespawnHUD.Instance.ShowHUD(CharacterType, 1);
             }
 
