@@ -48,7 +48,7 @@ namespace Solis.Player
                 if (Physics.Raycast(ray, out var hit, 100, grapplingHookMask))
                 {
                     attachedTo = hit.transform;
-                    attachedToLocalPoint = attachedTo.InverseTransformPoint(hit.point);
+                    attachedToLocalPoint = attachedTo.InverseTransformPoint(attachedTo.childCount > 0 ? hit.transform.GetChild(0).position : hit.point);
                     state = State.GrapplingHook;
                 }
                 else

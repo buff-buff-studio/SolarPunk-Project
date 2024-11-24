@@ -81,6 +81,13 @@ namespace Solis.Circuit.Components
             return true;
         }
 
+        protected override void _OnValueChanged(bool old, bool @new)
+        {
+            Refresh();
+            if(@new)
+                onToggleComponent?.Invoke();
+        }
+
         #endregion
     }
 }
