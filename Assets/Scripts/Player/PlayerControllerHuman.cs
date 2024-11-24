@@ -17,11 +17,13 @@ namespace Solis.Player
         [Space]
         [Header("SPECIAL")]
         public float specialCooldown = 5f;
-        private BoolNetworkValue _isSpecialOn = new(false);
-        private float _specialTimer;
         public GameObject cloudPrefab;
         public Vector3 cloudOffset;
         public float minDistanceToSpecial = 1f;
+
+        private bool _isSpecialBlocked;
+        private BoolNetworkValue _isSpecialOn = new(false);
+        private float _specialTimer;
 
         [ColorUsage(false, true)]
         public Color specialOnColor, specialOffColor;
@@ -33,6 +35,7 @@ namespace Solis.Player
             base.OnEnable();
             WithValues(isRespawning, isPaused, username, _isSpecialOn);
             _isSpecialOn.OnValueChanged += _OnSpecialValueChanged;
+            _isSpecialBlocked = false;
         }
 
         private void _OnSpecialValueChanged(bool oldvalue, bool newvalue)
@@ -43,6 +46,8 @@ namespace Solis.Player
         protected override void _Timer()
         {
             base._Timer();
+
+            if(_flyMode || _isSpecialBlocked) return;
             if (_specialTimer > 0)
             {
                 _specialTimer -= Time.deltaTime;
@@ -57,7 +62,12 @@ namespace Solis.Player
 
         protected override void _Special()
         {
-            if(_flyMode) return;
+            if(_flyMode || _isSpecialBlocked)
+            {
+                _specialTimer = specialCooldown / 2;
+                _isSpecialOn.Value = false;
+                return;
+            }
 
             if (SolisInput.GetKeyDown("Jump") && !IsGrounded)
             {
@@ -75,6 +85,27 @@ namespace Solis.Player
                 _specialTimer = specialCooldown;
                 _isSpecialOn.Value = false;
                 Spawn(cloudPrefab, transform.position + cloudOffset, body.rotation);
+            }
+        }
+
+        private void OnTriggerEnter(Collider col)
+        {
+            if (col.CompareTag("SpecialController"))
+            {
+                _isSpecialBlocked = true;
+                _specialTimer = specialCooldown / 2;
+                _isSpecialOn.Value = false;
+                renderer.material.SetColor(EmissionColor2, specialOffColor);
+                Debug.Log("Nina Special is blocked");
+            }
+        }
+
+        private void OnTriggerExit(Collider col)
+        {
+            if (col.CompareTag("SpecialController"))
+            {
+                _isSpecialBlocked = false;
+                Debug.Log("Nina Special is unblocked");
             }
         }
     }
