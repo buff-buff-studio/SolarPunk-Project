@@ -1,4 +1,6 @@
-﻿using NetBuff.Misc;
+﻿using System.IO;
+using NetBuff.Interface;
+using NetBuff.Misc;
 using Solis.Circuit.Interfaces;
 using Solis.Data;
 using Solis.Interface.Input;
@@ -50,6 +52,12 @@ namespace Solis.Player
                     attachedTo = hit.transform;
                     attachedToLocalPoint = attachedTo.InverseTransformPoint(attachedTo.childCount > 0 ? hit.transform.GetChild(0).position : hit.point);
                     state = State.GrapplingHook;
+                    
+                    SendPacket(new PlayerGrapplingHookPacket
+                    {
+                        Id = Id,
+                        Grappled = true
+                    });
                 }
                 else
                 {
@@ -66,6 +74,12 @@ namespace Solis.Player
             
             velocity = v;
             state = State.Normal;
+            
+            SendPacket(new PlayerGrapplingHookPacket
+            {
+                Id = Id,
+                Grappled = false
+            });
 
             grapplingHook.Value = 0f;
         }
@@ -136,5 +150,23 @@ namespace Solis.Player
         }
 
         #endregion
+    }
+
+    public class PlayerGrapplingHookPacket : IOwnedPacket
+    {
+        public NetworkId Id { get; set; }
+        public bool Grappled { get; set; }
+        
+        public void Serialize(BinaryWriter writer)
+        {
+            Id.Serialize(writer);
+            writer.Write(Grappled);
+        }
+
+        public void Deserialize(BinaryReader reader)
+        {
+            Id = NetworkId.Read(reader);
+            Grappled = reader.ReadBoolean();
+        }
     }
 }

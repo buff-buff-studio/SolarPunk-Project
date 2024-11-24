@@ -608,6 +608,11 @@ namespace Solis.Player
                     if (clientId == OwnerId)
                         ServerBroadcastPacket(deathPacket);
                     break;
+                
+                case PlayerGrapplingHookPacket grapplingHook:
+                    if (clientId == OwnerId)
+                        ServerBroadcastPacket(grapplingHook);
+                    break;
             }
         }
 
@@ -626,6 +631,12 @@ namespace Solis.Player
                 case InteractObjectPacket interactObjectPacket:
                     if (interactObjectPacket.Id == Id)
                         PlayInteraction(interactObjectPacket.Interaction);
+                    break;
+                
+                case PlayerGrapplingHookPacket grapplingHook:
+                    if (HasAuthority)
+                        return;
+                    state = grapplingHook.Grappled ? State.GrapplingHook : State.Normal;
                     break;
             }
         }
