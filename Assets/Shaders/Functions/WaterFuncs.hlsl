@@ -12,10 +12,10 @@ void water_PipeExit_float(float3 position, out float2 Position, out float Streng
     
     float value = 0;
     float2 center = float2(0, 0);
-
+    
     for (int j = 0; j < _waterPipeExit[0]; j ++)
     {
-        int idx = j * 3 + 1;
+        int idx = j * 4 + 1;
         float pX = _waterPipeExit[idx];
         float pY = _waterPipeExit[idx + 1];
         float radius = _waterPipeExit[idx + 2];
