@@ -4,6 +4,7 @@ using Cinemachine;
 using UnityEngine;
 using NetBuff.Components;
 using NetBuff.Misc;
+using NetBuff.Packets;
 using Solis.Data;
 using Solis.Packets;
 using Solis.Player;
@@ -26,6 +27,7 @@ namespace Solis.Misc.Multicam
         [Header("REFERENCES")]
         public Camera mainCamera;
         public CameraState state;
+        public Transform nullTrack;
         public Transform target;
 
         [Header("GAMEPLAY")]
@@ -62,6 +64,7 @@ namespace Solis.Misc.Multicam
         private void OnEnable()
         {
             PacketListener.GetPacketListener<PlayerInputPackage>().AddServerListener(OnInput);
+            PacketListener.GetPacketListener<NetworkUnloadScenePacket>().AddClientListener(_ => OnChangeScene());
         }
 
         private void OnDisable()
@@ -106,6 +109,7 @@ namespace Solis.Misc.Multicam
             _cinemachineBrain.m_DefaultBlend = new CinemachineBlendDefinition(blend, blendTime);
 
             gameplayCamera.gameObject.SetActive(newState == CameraState.Gameplay);
+            gameplayCamera.enabled = true;
             dialogueCamera.gameObject.SetActive(newState == CameraState.Dialogue);
 
             if(cinematicCamera != null) cinematicCamera.gameObject.SetActive(newState == CameraState.Cinematic);
@@ -215,6 +219,17 @@ namespace Solis.Misc.Multicam
             }
 
             ChangeCameraState(CameraState.Dialogue, CinemachineBlendDefinition.Style.EaseInOut, 1);
+        }
+
+        public bool OnChangeScene()
+        {
+            nullTrack.position = gameplayCamera.Follow.position;
+            nullTrack.rotation = gameplayCamera.Follow.rotation;
+            gameplayCamera.Follow = nullTrack;
+            gameplayCamera.LookAt = nullTrack;
+
+            ChangeCameraState(CameraState.Gameplay);
+            return true;
         }
 
         #endregion

@@ -9,6 +9,7 @@ using Solis.Player;
 using Solis.Data;
 using Solis.Data.Saves;
 using Solis.Interface.Lobby;
+using Solis.Misc.Multicam;
 using Solis.Misc.Props;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -217,6 +218,8 @@ namespace Solis.Core
                 SaveData.currentLevel = Mathf.Clamp(SaveData.currentLevel, 0, registry.levels.Length - 1);
                 return;
             }
+
+            MulticamCamera.Instance?.OnChangeScene();
 
             var manager = NetworkManager.Instance!;
             var levelInfo = registry.levels[save.data.currentLevel];
