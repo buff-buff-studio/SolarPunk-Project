@@ -118,7 +118,7 @@ namespace Solis.Player
         protected override void HandleGrapplingHookRemote()
         {
             var start = grapplingLine.transform.position;
-            grapplingLine.SetPositions(new[] {start, Vector3.Lerp(start, attachedTo.TransformPoint(attachedToLocalPoint), grapplingHook.Value)});
+            grapplingLine.SetPositions(new[] {start, Vector3.Lerp(start, grapplingHookPosition.Value, grapplingHook.Value)});
         }
         #endregion
 
