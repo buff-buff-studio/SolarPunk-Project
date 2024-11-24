@@ -14388,6 +14388,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1596106626}
     m_Modifications:
+    - target: {fileID: 205085160945796845, guid: 76e7b80fdd5c73940a2e2c1a2c8219db, type: 3}
+      propertyPath: onToggleComponent.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 205085160945796845, guid: 76e7b80fdd5c73940a2e2c1a2c8219db, type: 3}
+      propertyPath: onToggleComponent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 205085160945796845, guid: 76e7b80fdd5c73940a2e2c1a2c8219db, type: 3}
+      propertyPath: onToggleComponent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1877735746}
+    - target: {fileID: 205085160945796845, guid: 76e7b80fdd5c73940a2e2c1a2c8219db, type: 3}
+      propertyPath: onToggleComponent.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 205085160945796845, guid: 76e7b80fdd5c73940a2e2c1a2c8219db, type: 3}
+      propertyPath: onToggleComponent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: UpdateMaterial
+      objectReference: {fileID: 0}
+    - target: {fileID: 205085160945796845, guid: 76e7b80fdd5c73940a2e2c1a2c8219db, type: 3}
+      propertyPath: onToggleComponent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Solis.Circuit.Gates.CircuitColorConverter, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 205085160945796845, guid: 76e7b80fdd5c73940a2e2c1a2c8219db, type: 3}
+      propertyPath: onToggleComponent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
+      value: Interact
+      objectReference: {fileID: 0}
+    - target: {fileID: 205085160945796845, guid: 76e7b80fdd5c73940a2e2c1a2c8219db, type: 3}
+      propertyPath: onToggleComponent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1012287188068058006, guid: 76e7b80fdd5c73940a2e2c1a2c8219db, type: 3}
       propertyPath: id.low
       value: 1959253056
@@ -44731,31 +44763,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16927.898
+      value: -17368.02
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -376212.97
+      value: -384905.4
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1610.7844
+      value: -888.9939
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.9727045
+      value: -0.88301915
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.0027845316
+      value: 0.031495124
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.2320306
+      value: -0.46753022
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00016104388
+      value: 0.02647469
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -46606,6 +46638,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4286775803756770786, guid: 0065a8bcb9c83f543aae88a8dc6c4a85, type: 3}
   m_PrefabInstance: {fileID: 8259914682045559896}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1877735746 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2596855686550947194, guid: 0065a8bcb9c83f543aae88a8dc6c4a85, type: 3}
+  m_PrefabInstance: {fileID: 8259914682045559896}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5855731fd885f084db669e1562209a15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1879172979
 PrefabInstance:
   m_ObjectHideFlags: 0
