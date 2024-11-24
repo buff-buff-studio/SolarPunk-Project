@@ -106,8 +106,9 @@ namespace Misc.Props
             for (int i = 0; i < maxAttempts; i++)
             {
                 Vector3 randomPoint = Random.insideUnitCircle * animalController.walkingRadius;
-                if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 20, NavMesh.GetAreaFromName(animalController.walkArea))) return hit.position;
+                if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 20, NavMesh.AllAreas)) return hit.position;
             }
+           
             return animalController.transform.position;
         }
 
@@ -155,7 +156,7 @@ namespace Misc.Props
                 Vector3 awayPosition = animalController.transform.position + awayDirection * animalController.runRadius;
                 Vector3 randomAwayPosition = awayPosition + randomPoint;
         
-                if (NavMesh.SamplePosition(randomAwayPosition, out NavMeshHit hit, 20, NavMesh.GetAreaFromName(animalController.walkArea))) return hit.position;
+                if (NavMesh.SamplePosition(randomAwayPosition, out NavMeshHit hit, 20, NavMesh.AllAreas)) return hit.position;
             }
             return animalController.transform.position;
         }
