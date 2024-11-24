@@ -436,6 +436,21 @@ namespace Solis.Circuit.Connections
 
             if (nodes.Count > minNodeCount || Holder != null)
             {
+                //check is head is under -15 y height
+                if (Head.gameObject.transform.position.y < -15)
+                {
+                    for (var i = 1; i < nodes.Count - 1; i++)
+                    {
+                        var next = nodes[i + 1];
+                        var prev = nodes[i - 1];
+                        
+                        next.joint.connectedBody = prev.rigidbody;
+                        Destroy(nodes[i].gameObject);
+                        nodes.RemoveAt(i);
+                        break;
+                    }
+                }
+                
                 if (holderJoint != null)
                 {
                     var target = holderJoint.transform.position;
