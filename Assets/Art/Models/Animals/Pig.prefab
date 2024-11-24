@@ -80,6 +80,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3315246160791900763}
     - target: {fileID: 1406244892810879556, guid: 1defee666c2f46544a920dec5161fc4f, type: 3}
+      propertyPath: walkingRadius
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1406244892810879556, guid: 1defee666c2f46544a920dec5161fc4f, type: 3}
       propertyPath: animalSkins.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -87,6 +91,10 @@ PrefabInstance:
       propertyPath: 'animalSkins.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 93d264693b87d2b40bbbac6c95bf2dc3, type: 2}
+    - target: {fileID: 1751767849529728417, guid: 1defee666c2f46544a920dec5161fc4f, type: 3}
+      propertyPath: m_Speed
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1751767849529728417, guid: 1defee666c2f46544a920dec5161fc4f, type: 3}
       propertyPath: m_Radius
       value: 0.7
