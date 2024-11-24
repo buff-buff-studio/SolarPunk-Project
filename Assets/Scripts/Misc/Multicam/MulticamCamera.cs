@@ -6,6 +6,7 @@ using NetBuff.Components;
 using NetBuff.Misc;
 using NetBuff.Packets;
 using Solis.Data;
+using Solis.Interface.Input;
 using Solis.Packets;
 using Solis.Player;
 using TMPro;
@@ -32,6 +33,7 @@ namespace Solis.Misc.Multicam
 
         [Header("GAMEPLAY")]
         public CinemachineFreeLook gameplayCamera;
+        public CinemachineVirtualCamera focusCamera;
         protected internal bool PlayerFound;
 
         [Header("CINEMATIC")]
@@ -106,11 +108,16 @@ namespace Solis.Misc.Multicam
         public void ChangeCameraState(CameraState newState, CinemachineBlendDefinition.Style blend = CinemachineBlendDefinition.Style.Cut, float blendTime = 0)
         {
             Debug.Log($"Changing camera state to {newState}");
-            _cinemachineBrain.m_DefaultBlend = new CinemachineBlendDefinition(blend, blendTime);
+            SetCameraBlend(blend, blendTime);
 
             gameplayCamera.gameObject.SetActive(newState == CameraState.Gameplay);
             gameplayCamera.enabled = true;
             dialogueCamera.gameObject.SetActive(newState == CameraState.Dialogue);
+
+            if(newState != CameraState.Gameplay)
+            {
+                focusCamera.gameObject.SetActive(false);
+            }
 
             if(cinematicCamera != null) cinematicCamera.gameObject.SetActive(newState == CameraState.Cinematic);
             else if(newState == CameraState.Cinematic)
@@ -129,10 +136,18 @@ namespace Solis.Misc.Multicam
 
             state = newState;
         }
-        public Transform SetPlayerTarget(Transform follow, Transform lookAt)
+
+        private void SetCameraBlend(CinemachineBlendDefinition.Style blend, float blendTime)
+        {
+            _cinemachineBrain.m_DefaultBlend = new CinemachineBlendDefinition(blend, blendTime);
+        }
+
+        public Transform SetPlayerTarget(Transform follow, Transform lookAt, Transform focus)
         {
             gameplayCamera.Follow = follow;
             gameplayCamera.LookAt = lookAt;
+            focusCamera.Follow = focus;
+            focusCamera.LookAt = focus;
             PlayerFound = true;
 
             if(!cinematicCamera)
@@ -230,6 +245,16 @@ namespace Solis.Misc.Multicam
 
             ChangeCameraState(CameraState.Gameplay);
             return true;
+        }
+
+        public void SetFocus(bool active)
+        {
+            if(state == CameraState.Gameplay)
+            {
+                SetCameraBlend(CinemachineBlendDefinition.Style.EaseInOut, .5f);
+                //focusCamera.gameObject.SetActive(active);
+                
+            }
         }
 
         #endregion
