@@ -11,6 +11,7 @@ using Solis.Audio;
 using Solis.Circuit.Components;
 using Solis.Core;
 using Solis.Data;
+using Solis.Interface;
 using Solis.Interface.Input;
 using Solis.Misc;
 using Solis.Misc.Integrations;
@@ -739,6 +740,8 @@ namespace Solis.Player
             Debug.Log("Focus: " + focus);
             MulticamCamera.Instance.SetFocus(focus);
             _isFocused = focus;
+            
+            Crosshair.Instance.SetCrosshairEnabled(focus);
         }
         
         protected virtual void _Special() { }
