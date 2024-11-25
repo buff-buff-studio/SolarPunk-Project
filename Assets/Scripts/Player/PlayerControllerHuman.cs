@@ -85,6 +85,7 @@ namespace Solis.Player
                 _specialTimer = specialCooldown;
                 _isSpecialOn.Value = false;
                 Spawn(cloudPrefab, transform.position + cloudOffset, body.rotation);
+                velocity = Vector3.zero;
             }
         }
 
