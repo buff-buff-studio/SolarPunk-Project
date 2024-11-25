@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NetBuff.Misc;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -29,7 +30,7 @@ namespace Solis.Circuit.Gates
         public bool invisibleOnPlay = false;
         #endregion
 
-        private float power;
+        private FloatNetworkValue power = new(0);
 
         #region Unity Callbacks
         protected override void OnEnable()
@@ -52,17 +53,17 @@ namespace Solis.Circuit.Gates
         public override CircuitData ReadOutput(CircuitPlug plug)
         {
             var count = input.Connections.Length;
-            power = 0;
+            power.Value = 0;
             for(var i = 0; i < count; i++)
-                power += input.ReadOutput(i).power;
+                power.Value += input.ReadOutput(i).power;
 
-            if (power <= 0)
+            if (power.Value <= 0)
                 return new CircuitData(false);
-            else if (power >= powerToBreak)
-                return new CircuitData(power,
+            else if (power.Value >= powerToBreak)
+                return new CircuitData(power.Value,
                     new Vector3(-1, -1, -1));
             else
-                return new CircuitData(power,
+                return new CircuitData(power.Value,
                     new Vector3(rData.ReadOutput().power, gData.ReadOutput().power, bData.ReadOutput().power));
         }
         
@@ -93,7 +94,7 @@ namespace Solis.Circuit.Gates
             if(meshRenderer == null) return;
 
             var color = Color.black;
-            if (power > 0)
+            if (power.Value > 0)
             {
                 color.r = rData.ReadOutput().IsPowered ? 1 : 0;
                 color.g = gData.ReadOutput().IsPowered ? 1 : 0;
