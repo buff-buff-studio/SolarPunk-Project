@@ -31,7 +31,6 @@ namespace Solis.Circuit.Connections
         #endregion
 
         #region Private Static Fields
-        private static readonly Collider[] _Results = new Collider[10];
         #endregion
 
         #region Inspector Fields
@@ -305,16 +304,14 @@ namespace Solis.Circuit.Connections
                 Holder = null;
 
                 var transform1 = player.transform;
-                var size = Physics.OverlapSphereNonAlloc(transform1.position + new Vector3(0, 0.5f, 0), 3f, _Results);
 
+                var sockets = FindObjectsByType<CircuitSocket>(FindObjectsSortMode.None);
+            
                 var closestSocket = default(CircuitSocket);
-                var closestDistance = float.MaxValue;
-
-                for (var i = 0; i < size; i++)
+                var closestDistance = 2.5f;
+                
+                foreach (var socket in sockets)
                 {
-                    var hit = _Results[i];
-                    var socket = hit.GetComponent<CircuitSocket>();
-
                     if (socket != null && socket.outlet.Connection == null && PlugA != socket.outlet)
                     {
                         if (socket.outlet.type == PlugA.type)
