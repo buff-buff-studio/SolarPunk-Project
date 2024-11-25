@@ -36,11 +36,14 @@ namespace Solis.Circuit.Gates
         protected override void OnEnable()
         {
             base.OnEnable();
+            WithValues(power);
             UpdateMaterial();
             if(invisibleOnPlay)
             {
                 transform.GetChild(0).gameObject.SetActive(false);
             }
+
+            power.OnValueChanged += (_, __) => UpdateMaterial();
         }
         
         private void OnValidate()
@@ -53,9 +56,11 @@ namespace Solis.Circuit.Gates
         public override CircuitData ReadOutput(CircuitPlug plug)
         {
             var count = input.Connections.Length;
-            power.Value = 0;
+            var pow = 0f;
             for(var i = 0; i < count; i++)
-                power.Value += input.ReadOutput(i).power;
+                pow += input.ReadOutput(i).power;
+
+            power.Value = pow;
 
             if (power.Value <= 0)
                 return new CircuitData(false);
