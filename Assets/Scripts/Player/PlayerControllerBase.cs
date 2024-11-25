@@ -291,8 +291,11 @@ namespace Solis.Player
                 velocity.x = Mathf.MoveTowards(velocity.x, 0, Deceleration);
                 velocity.z = Mathf.MoveTowards(velocity.z, 0, Deceleration);
 
-                if(state == State.Normal)
+                if(state == State.Normal && _isFocused)
+                {
+                    GrapplingHook();
                     _Focus();
+                }
 
                 if(DialogPanel.IsDialogPlaying || _isCinematicRunning)
                     if(SolisInput.GetKeyDown("Skip"))
@@ -680,6 +683,7 @@ namespace Solis.Player
         private void _OnPause(bool isPaused)
         {
             if (!this.isPaused.CheckPermission()) return;
+            
             this.isPaused.Value = isPaused;
         }
 
