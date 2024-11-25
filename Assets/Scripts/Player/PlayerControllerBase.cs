@@ -725,7 +725,6 @@ namespace Solis.Player
 
         private void _Focus()
         {
-            return;
             if (SolisInput.GetKeyDown("Focus") && !IsPlayerLocked)
             {
                 SetFocus(true);
