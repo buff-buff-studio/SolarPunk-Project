@@ -4,7 +4,9 @@ using Cinemachine;
 using UnityEngine;
 using NetBuff.Components;
 using NetBuff.Misc;
+using NetBuff.Packets;
 using Solis.Data;
+using Solis.Interface.Input;
 using Solis.Packets;
 using Solis.Player;
 using TMPro;
@@ -26,10 +28,12 @@ namespace Solis.Misc.Multicam
         [Header("REFERENCES")]
         public Camera mainCamera;
         public CameraState state;
+        public Transform nullTrack;
         public Transform target;
 
         [Header("GAMEPLAY")]
         public CinemachineFreeLook gameplayCamera;
+        public CinemachineVirtualCamera focusCamera;
         protected internal bool PlayerFound;
 
         [Header("CINEMATIC")]
@@ -37,6 +41,7 @@ namespace Solis.Misc.Multicam
         public GameObject cinematicCanvas;
         public TextMeshProUGUI skipCinematicText;
         private List<int> _hasSkipped = new List<int>();
+        private IntNetworkValue _skipCount = new IntNetworkValue(0);
 
         [Header("DIALOGUE")]
         public CinemachineVirtualCamera dialogueCamera;
@@ -54,11 +59,14 @@ namespace Solis.Misc.Multicam
             else Destroy(this);
 
             _cinemachineBrain = mainCamera.GetComponent<CinemachineBrain>();
+            WithValues(_skipCount);
+            _skipCount.OnValueChanged += OnSkipCountChange;
         }
 
         private void OnEnable()
         {
             PacketListener.GetPacketListener<PlayerInputPackage>().AddServerListener(OnInput);
+            PacketListener.GetPacketListener<NetworkUnloadScenePacket>().AddClientListener(_ => OnChangeScene());
         }
 
         private void OnDisable()
@@ -76,22 +84,23 @@ namespace Solis.Misc.Multicam
                 if (arg1.Key != KeyCode.Return) return false;
                 if (_hasSkipped.Contains(arg2)) return false;
                 _hasSkipped.Add(arg2);
-                skipCinematicText.text = $"{_hasSkipped.Count}/2";
-
+                _skipCount.Value = _hasSkipped.Count;
 #if UNITY_EDITOR
-                if (_hasSkipped.Count >= 1)
-                {
-                    CinematicController.Instance.Stop();
-                    return true;
-                }
+                if (_hasSkipped.Count >= 1) return true;
 #endif
-                
-                if (_hasSkipped.Count < 2) return false;
-                CinematicController.Instance.Stop();
-                return true;
+                return _hasSkipped.Count >= 2;
             }
 
             return false;
+        }
+
+        private void OnSkipCountChange(int old, int @new)
+        {
+            skipCinematicText.text = $"{@new}/2";
+#if UNITY_EDITOR
+            if (@new >= 1) CinematicController.Instance.Stop();
+#endif
+            if (@new >= 2) CinematicController.Instance.Stop();
         }
 
         #region Public Methods
@@ -99,10 +108,16 @@ namespace Solis.Misc.Multicam
         public void ChangeCameraState(CameraState newState, CinemachineBlendDefinition.Style blend = CinemachineBlendDefinition.Style.Cut, float blendTime = 0)
         {
             Debug.Log($"Changing camera state to {newState}");
-            _cinemachineBrain.m_DefaultBlend = new CinemachineBlendDefinition(blend, blendTime);
+            SetCameraBlend(blend, blendTime);
 
             gameplayCamera.gameObject.SetActive(newState == CameraState.Gameplay);
+            gameplayCamera.enabled = true;
             dialogueCamera.gameObject.SetActive(newState == CameraState.Dialogue);
+
+            if(newState != CameraState.Gameplay)
+            {
+                focusCamera.gameObject.SetActive(false);
+            }
 
             if(cinematicCamera != null) cinematicCamera.gameObject.SetActive(newState == CameraState.Cinematic);
             else if(newState == CameraState.Cinematic)
@@ -121,10 +136,18 @@ namespace Solis.Misc.Multicam
 
             state = newState;
         }
-        public Transform SetPlayerTarget(Transform follow, Transform lookAt)
+
+        private void SetCameraBlend(CinemachineBlendDefinition.Style blend, float blendTime)
+        {
+            _cinemachineBrain.m_DefaultBlend = new CinemachineBlendDefinition(blend, blendTime);
+        }
+
+        public Transform SetPlayerTarget(Transform follow, Transform lookAt, Transform focus)
         {
             gameplayCamera.Follow = follow;
             gameplayCamera.LookAt = lookAt;
+            focusCamera.Follow = focus;
+            focusCamera.LookAt = focus;
             PlayerFound = true;
 
             if(!cinematicCamera)
@@ -211,6 +234,27 @@ namespace Solis.Misc.Multicam
             }
 
             ChangeCameraState(CameraState.Dialogue, CinemachineBlendDefinition.Style.EaseInOut, 1);
+        }
+
+        public bool OnChangeScene()
+        {
+            nullTrack.position = gameplayCamera.Follow.position;
+            nullTrack.rotation = gameplayCamera.Follow.rotation;
+            gameplayCamera.Follow = nullTrack;
+            gameplayCamera.LookAt = nullTrack;
+
+            ChangeCameraState(CameraState.Gameplay);
+            return true;
+        }
+
+        public void SetFocus(bool active)
+        {
+            if(state == CameraState.Gameplay)
+            {
+                SetCameraBlend(CinemachineBlendDefinition.Style.EaseInOut, .5f);
+                //focusCamera.gameObject.SetActive(active);
+                
+            }
         }
 
         #endregion

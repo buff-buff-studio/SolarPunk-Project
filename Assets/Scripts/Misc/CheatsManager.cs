@@ -22,11 +22,13 @@ namespace Solis.Misc
         private PauseManager _pauseManager;
 
         [SerializeField]
-        private GameObject _noClip;
+        private Toggle _godMode, _flyMode, _noClip;
         [SerializeField]
         private GameObject _nextPhase;
         [SerializeField]
         private GameObject _boxPrefab;
+
+        private GameObject NoClip => _noClip.transform.parent.gameObject;
 
         private void Awake()
         {
@@ -43,8 +45,7 @@ namespace Solis.Misc
             _pauseManager = GetComponentInParent<PauseManager>();
             IsCheatsEnabled = false;
 
-            _nextPhase.SetActive(IsServer);
-            _noClip.SetActive(false);
+            NoClip.SetActive(false);
 
             DisableCheats();
         }
@@ -55,7 +56,17 @@ namespace Solis.Misc
             _canvasGroup.blocksRaycasts = IsCheatsEnabled;
             _canvasGroup.interactable = IsCheatsEnabled;
 
-            _noClip.SetActive(false);
+            NoClip.SetActive(false);
+        }
+
+        public void ChangeScene(PlayerControllerBase player)
+        {
+            if (!IsCheatsEnabled) return;
+
+            _player = player;
+            SetGodMode(_godMode.isOn);
+            SetFlyMode(_flyMode.isOn);
+            SetNoClip(_noClip.isOn);
         }
 
         public void EnableCheats(PlayerControllerBase player)
@@ -93,10 +104,10 @@ namespace Solis.Misc
             if (!IsCheatsEnabled) return;
 
             _player.SetCheatsValue(1, value);
-            _noClip.SetActive(value);
+            NoClip.SetActive(value);
             if (!value)
             {
-                _noClip.GetComponentInChildren<Toggle>().isOn = false;
+                _noClip.isOn = false;
                 SetNoClip(false);
             }
         }
@@ -144,6 +155,19 @@ namespace Solis.Misc
         {
             if (!IsCheatsEnabled) return;
 
+            if(!IsServer) return;
+
+            GameManager.Instance.SaveData.currentLevel++;
+            GameManager.Instance.LoadLevel();
+        }
+
+        public void PreviousPhase()
+        {
+            if (!IsCheatsEnabled) return;
+
+            if(!IsServer) return;
+
+            GameManager.Instance.SaveData.currentLevel--;
             GameManager.Instance.LoadLevel();
         }
     }

@@ -44,6 +44,7 @@ namespace Solis.Player
 
         protected virtual void OnValidate()
         {
+            if(Application.isPlaying) return;
             TryGetComponent(out _collider);
             _collider.isTrigger = true;
             gameObject.tag = "DeathTrigger";

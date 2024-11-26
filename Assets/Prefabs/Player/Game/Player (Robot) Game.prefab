@@ -243,6 +243,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resize: 0
+--- !u!1 &2820406360503026845
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 352223577318632510}
+  m_Layer: 11
+  m_Name: Focus
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &352223577318632510
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2820406360503026845}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.192, z: 0.43}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5535532644862191047}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3358688809274173540
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,12 +573,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6749992417426740722}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.00000009415696, y: -0.7071068, z: -0.7071067, w: 0.00000009415697}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5535532644862191047}
+  m_Father: {fileID: 1320936419674065384}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &8313758403032373377
 LineRenderer:
@@ -598,7 +629,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.2
+    widthMultiplier: 1.5
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -647,7 +678,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 1
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
@@ -1283,6 +1314,9 @@ PrefabInstance:
       addedObject: {fileID: 6460570023915028333}
     - targetCorrespondingSourceObject: {fileID: 4136800555700545090, guid: a55a3791e379dfa42a63dd01f73de466, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 352223577318632510}
+    - targetCorrespondingSourceObject: {fileID: 4136800555700545090, guid: a55a3791e379dfa42a63dd01f73de466, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 2724270539932553359}
     - targetCorrespondingSourceObject: {fileID: 4136800555700545090, guid: a55a3791e379dfa42a63dd01f73de466, type: 3}
       insertIndex: -1
@@ -1293,9 +1327,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4136800555700545090, guid: a55a3791e379dfa42a63dd01f73de466, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8130503521122144198}
-    - targetCorrespondingSourceObject: {fileID: 4136800555700545090, guid: a55a3791e379dfa42a63dd01f73de466, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8604506512918765903}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6778590176504362698, guid: a55a3791e379dfa42a63dd01f73de466, type: 3}
       insertIndex: -1
@@ -1353,6 +1384,7 @@ MonoBehaviour:
   emoteController: {fileID: 7701133022374915957}
   body: {fileID: 8130503521122144198}
   lookAt: {fileID: 6460570023915028333}
+  focus: {fileID: 352223577318632510}
   dialogueLookAt: {fileID: 2724270539932553359}
   headOffset: {fileID: 547837559869387434}
   renderer: {fileID: 5028200628914497815}
@@ -1383,6 +1415,10 @@ MonoBehaviour:
   debugLastJumpMaxHeight: {x: 0, y: 0, z: 0}
   debugNextMovePos: {x: 0, y: 0, z: 0}
   debugNextBoxPos: {x: 0, y: 0, z: 0}
+  grapplingMaxDistance: 37.5
+  grapplingHookMask:
+    serializedVersion: 2
+    m_Bits: 524288
   grapplingLine: {fileID: 8313758403032373377}
   attachedTo: {fileID: 0}
   attachedToLocalPoint: {x: 0, y: 0, z: 0}
@@ -3749,6 +3785,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7280922231851295173, guid: 0fc0bad2254c54340b2ac61172192917, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7886577095704329190}
+    - targetCorrespondingSourceObject: {fileID: 7280922231851295173, guid: 0fc0bad2254c54340b2ac61172192917, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8604506512918765903}
     - targetCorrespondingSourceObject: {fileID: 2525282550766836399, guid: 0fc0bad2254c54340b2ac61172192917, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8461407574343396626}

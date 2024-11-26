@@ -6,6 +6,7 @@ using NetBuff.Interface;
 using NetBuff.Misc;
 using Solis.Circuit.Interfaces;
 using Solis.Packets;
+using Solis.Player;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -31,7 +32,6 @@ namespace Solis.Circuit.Connections
         #endregion
 
         #region Private Static Fields
-        private static readonly Collider[] _Results = new Collider[10];
         #endregion
 
         #region Inspector Fields
@@ -39,6 +39,7 @@ namespace Solis.Circuit.Connections
         public int minNodeCount = 3;
         public int maxNodeCount = 15;
         public float nodeDistance = 0.25f;
+        public float radius = 3;
 
         [Header("REFERENCES")]
         public GameObject nodePrefab;
@@ -298,23 +299,22 @@ namespace Solis.Circuit.Connections
         #region Private Methods
         private bool _OnPlayerInteract(PlayerInteractPacket packet, int client)
         {
-            var player = GetNetworkObject(packet.Id).gameObject.GetComponentInChildren<Rigidbody>();
+            var player = GetNetworkObject(packet.Id).gameObject.GetComponent<PlayerControllerBase>();
+            var hand = player.GetComponentInChildren<Rigidbody>();
 
-            if (Holder == player)
+            if (Holder == hand)
             {
                 Holder = null;
 
-                var transform1 = player.transform;
-                var size = Physics.OverlapSphereNonAlloc(transform1.position + new Vector3(0, 0.5f, 0), 3f, _Results);
+                var transform1 = hand.transform;
 
+                var sockets = FindObjectsByType<CircuitSocket>(FindObjectsSortMode.None);
+            
                 var closestSocket = default(CircuitSocket);
-                var closestDistance = float.MaxValue;
-
-                for (var i = 0; i < size; i++)
+                var closestDistance = 2.5f;
+                
+                foreach (var socket in sockets)
                 {
-                    var hit = _Results[i];
-                    var socket = hit.GetComponent<CircuitSocket>();
-
                     if (socket != null && socket.outlet.Connection == null && PlugA != socket.outlet)
                     {
                         if (socket.outlet.type == PlugA.type)
@@ -334,13 +334,27 @@ namespace Solis.Circuit.Connections
 
                 if (closestSocket != null)
                     Holder = closestSocket.GetComponentInChildren<Rigidbody>();
+
+
+                player.PlayInteraction(InteractionType.Cable);
+                ServerBroadcastPacket(new InteractObjectPacket()
+                {
+                    Id = player.Id,
+                    Interaction = InteractionType.Cable
+                });
                 return true;
             }
 
 
-            if (Vector3.Distance(player.transform.position, Head.gameObject.transform.position) < 3f)
+            if (Vector3.Distance(player.transform.position, Head.gameObject.transform.position) < radius)
             {
-                Holder = player;
+                Holder = hand;
+                player.PlayInteraction(InteractionType.Cable);
+                ServerBroadcastPacket(new InteractObjectPacket()
+                {
+                    Id = player.Id,
+                    Interaction = InteractionType.Cable
+                });
                 return true;
             }
 
@@ -436,6 +450,21 @@ namespace Solis.Circuit.Connections
 
             if (nodes.Count > minNodeCount || Holder != null)
             {
+                //check is head is under -15 y height
+                if (Head.gameObject.transform.position.y < -15)
+                {
+                    for (var i = 1; i < nodes.Count - 1; i++)
+                    {
+                        var next = nodes[i + 1];
+                        var prev = nodes[i - 1];
+                        
+                        next.joint.connectedBody = prev.rigidbody;
+                        Destroy(nodes[i].gameObject);
+                        nodes.RemoveAt(i);
+                        break;
+                    }
+                }
+                
                 if (holderJoint != null)
                 {
                     var target = holderJoint.transform.position;

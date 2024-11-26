@@ -42,5 +42,21 @@ namespace Solis.Circuit
             yield return outlet;
         }
         #endregion
+        
+        private Vector3 _lastPosition;
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            
+            if(_lastPosition == Vector3.zero)
+                _lastPosition = transform.position;
+        }
+        
+        private void Update()
+        {
+            if (_lastPosition != transform.position)
+                _lastPosition = transform.position;
+        }
     }
 }

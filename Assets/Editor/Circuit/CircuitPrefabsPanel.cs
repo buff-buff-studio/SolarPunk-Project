@@ -13,7 +13,7 @@ namespace Editor.Circuit
         private const int _PREVIEW_SIZE = 50;
         #endregion
         
-        private string _currentCategory = "Basic";
+        private string _currentCategory = "";
         
         public override void OnCreated()
         {
@@ -75,6 +75,9 @@ namespace Editor.Circuit
                     folders.Add(folder.Substring(folder.LastIndexOf('/') + 1));
                 }
             }
+
+            if(string.IsNullOrEmpty(_currentCategory) && folders.Count > 0)
+                _currentCategory = folders[0];
 
             var dropdown = new DropdownField("", folders, folders.IndexOf(_currentCategory))
             {

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using NetBuff.Misc;
 using UnityEngine;
 
 namespace Solis.Circuit.Components
@@ -26,7 +28,27 @@ namespace Solis.Circuit.Components
 
         #endregion
 
+        private FloatNetworkValue powered = new(0);
+
         private Color offColor => useColorOff ? colorOff : Color.black;
+
+        private void Awake()
+        {
+            WithValues(powered);
+            powered.OnValueChanged += RefreshLamp;
+        }
+
+        private void Start()
+        {
+            OnRefresh();
+            RefreshLamp(0, powered.Value);
+        }
+
+        private void RefreshLamp(float oldvalue, float newvalue)
+        {
+            renderer.material.SetColor(EmissionColor, newvalue > 0.5f ? colorOn : offColor);
+            light.color = newvalue > 0.5f ? colorOn : offColor;
+        }
 
         #region Abstract Methods Implementation
         public override CircuitData ReadOutput(CircuitPlug plug)
@@ -36,8 +58,8 @@ namespace Solis.Circuit.Components
 
         protected override void OnRefresh()
         {
-            renderer.material.SetColor(EmissionColor, input.ReadOutput().power > 0.5f ? colorOn : offColor);
-            light.color = input.ReadOutput().power > 0.5f ? colorOn : offColor;
+            if(powered.CheckPermission())
+                powered.Value = input.ReadOutput().power;
         }
 
         public override IEnumerable<CircuitPlug> GetPlugs()

@@ -74,7 +74,7 @@ namespace VFX
         {
             var array = Shader.GetGlobalFloatArray(_WaterPipeExit);
             if (array == null)
-                array = new float[21];
+                array = new float[41];
 
             var l = 0;
             for (var i = 0; i < pipeExits.Length; i++)

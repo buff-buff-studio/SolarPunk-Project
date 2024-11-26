@@ -11,6 +11,7 @@ using Solis.Audio;
 using Solis.Circuit.Components;
 using Solis.Core;
 using Solis.Data;
+using Solis.Interface;
 using Solis.Interface.Input;
 using Solis.Misc;
 using Solis.Misc.Integrations;
@@ -31,7 +32,8 @@ namespace Solis.Player
         Button = 1,
         Scanner = 2,
         Valve = 3,
-        Box = 4
+        Box = 4,
+        Cable
     }
 
     /// <summary>
@@ -78,6 +80,7 @@ namespace Solis.Player
         [Header("BODY REFERENCES")]
         public Transform body;
         public Transform lookAt;
+        public Transform focus;
         public Transform dialogueLookAt;
         public Transform headOffset;
         public new SkinnedMeshRenderer renderer;
@@ -152,6 +155,8 @@ namespace Solis.Player
         private InteractionType _lastInteractionType;
         private bool _isCarrying;
 
+        private bool _isFocused;
+
         private static readonly int Respawning = Shader.PropertyToID("_Respawning");
 
         //Cheats
@@ -207,33 +212,22 @@ namespace Solis.Player
         private Vector2 MoveInput => SolisInput.GetVector2("Move");
         private bool InputJump => SolisInput.GetKeyDown("Jump");
         private bool InputJumpUp => SolisInput.GetKeyUp("Jump");
-        private bool CanJump => !IsJumping && (IsGrounded || _coyoteTimer > 0) && _jumpTimer <= 0 && !isPaused.Value && !DialogPanel.IsDialogPlaying;
+        private bool CanJump => !IsJumping && (IsGrounded || _coyoteTimer > 0) && _jumpTimer <= 0 && !isPaused.Value && !DialogPanel.IsDialogPlaying && !_isFocused;
 
         private protected bool CanJumpCut =>
             IsJumping && (transform.position.y - _startJumpPos) >= JumpCutMinHeight;
-        private bool IsPlayerLocked => _isCinematicRunning || isRespawning.Value || _isInteracting;
+        private bool IsPlayerLocked => _isCinematicRunning || isRespawning.Value || _isInteracting || _isFocused;
         private Vector3 HeadOffset => headOffset.position;
         private Animator Animator => animator.Animator;
         #endregion
 
-        #region TEMP - Grappling Hook
-        public LineRenderer grapplingLine;
-
-        public Transform attachedTo;
-        public Vector3 attachedToLocalPoint;
-        
-        public FloatNetworkValue grapplingHook = new(0f);
-        public Vector3NetworkValue grapplingHookPosition = new(Vector3.zero);
-        #endregion
-        
         #region Unity Callbacks
 
         protected virtual void OnEnable()
         {
-            WithValues(isRespawning, isPaused, username, grapplingHookPosition, grapplingHook);
+            WithValues(isRespawning, isPaused, username);
             isRespawning.OnValueChanged += _OnRespawningChanged;
             isPaused.OnValueChanged += OnPausedChanged;
-            grapplingHook.OnValueChanged += (old, @new) => grapplingLine.enabled = @new > 0;
 
             PauseManager.OnPause += _OnPause;
 
@@ -243,8 +237,7 @@ namespace Solis.Player
             _isCinematicRunning = CinematicController.IsPlaying;
             CinematicController.OnCinematicStarted += () => _isCinematicRunning = true;
             CinematicController.OnCinematicEnded += () => _isCinematicRunning = false;
-
-
+            
             _remoteBodyRotation = body.localEulerAngles.y;
             _remoteBodyPosition = body.localPosition;
             _multiplier = FallMultiplier;
@@ -254,6 +247,8 @@ namespace Solis.Player
 
             if (controller == null) TryGetComponent(out controller);
             InvokeRepeating(nameof(_Tick), 0, 1f / tickRate);
+
+            CheatsManager.Instance?.ChangeScene(this);
         }
 
         private void OnDisable()
@@ -296,7 +291,13 @@ namespace Solis.Player
             {
                 velocity.x = Mathf.MoveTowards(velocity.x, 0, Deceleration);
                 velocity.z = Mathf.MoveTowards(velocity.z, 0, Deceleration);
-                
+
+                if(state == State.Normal && _isFocused)
+                {
+                    GrapplingHook();
+                    _Focus();
+                }
+
                 if(DialogPanel.IsDialogPlaying || _isCinematicRunning)
                     if(SolisInput.GetKeyDown("Skip"))
                         SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
@@ -310,7 +311,8 @@ namespace Solis.Player
                     _Jump();
                     _Interact();
                     _Special();
-                    _GrapplingHook();
+                    _Focus();
+                    GrapplingHook();
                     break;
                 case State.Magnetized:
                     if (magnetAnchor == null)
@@ -331,7 +333,7 @@ namespace Solis.Player
                 
                 case State.GrapplingHook:
                     if(SolisInput.GetKeyDown("GrapplingHook"))
-                        _ExitGrapplingHook();
+                        ExitGrapplingHook();
                     break;
             }
 
@@ -356,7 +358,7 @@ namespace Solis.Player
                 switch (state)
                 {
                     case State.GrapplingHook:
-                        _HandleGrapplingHookRemote();
+                        HandleGrapplingHookRemote();
                         break;
                     case State.Magnetized when magnetAnchor == null:
                         state = State.Normal;
@@ -380,7 +382,7 @@ namespace Solis.Player
             switch (state)
             {
                 case State.GrapplingHook:
-                    _HandleGrapplingHook();
+                    HandleGrapplingHook();
                     break;
                 
                 case State.Normal:
@@ -400,8 +402,7 @@ namespace Solis.Player
                     else dustParticles.Stop();
 
                     var move = Quaternion.Euler(0, te.y, 0) * velocity;
-                    if (_interactTimer > 0)
-                        move = Vector3.zero;
+                    //if (_interactTimer > 0) move = Vector3.zero;
 
                     var walking = velocityXZ.magnitude > 0.1f;
                     var nextPos = transform.position + (new Vector3(move.x, 0, move.z) * (Time.fixedDeltaTime * data.nextMoveMultiplier));
@@ -434,7 +435,7 @@ namespace Solis.Player
                         {
                             var size = Physics.OverlapSphere(
                                 boxNextPos, carriedObject.objectSize.extents.x,
-                                ~LayerMask.GetMask("Box", "CarriedIgnore",
+                                ~LayerMask.GetMask("Box", "CarriedIgnore", "PressurePlate",
                                     (CharacterType == CharacterType.Human ? "Human" : "Robot")),
                                 QueryTriggerInteraction.Ignore);
 
@@ -487,6 +488,15 @@ namespace Solis.Player
                     break;
             }
         }
+
+        #region Grappling Hook
+        protected virtual void GrapplingHook() {}
+        protected virtual void HandleGrapplingHook() {}
+        protected virtual void ExitGrapplingHook() {}
+        protected virtual void HandleGrapplingHookRemote()
+        {
+        }
+        #endregion
 
         public void OnDrawGizmos()
         {
@@ -542,6 +552,8 @@ namespace Solis.Player
 
         public void PlayInteraction(InteractionType type)
         {
+            if (!HasAuthority || !IsOwnedByClient) return;
+
             _lastInteractionType = type;
             _waitingForInteract = false;
             switch (type)
@@ -589,7 +601,7 @@ namespace Solis.Player
             if (!HasAuthority)
                 return;
 
-            _camera = MulticamCamera.Instance.SetPlayerTarget(transform, lookAt);
+            _camera = MulticamCamera.Instance.SetPlayerTarget(transform, lookAt, focus);
             username.Value = NetworkManager.Instance.Name;
 
             if (DiscordController.Instance)
@@ -608,6 +620,11 @@ namespace Solis.Player
                     if (clientId == OwnerId)
                         ServerBroadcastPacket(deathPacket);
                     break;
+                
+                case PlayerGrapplingHookPacket grapplingHook:
+                    if (clientId == OwnerId)
+                        ServerBroadcastPacket(grapplingHook);
+                    break;
             }
         }
 
@@ -623,82 +640,21 @@ namespace Solis.Player
                     if (deathPacket.Id == Id && !isRespawning.Value)
                         PlayerDeath(deathPacket.Type);
                     break;
+                case InteractObjectPacket interactObjectPacket:
+                    if (interactObjectPacket.Id == Id)
+                        PlayInteraction(interactObjectPacket.Interaction);
+                    break;
+                
+                case PlayerGrapplingHookPacket grapplingHook:
+                    if (HasAuthority)
+                        return;
+                    state = grapplingHook.Grappled ? State.GrapplingHook : State.Normal;
+                    break;
             }
         }
         #endregion
         
         #region Private Methods
-
-        protected virtual void _GrapplingHook()
-        {
-            if (SolisInput.GetKeyDown("GrapplingHook"))
-            {
-                //raycast grappling hook
-                var camRay = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0));
-                var ray = new Ray(transform.position + camRay.direction, camRay.direction);
-                if (Physics.Raycast(ray, out var hit, 100))
-                {
-                    attachedTo = hit.transform;
-                    attachedToLocalPoint = attachedTo.InverseTransformPoint(hit.point);
-                    state = State.GrapplingHook;
-                }
-                else
-                {
-                    attachedTo = null;
-                }
-            }
-        }
-
-        protected virtual void _ExitGrapplingHook()
-        {
-            var delta = grapplingHookPosition.Value - transform.position;
-            var direction = delta.normalized;
-            var v = 10 * grapplingHook.Value * direction;
-            
-            velocity = v;
-            state = State.Normal;
-
-            grapplingHook.Value = 0f;
-        }
-
-        protected virtual void _HandleGrapplingHook()
-        {
-            var deltaTime = Time.fixedDeltaTime;
-            grapplingHook.Value = Mathf.Lerp(grapplingHook.Value,  1f, deltaTime * 10f);
-            grapplingHookPosition.Value = attachedTo.TransformPoint(attachedToLocalPoint);
-
-            _HandleGrapplingHookRemote();
-
-            var delta = grapplingHookPosition.Value - transform.position;
-            var direction = delta.normalized;
-            var v = 10 * grapplingHook.Value * direction;
-
-            controller.Move(v * deltaTime);
-            velocity = Vector3.zero;
-                
-            if (delta.magnitude < 0.5f)
-            {
-                _ExitGrapplingHook();
-            }
-            else
-            {
-                var targetRotation = Quaternion.LookRotation(delta);
-                var targetEuler = targetRotation.eulerAngles;
-
-                transform.eulerAngles = new Vector3(0,
-                    Mathf.LerpAngle(transform.eulerAngles.y, 0, Time.deltaTime * 20), 0);
-                body.localEulerAngles = new Vector3(0,
-                    Mathf.LerpAngle(body.localEulerAngles.y, targetEuler.y, deltaTime * 20), 0);
-            }
-        }
-
-        protected virtual void _HandleGrapplingHookRemote()
-        {
-            var start = handPosition.position;
-            grapplingLine.SetPositions(new[] {start, Vector3.Lerp(start, attachedTo.TransformPoint(attachedToLocalPoint), grapplingHook.Value)});
-        }
-        
-        
         protected virtual void _Timer()
         {
             var deltaTime = Time.deltaTime;
@@ -728,7 +684,7 @@ namespace Solis.Player
         private void _OnPause(bool isPaused)
         {
             if (!this.isPaused.CheckPermission()) return;
-            Debug.Log(gameObject.name + " is paused: " + isPaused);
+            
             this.isPaused.Value = isPaused;
         }
 
@@ -740,7 +696,7 @@ namespace Solis.Player
                 {
                     var size = Physics.OverlapSphere(
                         boxPlacedPosition.position, carriedObject.objectSize.extents.x,
-                        ~LayerMask.GetMask("Box", "CarriedIgnore", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
+                        ~LayerMask.GetMask("Box", "CarriedIgnore", "PressurePlate", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
 
                     if (size.Length > 0)
                     {
@@ -756,20 +712,41 @@ namespace Solis.Player
                 {
                     Id = Id
                 }, true);
-                Task.Run(async () =>
-                {
-                    await Task.Delay(500);
-
-                    Debug.Log("Interact Timer Ended");
-                    if (_waitingForInteract)
-                    {
-                        PlayInteraction(InteractionType.None);
-                    }
-                });
+                // Task.Run(async () =>
+                // {
+                //     await Task.Delay(500);
+                //
+                //     Debug.Log("Interact Timer Ended");
+                //     if (_waitingForInteract)
+                //     {
+                //         PlayInteraction(InteractionType.None);
+                //     }
+                // });
             }
             if(DialogPanel.IsDialogPlaying)
                 if(SolisInput.GetKeyDown("Skip"))
                     SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
+        }
+
+        private void _Focus()
+        {
+            if (SolisInput.GetKeyDown("Focus") && !IsPlayerLocked && IsGrounded)
+            {
+                SetFocus(true);
+            }
+            else if (SolisInput.GetKeyUp("Focus") && _isFocused)
+            {
+                SetFocus(false);
+            }
+        }
+
+        private protected void SetFocus(bool focus)
+        {
+            Debug.Log("Focus: " + focus);
+            MulticamCamera.Instance.SetFocus(focus);
+            _isFocused = focus;
+            
+            Crosshair.Instance.SetCrosshairEnabled(focus);
         }
         
         protected virtual void _Special() { }
@@ -778,15 +755,10 @@ namespace Solis.Player
         {
             var moveInput = (!isPaused.Value && !DialogPanel.IsDialogPlaying) ? MoveInput.normalized : Vector2.zero;
             var maxSpeedTarget = _inJumpState ? MaxSpeed * AccelInJumpMultiplier : MaxSpeed;
-            var target = moveInput * maxSpeedTarget;
-            var accelOrDecel = (Mathf.Abs(moveInput.magnitude) > 0.01f);
-            var accelerationValue = ((accelOrDecel ? Acceleration : Deceleration)) * Time.deltaTime;
-
-            velocity.x = Mathf.MoveTowards(velocity.x, target.x, accelerationValue);
-            velocity.z = Mathf.MoveTowards(velocity.z, target.y, accelerationValue);
 
             if (_flyMode)
             {
+                maxSpeedTarget = 14;
                 var moveYInput = SolisInput.GetAxis("Fly");
                 var targetY = moveYInput * maxSpeedTarget;
                 var accelOrDecelY = (Mathf.Abs(moveYInput) > 0.01f);
@@ -794,6 +766,13 @@ namespace Solis.Player
 
                 velocity.y = Mathf.MoveTowards(velocity.y, targetY, accelerationValueY);
             }
+
+            var target = moveInput * maxSpeedTarget;
+            var accelOrDecel = (Mathf.Abs(moveInput.magnitude) > 0.01f);
+            var accelerationValue = ((accelOrDecel ? Acceleration : Deceleration)) * Time.deltaTime;
+
+            velocity.x = Mathf.MoveTowards(velocity.x, target.x, accelerationValue);
+            velocity.z = Mathf.MoveTowards(velocity.z, target.y, accelerationValue);
         }
 
         private void _Jump()
@@ -932,15 +911,17 @@ namespace Solis.Player
                 BodyRotation = body.localEulerAngles.y,
                 BodyPosition = new Vector3(pos.x, pos.y, pos.z)
             };
-            ServerBroadcastPacketExceptFor(packet, OwnerId);
+            SendPacket(packet);
         }
 
         private void _Respawn()
         {
             if (HasAuthority && IsOwnedByClient)
+            {
                 isRespawning.Value = true;
-
-            RespawnHUD.Instance.ShowHUD(CharacterType, 1);
+                SetFocus(false);
+                RespawnHUD.Instance.ShowHUD(CharacterType, 1);
+            }
 
             velocity = Vector3.zero;
             _positionReset = false;

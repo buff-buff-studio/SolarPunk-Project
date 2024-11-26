@@ -5,16 +5,16 @@ using UnityEngine;
 
 namespace Solis.Circuit.Components
 {
-    [RequireComponent(typeof(NetworkAnimator))]
     public class CircuitAnimator : CircuitComponent
     {
         #region Inspector Fields
         [Header("REFERENCES")]
         public CircuitPlug input;
         public Animator animator;
-        
+
         [Header("STATE")]
         public BoolNetworkValue isOpen = new(false);
+        public bool canTurnOff = true;
 
         private static readonly int IsOn = Animator.StringToHash("IsOn");
 
@@ -53,15 +53,20 @@ namespace Solis.Circuit.Components
         protected override void OnRefresh()
         {
             if(isOpen.AttachedTo != null && HasAuthority)
-                isOpen.Value = input.ReadOutput().power > 0;
+            {
+                var power = input.ReadOutput().power > 0;
+                if(!canTurnOff && isOpen.Value && !power) return;
+
+                isOpen.Value = power;
+            }
         }
         #endregion
 
         #region Private Methods
-        private void _OnValueChanged(bool old, bool now)
+        private void _OnValueChanged(bool old, bool @new)
         {
-            animator.SetBool(IsOn, now);
-            if (now) onToggleComponent.Invoke();
+            animator.SetBool(IsOn, @new);
+            if (@new) onToggleComponent.Invoke();
         }
         #endregion
     }

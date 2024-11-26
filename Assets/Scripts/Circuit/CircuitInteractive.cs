@@ -13,12 +13,15 @@ namespace Solis.Circuit
 {
     public abstract class CircuitInteractive : CircuitComponent
     {
+        #region Inspector Fields
         [Header("SETTINGS")]
         public float radius = 3f;
         public float minDistance = 1.24f;
         [UnityEngine.Range(0,1)] [Tooltip("The dot product threshold for player facing the object")]
         public float dotThreshold = 0.5f;
         public CharacterTypeFilter playerTypeFilter = CharacterTypeFilter.Both;
+        public BoolNetworkValue isOn = new(false);
+        #endregion
 
         private List<Collider> _colliders = new List<Collider>();
         private LayerMask _layerMask;
@@ -27,13 +30,15 @@ namespace Solis.Circuit
         [SerializeField] [Tooltip("The parent object that will be ignored by the raycast, don't add the parent object to the list")]
         private List<Collider> ignoreColliders = new List<Collider>();
 
-#if UNITY_EDITOR
-        private Transform _playerTransform;
-#endif
+        private protected PlayerControllerBase _lastPlayerInteracted;
 
         protected override void OnEnable()
         {
             base.OnEnable();
+
+            WithValues(isOn);
+            isOn.OnValueChanged += _OnValueChanged;
+
             _objectCenter = GetComponentInChildren<Collider>().bounds.center;
             _originalLayer = gameObject.layer;
             PacketListener.GetPacketListener<PlayerInteractPacket>().AddServerListener(OnPlayerInteract);
@@ -70,11 +75,7 @@ namespace Solis.Circuit
             if (!playerTypeFilter.Filter(player.CharacterType))
                 return false;
 
-#if UNITY_EDITOR
-            _playerTransform = player.body;
-#endif
-
-            return true;
+            _lastPlayerInteracted = player;
 
             // Check if player is facing the object
             var directionToTarget = _objectCenter - player.body.position;
@@ -125,13 +126,20 @@ namespace Solis.Circuit
             throw new System.NotImplementedException();
         }
 
+        protected virtual void _OnValueChanged(bool old, bool @new)
+        {
+            Refresh();
+            onToggleComponent?.Invoke();
+            _lastPlayerInteracted = null;
+        }
+
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
-            if (_playerTransform == null) return;
+            if (_lastPlayerInteracted == null) return;
 
             Gizmos.color = Color.blue;
-            Gizmos.DrawRay(_playerTransform.position, _playerTransform.forward * radius);
+            Gizmos.DrawRay(_lastPlayerInteracted.body.position, _lastPlayerInteracted.body.forward * radius);
         }
 
         protected virtual void OnValidate()

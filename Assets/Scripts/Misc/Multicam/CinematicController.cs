@@ -67,7 +67,8 @@ namespace Solis.Misc.Multicam
             virtualCamera.m_Follow = _follow;
             virtualCamera.m_LookAt = _lookAt;
 
-            MulticamCamera.Instance!.SetCinematic(virtualCamera, playOnAwake);
+            if(MulticamCamera.Instance != null)
+                MulticamCamera.Instance?.SetCinematic(virtualCamera, playOnAwake);
         }
 
         private void OnEnable()
@@ -127,6 +128,7 @@ namespace Solis.Misc.Multicam
 
         public void Stop()
         {
+            if(!IsPlaying) return;
 #if UNITY_EDITOR
             if (!MulticamCamera.Instance.PlayerFound)
             {

@@ -88,22 +88,27 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: -8853960877304695376, guid: 8479b2e11b549db40957ae6658a3fe10, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8479b2e11b549db40957ae6658a3fe10, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1642806462429231071}
+      addedObject: {fileID: 4126857310465998373}
   m_SourcePrefab: {fileID: 100100000, guid: 8479b2e11b549db40957ae6658a3fe10, type: 3}
---- !u!1 &5764759364818139411 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -8853960877304695376, guid: 8479b2e11b549db40957ae6658a3fe10, type: 3}
+--- !u!4 &5956672525271706440 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8479b2e11b549db40957ae6658a3fe10, type: 3}
   m_PrefabInstance: {fileID: 6134152725721205923}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &1642806462429231071
+--- !u!1 &6476610255615062514 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8479b2e11b549db40957ae6658a3fe10, type: 3}
+  m_PrefabInstance: {fileID: 6134152725721205923}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &4126857310465998373
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5764759364818139411}
+  m_GameObject: {fileID: 6476610255615062514}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -116,11 +121,6 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 1939559902727880933, guid: 8479b2e11b549db40957ae6658a3fe10, type: 3}
---- !u!4 &5956672525271706440 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8479b2e11b549db40957ae6658a3fe10, type: 3}
-  m_PrefabInstance: {fileID: 6134152725721205923}
-  m_PrefabAsset: {fileID: 0}
+  m_Mesh: {fileID: -7105879592757971332, guid: 8479b2e11b549db40957ae6658a3fe10, type: 3}

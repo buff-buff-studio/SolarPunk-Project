@@ -9,6 +9,7 @@ using Solis.Player;
 using Solis.Data;
 using Solis.Data.Saves;
 using Solis.Interface.Lobby;
+using Solis.Misc.Multicam;
 using Solis.Misc.Props;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -211,6 +212,15 @@ namespace Solis.Core
         [ServerOnly]
         public async void LoadLevel()
         {
+            if(SaveData.currentLevel >= registry.levels.Length || SaveData.currentLevel < 0)
+            {
+                Debug.LogWarning("Level index out of range: " + SaveData.currentLevel);
+                SaveData.currentLevel = Mathf.Clamp(SaveData.currentLevel, 0, registry.levels.Length - 1);
+                return;
+            }
+
+            MulticamCamera.Instance?.OnChangeScene();
+
             var manager = NetworkManager.Instance!;
             var levelInfo = registry.levels[save.data.currentLevel];
             var scene = levelInfo.scene.Name;
@@ -479,7 +489,12 @@ namespace Solis.Core
         public void ButtonRestartLevel()
         {
             if (IsServer)
+            {
+                #if UNITY_EDITOR
+                SaveData.currentLevel = FindActiveLevel();
+                #endif
                 LoadLevel();
+            }
         }
         
         public void ButtonCopyCode()
