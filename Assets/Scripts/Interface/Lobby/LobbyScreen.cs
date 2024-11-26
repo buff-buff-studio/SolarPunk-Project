@@ -136,6 +136,11 @@ namespace Solis.Interface.Lobby
             NetworkManager.Instance.Close();
         }
 
+        public void InviteFriends()
+        {
+            DiscordController.Instance.SendInvite();
+        }
+
         /// <summary>
         /// Refreshes the save display.
         /// </summary>

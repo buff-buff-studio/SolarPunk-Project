@@ -15,6 +15,8 @@ namespace Interface
     public class RelayScreen : MonoBehaviour
     {
         #region Inspector Fields
+        public static RelayScreen Instance { get; private set; }
+
         [Header("REFERENCES")]
         public SettingsManager settingsManager;
         public TMP_InputField inputFieldUsername;
@@ -32,6 +34,12 @@ namespace Interface
         private string _firstUsername;
 
         #endregion
+
+        private void Awake()
+        {
+            if (Instance == null) Instance = this;
+            else Destroy(this);
+        }
 
         private async void OnEnable()
         {
@@ -119,6 +127,13 @@ namespace Interface
             SolisNetworkManager.usingRelay = true;
 
             SceneManager.LoadScene("Core");
+        }
+
+        public void Join(string user, string code)
+        {
+            inputFieldUsername.text = user;
+            inputRelayCode.text = code;
+            Join();
         }
 
         public void Join()

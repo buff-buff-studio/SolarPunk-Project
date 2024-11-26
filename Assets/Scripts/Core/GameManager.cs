@@ -155,7 +155,10 @@ namespace Solis.Core
             var spawnPoints = FindObjectsByType<LobbySpawnPoint>(FindObjectsSortMode.InstanceID)
                 .Where(x => x.occupiedBy == clientId).ToArray();
             foreach (var spawnPoint in spawnPoints)
+            {
                 spawnPoint.occupiedBy = -1;
+                spawnPoint.playerNameValue.Value = "";
+            }
         }
         #endregion
 
@@ -395,6 +398,7 @@ namespace Solis.Core
                         .FirstOrDefault(x => (x.occupiedBy == -1 || x.occupiedBy == clientId) && x.playerTypeFilter.Filter(data.PlayerCharacterType));
 
                     spawnPoint!.occupiedBy = clientId;
+                    spawnPoint!.playerNameValue.Value = data.Username;
                     spawnPos = spawnPoint.transform.position;
                 }
                 else

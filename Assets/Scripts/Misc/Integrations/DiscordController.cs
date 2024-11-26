@@ -1,5 +1,6 @@
 using System;
 using Discord;
+using Interface;
 using Solis.Data;
 using UnityEngine;
 
@@ -19,6 +20,9 @@ namespace Solis.Misc.Integrations
         public static int PlayerCount;
 
         public Discord.Discord Discord;
+
+        private static long USER_ID;
+        private Activity _activity;
 
         private void Awake()
         {
@@ -58,6 +62,12 @@ namespace Solis.Misc.Integrations
                     }
                 };
 
+                Discord.SetLogHook(LogLevel.Debug, LogProblemsFunction);
+                Discord.SetLogHook(LogLevel.Error, LogProblemsFunction);
+                Discord.SetLogHook(LogLevel.Warn, LogProblemsFunction);
+                Discord.SetLogHook(LogLevel.Info, LogProblemsFunction);
+
+                //activityManager.RegisterCommand("solis://run --lobby");
                 activityManager.UpdateActivity(activity, result =>
                 {
                     if (result == Result.Ok)
@@ -67,6 +77,7 @@ namespace Solis.Misc.Integrations
                         Discord.GetUserManager().OnCurrentUserUpdate += () =>
                         {
                             var user = Discord.GetUserManager().GetCurrentUser();
+                            USER_ID = user.Id;
                             Debug.Log("Discord Rich Presence connected as: " + user.Username);
                             Username = user.Username;
                         };
@@ -78,6 +89,40 @@ namespace Solis.Misc.Integrations
                         this.enabled = false;
                     }
                 });
+
+                activityManager.OnActivityInvite += (ActivityActionType type, ref User user, ref Activity activity) =>
+                {
+                    Debug.Log("Received invite from: " + user.Username);
+                    activityManager.SendRequestReply(user.Id, ActivityJoinRequestReply.Yes, result =>
+                    {
+                        if (result == Result.Ok)
+                        {
+                            Debug.Log("Invite accepted");
+                        }
+                        else
+                            Debug.LogError("Failed to accept invite");
+                    });
+                };
+
+                activityManager.OnActivityJoin += (string secret) =>
+                {
+                    RelayScreen.Instance.Join(Username, secret);
+                    Debug.Log("Joining activity: " + secret);
+                };
+
+                activityManager.OnActivityJoinRequest += (ref User user) =>
+                {
+                    Debug.Log("Join request from: " + user.Username);
+                    activityManager.SendRequestReply(user.Id, ActivityJoinRequestReply.Yes, result =>
+                    {
+                        if (result == Result.Ok)
+                        {
+                            Debug.Log("Join request accepted");
+                        }
+                        else
+                            Debug.LogError("Failed to accept join request");
+                    });
+                };
             }
             catch (Exception e)
             {
@@ -100,44 +145,71 @@ namespace Solis.Misc.Integrations
             Discord.Dispose();
         }
 
+        public void LogProblemsFunction(Discord.LogLevel level, string message)
+        {
+            Debug.Log($"Discord:{level} - {message}");
+        }
+
         public void SetGameActivity(CharacterType characterType, bool inLobby, string relayCode)
         {
             if(!IsConnected) return;
 
+            Debug.Log("Updating Discord Rich Presence");
+
             var activityManager = Discord.GetActivityManager();
-            var activity = new Activity
+            var id = CLIENT_ID;
+            var state = inLobby ? "In Lobby" : "In Game";
+            var smallImage = characterType == CharacterType.Human ? "nina_icon" : "ram_icon";
+            var smallText = characterType == CharacterType.Human ? "Nina" : "RAM";
+            var timestamp = LobbyStartTimestamp;
+            var count = PlayerCount;
+            _activity = new Activity
             {
-                ApplicationId = CLIENT_ID,
+                Type = ActivityType.Playing,
+                ApplicationId = id,
                 Name = "Solis",
                 Details = "Playing Solis",
-                State = inLobby ? "In Lobby" : "In Game",
+                State = state,
                 Assets =
                 {
                     LargeImage = "solis_logo",
                     LargeText = "*uebeti*",
-                    SmallImage = characterType == CharacterType.Human ? "nina_icon" : "ram_icon",
-                    SmallText = characterType == CharacterType.Human ? "Nina" : "RAM"
+                    SmallImage = smallImage,
+                    SmallText = smallText
                 },
                 Timestamps =
                 {
-                    Start = LobbyStartTimestamp
+                    Start = timestamp
                 },
                 Party =
                 {
-                    Id = relayCode,
+                    Id = "Solis"+relayCode,
                     Size =
                     {
-                        CurrentSize = PlayerCount,
+                        CurrentSize = count,
                         MaxSize = 2
-                    }
-                }
+                    },
+                    Privacy = ActivityPartyPrivacy.Public
+                },
+                Secrets =
+                {
+                    Join = relayCode,
+                    Match = relayCode,
+                    Spectate = relayCode
+                },
+                Instance = true
             };
 
-
-            activityManager.UpdateActivity(activity, result =>
+            activityManager.UpdateActivity(_activity, result =>
             {
                 if (result == Result.Ok)
+                {
                     Debug.Log("Discord Rich Presence updated successfully");
+                    if (string.IsNullOrEmpty(relayCode))
+                    {
+                        Debug.LogError("Relay code is null or empty. Cannot update activity.");
+                    }
+                }
                 else
                     Debug.LogError("Failed to update Discord Rich Presence");
             });
@@ -169,5 +241,22 @@ namespace Solis.Misc.Integrations
                     Debug.LogError("Failed to update Discord Rich Presence");
             });
         }
+
+        public void SendInvite()
+        {
+            if(!IsConnected) return;
+
+            var activityManager = Discord.GetActivityManager();
+            activityManager.SendInvite(USER_ID,
+                ActivityActionType.Join,
+                _activity.ToString(), result =>
+            {
+                if (result == Result.Ok)
+                    Debug.Log("Invite sent successfully");
+                else
+                    Debug.LogError("Failed to send invite:" + result);
+            });
+        }
+
     }
 }
