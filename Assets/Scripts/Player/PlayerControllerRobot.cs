@@ -17,6 +17,7 @@ namespace Solis.Player
     {
         #region Grappling Hook
         [Header("GRAPPLING HOOK")]
+        public float grapplingMaxDistance = 30f;
         public LayerMask grapplingHookMask;
         public LineRenderer grapplingLine;
 
@@ -49,10 +50,15 @@ namespace Solis.Player
                 var ray = new Ray(transform.position + camRay.direction, camRay.direction);
                 if (Physics.Raycast(ray, out var hit, 100, grapplingHookMask))
                 {
+                    Debug.Log("Distance: " + Vector3.Distance(transform.position, hit.point));
+                    if(grapplingMaxDistance < Vector3.Distance(transform.position, hit.point))
+                        return;
+
                     attachedTo = hit.transform;
                     attachedToLocalPoint = attachedTo.InverseTransformPoint(attachedTo.childCount > 0 ? hit.transform.GetChild(0).position : hit.point);
                     state = State.GrapplingHook;
-                    
+
+                    SetFocus(false);
                     SendPacket(new PlayerGrapplingHookPacket
                     {
                         Id = Id,

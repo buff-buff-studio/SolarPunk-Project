@@ -77,15 +77,13 @@ namespace Solis.Circuit.Components
                 Id = arg1.Id,
                 Interaction = InteractionType.Lever
             });
-
             return true;
         }
 
         protected override void _OnValueChanged(bool old, bool @new)
         {
             Refresh();
-            if(@new)
-                onToggleComponent?.Invoke();
+            if(@new) onToggleComponent?.Invoke();
         }
 
         #endregion

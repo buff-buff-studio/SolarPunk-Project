@@ -212,7 +212,7 @@ namespace Misc.Props
        public void SetState(AnimalState newState)
        {
            #if UNITY_EDITOR
-           Debug.Log($"Changing state from {_state} to {newState}");
+           //Debug.Log($"Changing state from {_state} to {newState}");
            #endif
            _state?.OnExit();
            _state = newState;
@@ -230,7 +230,7 @@ namespace Misc.Props
            if (agent.pathPending || !(agent.remainingDistance <= 0.5f) ||
                agent.remainingDistance == Mathf.Infinity) return false;
            #if UNITY_EDITOR
-           Debug.Log("Agent has reached the destination.");
+           //Debug.Log("Agent has reached the destination.");
            #endif
            return true;
        }

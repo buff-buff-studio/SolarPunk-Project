@@ -6,6 +6,7 @@ using NetBuff.Interface;
 using NetBuff.Misc;
 using Solis.Circuit.Interfaces;
 using Solis.Packets;
+using Solis.Player;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -38,6 +39,7 @@ namespace Solis.Circuit.Connections
         public int minNodeCount = 3;
         public int maxNodeCount = 15;
         public float nodeDistance = 0.25f;
+        public float radius = 3;
 
         [Header("REFERENCES")]
         public GameObject nodePrefab;
@@ -297,13 +299,14 @@ namespace Solis.Circuit.Connections
         #region Private Methods
         private bool _OnPlayerInteract(PlayerInteractPacket packet, int client)
         {
-            var player = GetNetworkObject(packet.Id).gameObject.GetComponentInChildren<Rigidbody>();
+            var player = GetNetworkObject(packet.Id).gameObject.GetComponent<PlayerControllerBase>();
+            var hand = player.GetComponentInChildren<Rigidbody>();
 
-            if (Holder == player)
+            if (Holder == hand)
             {
                 Holder = null;
 
-                var transform1 = player.transform;
+                var transform1 = hand.transform;
 
                 var sockets = FindObjectsByType<CircuitSocket>(FindObjectsSortMode.None);
             
@@ -331,13 +334,27 @@ namespace Solis.Circuit.Connections
 
                 if (closestSocket != null)
                     Holder = closestSocket.GetComponentInChildren<Rigidbody>();
+
+
+                player.PlayInteraction(InteractionType.Cable);
+                ServerBroadcastPacket(new InteractObjectPacket()
+                {
+                    Id = player.Id,
+                    Interaction = InteractionType.Cable
+                });
                 return true;
             }
 
 
-            if (Vector3.Distance(player.transform.position, Head.gameObject.transform.position) < 3f)
+            if (Vector3.Distance(player.transform.position, Head.gameObject.transform.position) < radius)
             {
-                Holder = player;
+                Holder = hand;
+                player.PlayInteraction(InteractionType.Cable);
+                ServerBroadcastPacket(new InteractObjectPacket()
+                {
+                    Id = player.Id,
+                    Interaction = InteractionType.Cable
+                });
                 return true;
             }
 

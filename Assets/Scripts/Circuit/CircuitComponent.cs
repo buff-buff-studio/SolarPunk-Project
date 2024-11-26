@@ -68,7 +68,7 @@ namespace Solis.Circuit
             if (_lastUpdateId == _currentUpdateID)
             {
                 Debug.LogWarning(
-                    $"CircuitComponent: Refresh called multiple times for {gameObject.name} at the same circuit. Maybe a loop?");
+                    $"CircuitComponent: Refresh called multiple times for {gameObject.name} at the same circuit. Maybe a loop?", gameObject);
                 return;
             }
 

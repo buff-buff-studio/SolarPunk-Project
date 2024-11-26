@@ -17,9 +17,30 @@ namespace Solis.Circuit.Components
         public bool invert;
         #endregion
 
+        private FloatNetworkValue powered = new(0);
+
+        private void Awake()
+        {
+            WithValues(powered);
+            powered.OnValueChanged += RefreshParticles;
+        }
+
         private void Start()
         {
-            Refresh();
+            OnRefresh();
+            RefreshParticles(0, powered.Value);
+        }
+
+        private void RefreshParticles(float oldvalue, float newvalue)
+        {
+            if (newvalue > 0.5f ^ invert)
+            {
+                particles.Play();
+            }
+            else
+            {
+                particles.Stop();
+            }
         }
 
         #region Abstract Methods Implementation
@@ -30,14 +51,8 @@ namespace Solis.Circuit.Components
 
         protected override void OnRefresh()
         {
-            if (input.ReadOutput().power > 0.5f ^ invert)
-            {
-                particles.Play();
-            }
-            else
-            {
-                particles.Stop();
-            }
+            if(powered.CheckPermission())
+                powered.Value = input.ReadOutput().power;
         }
 
         public override IEnumerable<CircuitPlug> GetPlugs()

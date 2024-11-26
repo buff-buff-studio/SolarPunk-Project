@@ -32,7 +32,8 @@ namespace Solis.Player
         Button = 1,
         Scanner = 2,
         Valve = 3,
-        Box = 4
+        Box = 4,
+        Cable
     }
 
     /// <summary>
@@ -729,7 +730,7 @@ namespace Solis.Player
 
         private void _Focus()
         {
-            if (SolisInput.GetKeyDown("Focus") && !IsPlayerLocked)
+            if (SolisInput.GetKeyDown("Focus") && !IsPlayerLocked && IsGrounded)
             {
                 SetFocus(true);
             }
@@ -739,7 +740,7 @@ namespace Solis.Player
             }
         }
 
-        private void SetFocus(bool focus)
+        private protected void SetFocus(bool focus)
         {
             Debug.Log("Focus: " + focus);
             MulticamCamera.Instance.SetFocus(focus);

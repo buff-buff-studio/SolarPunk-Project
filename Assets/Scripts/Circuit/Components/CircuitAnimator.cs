@@ -14,6 +14,7 @@ namespace Solis.Circuit.Components
 
         [Header("STATE")]
         public BoolNetworkValue isOpen = new(false);
+        public bool canTurnOff = true;
 
         private static readonly int IsOn = Animator.StringToHash("IsOn");
 
@@ -52,7 +53,12 @@ namespace Solis.Circuit.Components
         protected override void OnRefresh()
         {
             if(isOpen.AttachedTo != null && HasAuthority)
-                isOpen.Value = input.ReadOutput().power > 0;
+            {
+                var power = input.ReadOutput().power > 0;
+                if(!canTurnOff && isOpen.Value && !power) return;
+
+                isOpen.Value = power;
+            }
         }
         #endregion
 
