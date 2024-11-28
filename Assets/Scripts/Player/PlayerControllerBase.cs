@@ -80,7 +80,6 @@ namespace Solis.Player
         [Header("BODY REFERENCES")]
         public Transform body;
         public Transform lookAt;
-        public Transform focus;
         public Transform dialogueLookAt;
         public Transform headOffset;
         public new SkinnedMeshRenderer renderer;
@@ -100,6 +99,14 @@ namespace Solis.Player
         [Header("NETWORK")]
         public int tickRate = 50;
         public StringNetworkValue username = new("Default");
+
+        [Header("FOCUS")]
+        public Transform focusBody;
+        public Transform focusLookAt;
+        public float focusAcceleration = 10;
+        public float focusMaxVelocity = 10;
+        public Vector2 angleLimits = new Vector2(30, 30);
+        private Vector2 _focusVelocity;
 
         [Header("MAGNETIZED")]
         public Vector3 magnetReferenceLocalPosition = new Vector3(0, 2, 0);
@@ -249,6 +256,7 @@ namespace Solis.Player
             InvokeRepeating(nameof(_Tick), 0, 1f / tickRate);
 
             CheatsManager.Instance?.ChangeScene(this);
+            Crosshair.Instance.characterType = CharacterType;
         }
 
         private void OnDisable()
@@ -601,7 +609,7 @@ namespace Solis.Player
             if (!HasAuthority)
                 return;
 
-            _camera = MulticamCamera.Instance.SetPlayerTarget(transform, lookAt, focus);
+            _camera = MulticamCamera.Instance.SetPlayerTarget(transform, lookAt, focusBody, focusLookAt);
             username.Value = NetworkManager.Instance.Name;
 
             if (DiscordController.Instance)
@@ -733,10 +741,39 @@ namespace Solis.Player
             if (SolisInput.GetKeyDown("Focus") && !IsPlayerLocked && IsGrounded)
             {
                 SetFocus(true);
+                focusBody.localEulerAngles = Vector3.zero;
             }
-            else if (SolisInput.GetKeyUp("Focus") && _isFocused)
+            else if(_isFocused)
             {
-                SetFocus(false);
+                var camInput = SolisInput.GetVector2("Look");
+
+                var target = camInput * focusMaxVelocity;
+                var accelerationValue = focusAcceleration * Time.deltaTime;
+                _focusVelocity.x = Mathf.MoveTowards(_focusVelocity.x, target.x, accelerationValue);
+                _focusVelocity.y = Mathf.MoveTowards(_focusVelocity.y, target.y, accelerationValue);
+
+                if (focusBody.localEulerAngles.x > angleLimits.x && focusBody.localEulerAngles.x < 360 - angleLimits.x)
+                {
+                    if (focusBody.localEulerAngles.x > 180)
+                        focusBody.localEulerAngles = new Vector3(360 - angleLimits.x, focusBody.localEulerAngles.y, focusBody.localEulerAngles.z);
+                    else
+                        focusBody.localEulerAngles = new Vector3(angleLimits.x, focusBody.localEulerAngles.y, focusBody.localEulerAngles.z);
+                }
+                if(focusBody.localEulerAngles.y > angleLimits.y && focusBody.localEulerAngles.y < 360 - angleLimits.y)
+                {
+                    if (focusBody.localEulerAngles.y > 180)
+                        focusBody.localEulerAngles = new Vector3(focusBody.localEulerAngles.x, 360 - angleLimits.y, focusBody.localEulerAngles.z);
+                    else
+                        focusBody.localEulerAngles = new Vector3(focusBody.localEulerAngles.x, angleLimits.y, focusBody.localEulerAngles.z);
+                }
+
+                focusBody.Rotate(Vector3.up, _focusVelocity.x);
+                focusBody.Rotate(Vector3.right, -_focusVelocity.y);
+
+                if (SolisInput.GetKeyUp("Focus"))
+                {
+                    SetFocus(false);
+                }
             }
         }
 

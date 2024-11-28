@@ -614,12 +614,44 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7412340898116116074}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.325, z: 0.25}
+  m_LocalRotation: {x: -0.000000089406974, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.325, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 384595862643307859}
+  m_Father: {fileID: 5535532644862191047}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8588796573360358342
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 384595862643307859}
+  m_Layer: 12
+  m_Name: Focus_Track
+  m_TagString: Untagged
+  m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &384595862643307859
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8588796573360358342}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5535532644862191047}
+  m_Father: {fileID: 4928032630737046649}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8631030089950897592
 GameObject:
@@ -4431,7 +4463,6 @@ MonoBehaviour:
   emoteController: {fileID: 8554980401512840443}
   body: {fileID: 4168912144533225267}
   lookAt: {fileID: 6721387208844707837}
-  focus: {fileID: 4928032630737046649}
   dialogueLookAt: {fileID: 7910517573197891056}
   headOffset: {fileID: 2022477272680672439}
   renderer: {fileID: 4937946243392875704}
@@ -4453,6 +4484,11 @@ MonoBehaviour:
   username:
     value: Default
     type: 0
+  focusBody: {fileID: 4928032630737046649}
+  focusLookAt: {fileID: 384595862643307859}
+  focusAcceleration: 0.2
+  focusMaxVelocity: 0.5
+  angleLimits: {x: 30, y: 30}
   magnetReferenceLocalPosition: {x: 0, y: 2, z: 0}
   magnetAnchor: {fileID: 0}
   handPosition: {fileID: 3799068514059352170}

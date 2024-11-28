@@ -142,12 +142,12 @@ namespace Solis.Misc.Multicam
             _cinemachineBrain.m_DefaultBlend = new CinemachineBlendDefinition(blend, blendTime);
         }
 
-        public Transform SetPlayerTarget(Transform follow, Transform lookAt, Transform focus)
+        public Transform SetPlayerTarget(Transform follow, Transform lookAt, Transform focusBody, Transform focusLookAt)
         {
             gameplayCamera.Follow = follow;
             gameplayCamera.LookAt = lookAt;
-            focusCamera.Follow = focus;
-            focusCamera.LookAt = focus;
+            focusCamera.Follow = focusBody;
+            focusCamera.LookAt = focusLookAt;
             PlayerFound = true;
 
             if(!cinematicCamera)
@@ -252,7 +252,7 @@ namespace Solis.Misc.Multicam
             if(state == CameraState.Gameplay)
             {
                 SetCameraBlend(CinemachineBlendDefinition.Style.EaseInOut, .5f);
-                //focusCamera.gameObject.SetActive(active);
+                focusCamera.gameObject.SetActive(active);
                 
             }
         }
