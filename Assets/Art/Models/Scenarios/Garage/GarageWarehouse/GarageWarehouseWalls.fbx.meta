@@ -12,6 +12,16 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: GarageWarehouseGlass_Material
+    second: {fileID: 2100000, guid: a6c6ce94e6ddc384988d26dd591cbdff, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GarageWarehouse_Material
+    second: {fileID: 2100000, guid: a68a5b1d6c1381543ac2f0b4e2e8d734, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Garage_Material
     second: {fileID: 2100000, guid: a68a5b1d6c1381543ac2f0b4e2e8d734, type: 2}
   materials:
@@ -79,7 +89,7 @@ ModelImporter:
     strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 180
-    normalImportMode: 1
+    normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
