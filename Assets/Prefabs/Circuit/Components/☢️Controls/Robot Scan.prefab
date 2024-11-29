@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1311458887874845797}
   m_Layer: 0
   m_Name: Particle System
-  m_TagString: Untagged
+  m_TagString: Interactive
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4904,7 +4904,7 @@ GameObject:
   - component: {fileID: 4266738269880539742}
   m_Layer: 0
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: Interactive
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5005,7 +5005,7 @@ GameObject:
   - component: {fileID: 6319263386288231984}
   m_Layer: 0
   m_Name: Robot Scan
-  m_TagString: Untagged
+  m_TagString: Interactive
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5090,7 +5090,7 @@ GameObject:
   - component: {fileID: 6170162866485128196}
   m_Layer: 0
   m_Name: Image
-  m_TagString: Untagged
+  m_TagString: Interactive
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5164,7 +5164,7 @@ GameObject:
   - component: {fileID: 1118932377799350994}
   m_Layer: 0
   m_Name: Output
-  m_TagString: Untagged
+  m_TagString: Interactive
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5207,9 +5207,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1378774383258841924}
     m_Modifications:
+    - target: {fileID: 3696178119238869411, guid: c414eb1a73d509f49976ab5f7fbef5cf, type: 3}
+      propertyPath: m_TagString
+      value: Interactive
+      objectReference: {fileID: 0}
     - target: {fileID: 7071265241401252594, guid: c414eb1a73d509f49976ab5f7fbef5cf, type: 3}
       propertyPath: m_Name
       value: RobotScanner
+      objectReference: {fileID: 0}
+    - target: {fileID: 7071265241401252594, guid: c414eb1a73d509f49976ab5f7fbef5cf, type: 3}
+      propertyPath: m_TagString
+      value: Interactive
       objectReference: {fileID: 0}
     - target: {fileID: 8612486435756916861, guid: c414eb1a73d509f49976ab5f7fbef5cf, type: 3}
       propertyPath: m_LocalPosition.x

@@ -741,7 +741,6 @@ namespace Solis.Player
             if (SolisInput.GetKeyDown("Focus") && !IsPlayerLocked && IsGrounded)
             {
                 SetFocus(true);
-                focusBody.localEulerAngles = Vector3.zero;
             }
             else if(_isFocused)
             {
@@ -752,20 +751,7 @@ namespace Solis.Player
                 _focusVelocity.x = Mathf.MoveTowards(_focusVelocity.x, target.x, accelerationValue);
                 _focusVelocity.y = Mathf.MoveTowards(_focusVelocity.y, target.y, accelerationValue);
 
-                if (focusBody.localEulerAngles.x > angleLimits.x && focusBody.localEulerAngles.x < 360 - angleLimits.x)
-                {
-                    if (focusBody.localEulerAngles.x > 180)
-                        focusBody.localEulerAngles = new Vector3(360 - angleLimits.x, focusBody.localEulerAngles.y, focusBody.localEulerAngles.z);
-                    else
-                        focusBody.localEulerAngles = new Vector3(angleLimits.x, focusBody.localEulerAngles.y, focusBody.localEulerAngles.z);
-                }
-                if(focusBody.localEulerAngles.y > angleLimits.y && focusBody.localEulerAngles.y < 360 - angleLimits.y)
-                {
-                    if (focusBody.localEulerAngles.y > 180)
-                        focusBody.localEulerAngles = new Vector3(focusBody.localEulerAngles.x, 360 - angleLimits.y, focusBody.localEulerAngles.z);
-                    else
-                        focusBody.localEulerAngles = new Vector3(focusBody.localEulerAngles.x, angleLimits.y, focusBody.localEulerAngles.z);
-                }
+                FocusLimitsCheck();
 
                 focusBody.Rotate(Vector3.up, _focusVelocity.x);
                 focusBody.Rotate(Vector3.right, -_focusVelocity.y);
@@ -777,13 +763,39 @@ namespace Solis.Player
             }
         }
 
+        private void FocusLimitsCheck()
+        {
+            if (focusBody.localEulerAngles.x > angleLimits.x && focusBody.localEulerAngles.x < 360 - angleLimits.x)
+            {
+                if (focusBody.localEulerAngles.x > 180)
+                    focusBody.localEulerAngles = new Vector3(360 - angleLimits.x, focusBody.localEulerAngles.y, focusBody.localEulerAngles.z);
+                else
+                    focusBody.localEulerAngles = new Vector3(angleLimits.x, focusBody.localEulerAngles.y, focusBody.localEulerAngles.z);
+            }
+
+            if(focusBody.localEulerAngles.y > angleLimits.y && focusBody.localEulerAngles.y < 360 - angleLimits.y)
+            {
+                if (focusBody.localEulerAngles.y > 180)
+                    focusBody.localEulerAngles = new Vector3(focusBody.localEulerAngles.x, 360 - angleLimits.y, focusBody.localEulerAngles.z);
+                else
+                    focusBody.localEulerAngles = new Vector3(focusBody.localEulerAngles.x, angleLimits.y, focusBody.localEulerAngles.z);
+            }
+        }
+
         private protected void SetFocus(bool focus)
         {
             Debug.Log("Focus: " + focus);
+
+            if (focus)
+            {
+                focusBody.eulerAngles = new Vector3(_camera.eulerAngles.x, _camera.eulerAngles.y, 0);
+                Debug.Log("Focus Position: " + focusBody.localRotation.eulerAngles);
+            }
+
             MulticamCamera.Instance.SetFocus(focus);
             _isFocused = focus;
             
-            Crosshair.Instance.SetCrosshairEnabled(focus);
+            Crosshair.Instance.SetCrosshaiActive(focus);
         }
         
         protected virtual void _Special() { }

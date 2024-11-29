@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2017060722138905307}
   m_Layer: 0
   m_Name: Output
-  m_TagString: Untagged
+  m_TagString: Interactive
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 8081280454382572780}
   m_Layer: 0
   m_Name: Palm Scanner
-  m_TagString: Untagged
+  m_TagString: Interactive
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -138,9 +138,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8754673106017173414}
     m_Modifications:
+    - target: {fileID: 1489314379178858186, guid: 36590f9e95a09624c8e90d82adb71ce2, type: 3}
+      propertyPath: m_TagString
+      value: Interactive
+      objectReference: {fileID: 0}
+    - target: {fileID: 1970948562186523529, guid: 36590f9e95a09624c8e90d82adb71ce2, type: 3}
+      propertyPath: m_TagString
+      value: Interactive
+      objectReference: {fileID: 0}
+    - target: {fileID: 2548499238329208753, guid: 36590f9e95a09624c8e90d82adb71ce2, type: 3}
+      propertyPath: m_TagString
+      value: Interactive
+      objectReference: {fileID: 0}
     - target: {fileID: 3569437713073812564, guid: 36590f9e95a09624c8e90d82adb71ce2, type: 3}
       propertyPath: m_Name
       value: HandScanner
+      objectReference: {fileID: 0}
+    - target: {fileID: 3569437713073812564, guid: 36590f9e95a09624c8e90d82adb71ce2, type: 3}
+      propertyPath: m_TagString
+      value: Interactive
+      objectReference: {fileID: 0}
+    - target: {fileID: 4738544484031393658, guid: 36590f9e95a09624c8e90d82adb71ce2, type: 3}
+      propertyPath: m_TagString
+      value: Interactive
+      objectReference: {fileID: 0}
+    - target: {fileID: 4996371671257667337, guid: 36590f9e95a09624c8e90d82adb71ce2, type: 3}
+      propertyPath: m_TagString
+      value: Interactive
       objectReference: {fileID: 0}
     - target: {fileID: 6358241395877573221, guid: 36590f9e95a09624c8e90d82adb71ce2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -181,6 +205,10 @@ PrefabInstance:
     - target: {fileID: 6358241395877573221, guid: 36590f9e95a09624c8e90d82adb71ce2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8815075911245378896, guid: 36590f9e95a09624c8e90d82adb71ce2, type: 3}
+      propertyPath: m_TagString
+      value: Interactive
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
