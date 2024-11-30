@@ -6,7 +6,6 @@ using Cinemachine;
 using DefaultNamespace;
 using NetBuff.Components;
 using NetBuff.Misc;
-using Solis.Data;
 using Solis.i18n;
 using Solis.Misc.Multicam;
 using Solis.Packets;
@@ -60,26 +59,23 @@ namespace _Scripts.UI
         public static DialogPanel Instance => _instance ? _instance : FindFirstObjectByType<DialogPanel>();
 
         public static bool IsDialogPlaying;
-
         public TextScaler textWriterSingle;
+        
         [SerializeField]private GameObject orderTextGameObject;
         [SerializeField] private Image characterImage;
         [SerializeField] private TMP_Text characterName;
         [SerializeField] private List<CharacterTypeAndImages> characterTypesAndEmotions;
-
+        
         public NetworkBehaviourNetworkValue<DialogPlayerBase> currentDialog = new(); 
         public IntNetworkValue index;
-        private CharacterTypeEmote _characterThatIsTalking;
-
         public List<EmojisStructure> emojisStructure = new List<EmojisStructure>();
-
         public IntNetworkValue charactersReady;
+        
         [SerializeField]private List<int> hasSkipped = new List<int>();
         [SerializeField] private GameObject nextImage;
         [SerializeField] private TextMeshProUGUI playersText;
-
-        private Animator nextImageAnimator;
         
+        private Animator nextImageAnimator;
         
         #region MonoBehaviour
 
@@ -101,11 +97,11 @@ namespace _Scripts.UI
 
         private void Awake()
         {
-            if (_instance != null)
+            /*if (_instance != null)
             {
                 Destroy(gameObject);
                 return;
-            }
+            }*/
             
             _instance = this;
             nextImage.TryGetComponent(out nextImageAnimator);
@@ -134,14 +130,16 @@ namespace _Scripts.UI
             if (!IsDialogPlaying) return false;
             if(playerInputPackage.Key != KeyCode.Return) return false;
             if(hasSkipped.Contains(i)) return false;
-            if(textWriterSingle.isWriting) return false;
-            if(!orderTextGameObject.activeSelf) return false; 
+            if(!orderTextGameObject.activeSelf) return false;
             var player = GetNetworkObject(playerInputPackage.Id);
-            
             var controller = player.GetComponent<PlayerControllerBase>();
             if (controller == null)
                 return false;
-           
+            if (textWriterSingle.isWriting)
+            {
+                textWriterSingle.SkipText();
+                return true;
+            }
             if (index.Value != -1)
             {
                 hasSkipped.Add(i);
@@ -155,7 +153,6 @@ namespace _Scripts.UI
             }
             
             if(currentDialog == null) return false;
-            Debug.Log("C");
             if (index.Value + 1 > currentDialog.Value.currentDialog.dialogs.Count - 1) 
                 index.Value = -1;
             else
@@ -177,7 +174,6 @@ namespace _Scripts.UI
             {
                 if (nextImage.activeSelf) nextImageAnimator.Play("NextDialogClose");
                 IsDialogPlaying = true;
-                _characterThatIsTalking = currentDialog.Value.currentDialog.dialogs[index.Value].characterType;
                 TypeWriteText(currentDialog.Value.currentDialog.dialogs[index.Value], () =>
                 {
                     if (nextImage.activeSelf) nextImageAnimator.Play("NextDialogOpen");

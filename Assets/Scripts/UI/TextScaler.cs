@@ -35,7 +35,7 @@ namespace DefaultNamespace
         public void SetText(string dialog, Action callback)
         {
             _currentText = dialog;
-            text.text = ""; // Esconder o texto inicialmente
+            text.text = "";
             progress = 0;
             isWriting = true;
             onFinishWriting = callback;
@@ -52,9 +52,16 @@ namespace DefaultNamespace
             }
         }
 
+        public void SkipText()
+        {
+            text.text = _currentText;
+            actualCharCount = _currentText.Length;
+            progress = 1;
+        }
+
         public void ClearText()
         {
-            
+            text.text = "";
         }
 
         private void SetProgress()
@@ -72,42 +79,37 @@ namespace DefaultNamespace
             }
         }
 
+        private int actualCharCount;
         private void WriteText()
         {
             if (text == null || text.textInfo == null) return;
             if(_currentText == null) return;
-            // Variáveis para processar o texto
+           
             int charactersToShow = Mathf.FloorToInt(progress * _currentText.Length);
-            string displayedText = ""; // Texto a ser exibido
-            int actualCharCount = 0; // Contagem de caracteres reais (ignorando as tags)
+            string displayedText = ""; 
+            actualCharCount = 0; 
 
             for (int i = 0; i < _currentText.Length && actualCharCount < charactersToShow; i++)
             {
-                // Ignora tags como <sprite> ou <color> e trata como um único caractere
                 if (_currentText[i] == '<')
                 {
-                    // Pula até o fechamento da tag
                     int closingTagIndex = _currentText.IndexOf('>', i);
                     if (closingTagIndex != -1)
                     {
                         displayedText += _currentText.Substring(i, closingTagIndex - i + 1);
-                        i = closingTagIndex; // Pula para o final da tag
-                        continue; // Não contamos a tag como um caractere visível
+                        i = closingTagIndex;
                     }
                 }
                 else
                 {
-                    // Adiciona caracteres normais ao texto
                     displayedText += _currentText[i];
                     actualCharCount++;
                 }
             }
-
-            // Atualiza o texto exibido
+            
             text.text = displayedText;
-            text.ForceMeshUpdate(); // Garante que o mesh está atualizado
-
-            // Aplica efeitos de animação, como escalonamento e shake
+            text.ForceMeshUpdate();
+            
             for (var i = 0; i < text.textInfo.characterCount; i++)
             {
                 var charInfo = text.textInfo.characterInfo[i];
@@ -120,8 +122,7 @@ namespace DefaultNamespace
 
                 var center = (vertices[vertexIndex + 1] + vertices[vertexIndex + 3]) / 2;
                 var charProgress = Mathf.Clamp01(progress * _currentText.Length - i);
-
-                // Aplica o progresso à escala das letras
+                
                 for (var j = 0; j < 4; j++)
                 {
                     vertices[vertexIndex + j] = center + (vertices[vertexIndex + j] - center) * charProgress;
@@ -129,8 +130,7 @@ namespace DefaultNamespace
 
                 ApplyEffectsToCharacter(i);
             }
-
-            // Atualiza os dados do TMP com as modificações feitas nos vértices
+            
             text.UpdateVertexData(TMP_VertexDataUpdateFlags.All);
         }
 
