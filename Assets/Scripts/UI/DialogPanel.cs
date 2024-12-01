@@ -68,7 +68,7 @@ namespace _Scripts.UI
         
         public NetworkBehaviourNetworkValue<DialogPlayerBase> currentDialog = new(); 
         public IntNetworkValue index;
-        public List<EmojisStructure> emojisStructure = new List<EmojisStructure>();
+        public EmojisData emojisStructure;
         public IntNetworkValue charactersReady;
         
         [SerializeField]private List<int> hasSkipped = new List<int>();
@@ -110,7 +110,7 @@ namespace _Scripts.UI
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            emojisStructure.ForEach(c => c.EmojiNameDisplay = c.emoji.ToString());
+            //emojisStructure.emojisStructure.ForEach(c => c.EmojiNameDisplay = c.emoji.ToString());
         }
 #endif
         #endregion
@@ -244,7 +244,7 @@ namespace _Scripts.UI
             });*/
             
             string newText = text;
-            foreach (var emojiStructure in emojisStructure)
+            foreach (var emojiStructure in emojisStructure.emojisStructure)
             {
                 string emojiPlaceholder = $"{{{emojiStructure.emoji.ToString()}}}";
                 string value =

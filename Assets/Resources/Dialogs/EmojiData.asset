@@ -1,0 +1,190 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79045cca48494b18ba6a0f04210253ed, type: 3}
+  m_Name: EmojiData
+  m_EditorClassIdentifier: 
+  emojisStructure:
+  - EmojiNameDisplay: Lever
+    emoji: 0
+    emojiNameDisplay: Alavanca
+    emojiNameInSpriteEditor: 0
+    textColor: {r: 0.9056604, g: 0.021359911, b: 0.021359911, a: 1}
+  - EmojiNameDisplay: Button
+    emoji: 1
+    emojiNameDisplay: "Bot\xE3o"
+    emojiNameInSpriteEditor: 1
+    textColor: {r: 0.9056604, g: 0.08692624, b: 0.06407974, a: 1}
+  - EmojiNameDisplay: PressurePlate
+    emoji: 2
+    emojiNameDisplay: "Placa de Press\xE3o"
+    emojiNameInSpriteEditor: 2
+    textColor: {r: 0.9056604, g: 0.08692624, b: 0.06407974, a: 1}
+  - EmojiNameDisplay: ZipLine
+    emoji: 3
+    emojiNameDisplay: Tirolesa
+    emojiNameInSpriteEditor: 3
+    textColor: {r: 0.9056604, g: 0.08692624, b: 0.06407974, a: 1}
+  - EmojiNameDisplay: RightMouseBtn
+    emoji: 4
+    emojiNameDisplay: "Bot\xE3o direito do mouse"
+    emojiNameInSpriteEditor: 4
+    textColor: {r: 0.50146854, g: 0.5566038, b: 0.547181, a: 1}
+  - EmojiNameDisplay: Stop
+    emoji: 32
+    emojiNameDisplay: Pare
+    emojiNameInSpriteEditor: 6
+    textColor: {r: 0.90588236, g: 0.117868155, b: 0.06274509, a: 1}
+  - EmojiNameDisplay: PalmScanner
+    emoji: 19
+    emojiNameDisplay: Scanner de palma
+    emojiNameInSpriteEditor: 7
+    textColor: {r: 0.06274509, g: 0.7547516, b: 0.90588236, a: 1}
+  - EmojiNameDisplay: RobotScanner
+    emoji: 20
+    emojiNameDisplay: "Scanner do rob\xF4"
+    emojiNameInSpriteEditor: 8
+    textColor: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
+  - EmojiNameDisplay: Plug1
+    emoji: 21
+    emojiNameDisplay: Plug
+    emojiNameInSpriteEditor: 9
+    textColor: {r: 0.8962264, g: 0.097232126, b: 0.105661914, a: 1}
+  - EmojiNameDisplay: Plug2
+    emoji: 22
+    emojiNameDisplay: Plug
+    emojiNameInSpriteEditor: 24
+    textColor: {r: 0, g: 0.7803922, b: 0.82745105, a: 1}
+  - EmojiNameDisplay: WindTurbine
+    emoji: 25
+    emojiNameDisplay: Turbina de vento
+    emojiNameInSpriteEditor: 10
+    textColor: {r: 0.098039225, g: 0.8269962, b: 0.8980392, a: 1}
+  - EmojiNameDisplay: LeftMouseButton
+    emoji: 5
+    emojiNameDisplay: "Bot\xE3o esquerdo do mouse"
+    emojiNameInSpriteEditor: 11
+    textColor: {r: 0.5019608, g: 0.5568628, b: 0.54901963, a: 1}
+  - EmojiNameDisplay: W
+    emoji: 6
+    emojiNameDisplay: W
+    emojiNameInSpriteEditor: 5
+    textColor: {r: 0.90588236, g: 0.42622665, b: 0.06274509, a: 1}
+  - EmojiNameDisplay: A
+    emoji: 16
+    emojiNameDisplay: A
+    emojiNameInSpriteEditor: 12
+    textColor: {r: 0.90588236, g: 0.42745098, b: 0.0627451, a: 1}
+  - EmojiNameDisplay: S
+    emoji: 8
+    emojiNameDisplay: S
+    emojiNameInSpriteEditor: 19
+    textColor: {r: 0.90588236, g: 0.42745098, b: 0.0627451, a: 1}
+  - EmojiNameDisplay: D
+    emoji: 9
+    emojiNameDisplay: D
+    emojiNameInSpriteEditor: 25
+    textColor: {r: 0.90588236, g: 0.42745098, b: 0.0627451, a: 1}
+  - EmojiNameDisplay: Alert
+    emoji: 33
+    emojiNameDisplay: Alerta
+    emojiNameInSpriteEditor: 13
+    textColor: {r: 0.90588236, g: 0.7305558, b: 0.06274509, a: 1}
+  - EmojiNameDisplay: Socket1
+    emoji: 23
+    emojiNameDisplay: Tomada
+    emojiNameInSpriteEditor: 14
+    textColor: {r: 0.8980392, g: 0.09803922, b: 0.105882354, a: 1}
+  - EmojiNameDisplay: Socket2
+    emoji: 24
+    emojiNameDisplay: Tomada
+    emojiNameInSpriteEditor: 15
+    textColor: {r: 0.098039225, g: 0.8402208, b: 0.8980392, a: 1}
+  - EmojiNameDisplay: Container
+    emoji: 26
+    emojiNameDisplay: Container
+    emojiNameInSpriteEditor: 16
+    textColor: {r: 0.105080515, g: 0.6132076, b: 0.06074226, a: 1}
+  - EmojiNameDisplay: Box
+    emoji: 27
+    emojiNameDisplay: Caixa
+    emojiNameInSpriteEditor: 17
+    textColor: {r: 0.9622642, g: 0.8125974, b: 0.031772893, a: 1}
+  - EmojiNameDisplay: Enter
+    emoji: 10
+    emojiNameDisplay: Enter
+    emojiNameInSpriteEditor: 18
+    textColor: {r: 0.90588236, g: 0.42745098, b: 0.0627451, a: 1}
+  - EmojiNameDisplay: Frog
+    emoji: 28
+    emojiNameDisplay: Sapo
+    emojiNameInSpriteEditor: 20
+    textColor: {r: 0, g: 0.6862745, b: 0.59607846, a: 1}
+  - EmojiNameDisplay: Nina
+    emoji: 29
+    emojiNameDisplay: Nina
+    emojiNameInSpriteEditor: 21
+    textColor: {r: 0.5529412, g: 0.3647059, b: 0.2784314, a: 1}
+  - EmojiNameDisplay: Ram
+    emoji: 30
+    emojiNameDisplay: RAM
+    emojiNameInSpriteEditor: 22
+    textColor: {r: 0.40000004, g: 0.6666667, b: 0.81568635, a: 1}
+  - EmojiNameDisplay: Fan
+    emoji: 31
+    emojiNameDisplay: Ventilador
+    emojiNameInSpriteEditor: 23
+    textColor: {r: 0.9333334, g: 0, b: 0.07450981, a: 1}
+  - EmojiNameDisplay: Space
+    emoji: 11
+    emojiNameDisplay: "Espa\xE7o"
+    emojiNameInSpriteEditor: 28
+    textColor: {r: 0.90588236, g: 0.42745098, b: 0.0627451, a: 1}
+  - EmojiNameDisplay: Shift
+    emoji: 12
+    emojiNameDisplay: Shift
+    emojiNameInSpriteEditor: 27
+    textColor: {r: 0.90588236, g: 0.42745098, b: 0.0627451, a: 1}
+  - EmojiNameDisplay: E
+    emoji: 34
+    emojiNameDisplay: E
+    emojiNameInSpriteEditor: 29
+    textColor: {r: 0.90588236, g: 0.42745098, b: 0.0627451, a: 1}
+  - EmojiNameDisplay: Y
+    emoji: 13
+    emojiNameDisplay: Y
+    emojiNameInSpriteEditor: 30
+    textColor: {r: 0.90588236, g: 0.7793753, b: 0.06274509, a: 1}
+  - EmojiNameDisplay: B
+    emoji: 14
+    emojiNameDisplay: B
+    emojiNameInSpriteEditor: 31
+    textColor: {r: 0.90588236, g: 0.16661505, b: 0.06274509, a: 1}
+  - EmojiNameDisplay: X
+    emoji: 15
+    emojiNameDisplay: X
+    emojiNameInSpriteEditor: 32
+    textColor: {r: 0, g: 0.62352943, b: 0.882353, a: 1}
+  - EmojiNameDisplay: A
+    emoji: 16
+    emojiNameDisplay: A
+    emojiNameInSpriteEditor: 33
+    textColor: {r: 0, g: 0.74509805, b: 0.24705884, a: 1}
+  - EmojiNameDisplay: LJoyStick
+    emoji: 17
+    emojiNameDisplay: Joystick esquerdo
+    emojiNameInSpriteEditor: 34
+    textColor: {r: 0.10588236, g: 0.10196079, b: 0.10196079, a: 1}
+  - EmojiNameDisplay: RJoyStick
+    emoji: 18
+    emojiNameDisplay: Joystick direito
+    emojiNameInSpriteEditor: 35
+    textColor: {r: 0.10588236, g: 0.10196079, b: 0.10196079, a: 1}
