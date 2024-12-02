@@ -26,18 +26,18 @@ namespace Solis.Player
             switch (_collider.GetType().Name)
             {
                 case "BoxCollider":
-                    Gizmos.DrawCube(transform.position, transform.localScale);
-                    Gizmos.DrawWireCube(transform.position, transform.localScale);
+                    Gizmos.DrawCube(transform.position, _collider.bounds.size);
+                    Gizmos.DrawWireCube(transform.position, _collider.bounds.size);
                     break;
                 case "SphereCollider":
-                    Gizmos.DrawSphere(transform.position, transform.localScale.x);
+                    Gizmos.DrawSphere(transform.position, transform.lossyScale.x);
                     break;
                 case "CapsuleCollider":
                     var capsule = (CapsuleCollider) _collider;
                     Gizmos.DrawWireCube(transform.position, new Vector3(capsule.radius, capsule.height, capsule.radius));
                     break;
                 case "MeshCollider":
-                    Gizmos.DrawWireMesh(((MeshCollider) _collider).sharedMesh, transform.position, transform.rotation, transform.localScale);
+                    Gizmos.DrawWireMesh(((MeshCollider) _collider).sharedMesh, transform.position, transform.rotation, transform.lossyScale);
                     break;
             }
         }
