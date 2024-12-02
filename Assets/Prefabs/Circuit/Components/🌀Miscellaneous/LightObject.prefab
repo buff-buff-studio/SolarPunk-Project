@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2924602707765038533}
   m_Layer: 16
   m_Name: LightObject
-  m_TagString: Untagged
+  m_TagString: Carryable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,8 +73,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id:
-    high: -407542207
-    low: 1982568892
+    high: -824771307
+    low: 578599748
   ownerId: -1
   prefabId:
     high: 0
@@ -220,6 +220,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 502f7b0ab98f4e448885126d6a64a2b0, type: 3}
       propertyPath: m_Layer
       value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 502f7b0ab98f4e448885126d6a64a2b0, type: 3}
+      propertyPath: m_TagString
+      value: Carryable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

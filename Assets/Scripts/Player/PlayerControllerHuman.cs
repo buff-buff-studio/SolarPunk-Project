@@ -82,11 +82,20 @@ namespace Solis.Player
                     return;
                 }
 
-                _specialTimer = specialCooldown;
+                animator.SetTrigger("ShootCloud");
                 _isSpecialOn.Value = false;
-                Spawn(cloudPrefab, transform.position + cloudOffset, body.rotation);
-                velocity = Vector3.zero;
+                velocity = new Vector3(0, 1, 0);
+                IsJumping = true;
+                state = State.SpawnCloud;
             }
+        }
+
+        public void SpawnCloud()
+        {
+            state = State.Normal;
+            _isJumpCut = true;
+            _specialTimer = specialCooldown;
+            Spawn(cloudPrefab, transform.position + cloudOffset, body.rotation);
         }
 
         private void OnTriggerEnter(Collider col)

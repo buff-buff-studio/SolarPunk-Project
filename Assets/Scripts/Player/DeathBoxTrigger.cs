@@ -16,8 +16,8 @@ namespace Solis.Player
             Gizmos.color = _type == PlayerControllerBase.Death.Fall
                 ? new Color(1, 0, 0, .25f)
                 : new Color(1, .25f, 0, .25f);
-            Gizmos.DrawCube(transform.position, transform.localScale);
-            Gizmos.DrawWireCube(transform.position, transform.localScale);
+            Gizmos.DrawCube(transform.position, transform.lossyScale);
+            Gizmos.DrawWireCube(transform.position, transform.lossyScale);
 
             BoxColliderVolume();
         }

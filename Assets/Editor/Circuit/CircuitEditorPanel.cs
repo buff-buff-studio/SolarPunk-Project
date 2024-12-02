@@ -626,13 +626,21 @@ namespace Editor.Circuit
                     }
                     else
                     {
-                        var pc = plug.GetComponentInChildren<CircuitPhysicalCableConnection>();
-                        if (pc != null)
-                            continue;
-                    
-                        var physicalCableHolder = plug.GetComponentInChildren<Rigidbody>();
-                        if (physicalCableHolder != null)
-                            continue;
+                        try
+                        {
+                            var pc = plug.GetComponentInChildren<CircuitPhysicalCableConnection>();
+                            if (pc != null)
+                                continue;
+
+                            var physicalCableHolder = plug.GetComponentInChildren<Rigidbody>();
+                            if (physicalCableHolder != null)
+                                continue;
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogError(e, component.gameObject);
+                            throw;
+                        }
                     }
                     
                     
