@@ -49,7 +49,8 @@ namespace Solis.Player
         {
             Normal,
             Magnetized,
-            GrapplingHook
+            GrapplingHook,
+            SpawnCloud
         }
 
         /// <summary>
@@ -138,7 +139,7 @@ namespace Solis.Player
         internal bool IsJumping;
         private bool _isJumpingEnd;
         private bool _inJumpState;
-        private bool _isJumpCut;
+        private protected bool _isJumpCut;
         private float _lastJumpHeight;
         private float _lastJumpVelocity;
         
@@ -392,7 +393,11 @@ namespace Solis.Player
                 case State.GrapplingHook:
                     HandleGrapplingHook();
                     break;
-                
+
+                case State.SpawnCloud:
+                    controller.Move(new Vector3(0, Mathf.Max(velocity.y, .1f), 0) * Time.fixedDeltaTime);
+                    break;
+
                 case State.Normal:
                     _Gravity();
                     _HandlePlatform();

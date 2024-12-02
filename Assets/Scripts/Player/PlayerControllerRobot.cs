@@ -23,13 +23,17 @@ namespace Solis.Player
 
         public Transform attachedTo;
         public Vector3 attachedToLocalPoint;
-        
+
+        [Range(0,2)]
+        public float grapplingAnimationTime = 1f;
         public FloatNetworkValue grapplingHook = new(0f);
         public Vector3NetworkValue grapplingHookPosition = new(Vector3.zero);
         #endregion
         
         public override CharacterType CharacterType => CharacterType.Robot;
         public Transform diluvioPosition;
+        private float _grapplingAnimationTimer;
+        private bool _isHooking;
 
         protected override void OnEnable()
         {
@@ -37,6 +41,21 @@ namespace Solis.Player
             
             WithValues(isRespawning, isPaused, username, grapplingHookPosition, grapplingHook);
             grapplingHook.OnValueChanged += (old, @new) => grapplingLine.enabled = @new > 0;
+        }
+
+        protected override void _Timer()
+        {
+            base._Timer();
+
+            if(!attachedTo && _isHooking) return;
+
+            if (_grapplingAnimationTimer > 0)
+                _grapplingAnimationTimer -= Time.deltaTime;
+            else
+            {
+                _isHooking = true;
+                _grapplingAnimationTimer = 0;
+            }
         }
         
         #region Grappling Hook
@@ -54,9 +73,12 @@ namespace Solis.Player
                     if(grapplingMaxDistance < Vector3.Distance(transform.position, hit.point))
                         return;
 
+                    animator.SetBool("Hooking", true);
                     attachedTo = hit.transform;
                     attachedToLocalPoint = attachedTo.InverseTransformPoint(attachedTo.childCount > 0 ? hit.transform.GetChild(0).position : hit.point);
                     state = State.GrapplingHook;
+                    _isHooking = false;
+                    _grapplingAnimationTimer = grapplingAnimationTime;
 
                     SetFocus(false);
                     SendPacket(new PlayerGrapplingHookPacket
@@ -80,7 +102,8 @@ namespace Solis.Player
             
             velocity = v;
             state = State.Normal;
-            
+
+            animator.SetBool("Hooking", false);
             SendPacket(new PlayerGrapplingHookPacket
             {
                 Id = Id,
@@ -88,10 +111,13 @@ namespace Solis.Player
             });
 
             grapplingHook.Value = 0f;
+            _isHooking = false;
         }
 
         protected override void HandleGrapplingHook()
         {
+            if (!_isHooking) return;
+
             var deltaTime = Time.fixedDeltaTime;
             grapplingHook.Value = Mathf.Lerp(grapplingHook.Value,  1f, deltaTime * 10f);
             grapplingHookPosition.Value = attachedTo.TransformPoint(attachedToLocalPoint);
