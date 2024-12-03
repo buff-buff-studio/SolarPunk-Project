@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 240330175, guid: bb035e8d675cd524d966c83ad81471e3, type: 3}
+  m_Sprite: {fileID: -1421091864, guid: bb035e8d675cd524d966c83ad81471e3, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -98,7 +98,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 1237482915584059933}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 1}
+    m_NormalColor: {r: 0.8867924, g: 0.8867924, b: 0.8867924, a: 1}
     m_HighlightedColor: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
     m_PressedColor: {r: 0.8584906, g: 0.8584906, b: 0.8584906, a: 1}
     m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
@@ -853,7 +853,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 240330175, guid: bb035e8d675cd524d966c83ad81471e3, type: 3}
+  m_Sprite: {fileID: -1591356457, guid: bb035e8d675cd524d966c83ad81471e3, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -884,7 +884,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 8868868021817634262}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 1}
+    m_NormalColor: {r: 0.8867924, g: 0.8867924, b: 0.8867924, a: 1}
     m_HighlightedColor: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
     m_PressedColor: {r: 0.8584906, g: 0.8584906, b: 0.8584906, a: 1}
     m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
@@ -1104,7 +1104,7 @@ RectTransform:
   m_Father: {fileID: 6519960832517647997}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
@@ -1243,7 +1243,7 @@ MonoBehaviour:
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 637888517693338216}
   m_HorizontalScrollbarVisibility: 2
-  m_VerticalScrollbarVisibility: 2
+  m_VerticalScrollbarVisibility: 0
   m_HorizontalScrollbarSpacing: -3
   m_VerticalScrollbarSpacing: 0
   m_OnValueChanged:
@@ -1306,7 +1306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 55
-    m_Right: 55
+    m_Right: 0
     m_Top: 55
     m_Bottom: 55
   m_ChildAlignment: 0
@@ -1829,8 +1829,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -55.000008, y: 0}
+  m_SizeDelta: {x: -109.99999, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3166887301692148579
 CanvasRenderer:
@@ -2011,7 +2011,7 @@ RectTransform:
   m_Father: {fileID: 6735008172459107462}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
@@ -2150,7 +2150,7 @@ MonoBehaviour:
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 8086836989697212472}
   m_HorizontalScrollbarVisibility: 2
-  m_VerticalScrollbarVisibility: 2
+  m_VerticalScrollbarVisibility: 0
   m_HorizontalScrollbarSpacing: -3
   m_VerticalScrollbarSpacing: 0
   m_OnValueChanged:
@@ -2193,8 +2193,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -4.4957}
-  m_SizeDelta: {x: 0, y: 79.4957}
+  m_AnchoredPosition: {x: 0, y: -23.4811}
+  m_SizeDelta: {x: 0, y: 98.4811}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &1842470058524520009
 CanvasRenderer:
@@ -2945,7 +2945,7 @@ MonoBehaviour:
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 9097159002515586205}
   m_HorizontalScrollbarVisibility: 2
-  m_VerticalScrollbarVisibility: 2
+  m_VerticalScrollbarVisibility: 0
   m_HorizontalScrollbarSpacing: -3
   m_VerticalScrollbarSpacing: 0
   m_OnValueChanged:
@@ -3031,12 +3031,17 @@ MonoBehaviour:
   - {fileID: 4541293331443119330}
   - {fileID: 455062500707419062}
   settingsData: {fileID: 11400000, guid: 377e864256ff2ef4cbbf550619a3cf11, type: 2}
+  selectedTab: {fileID: -1591356457, guid: bb035e8d675cd524d966c83ad81471e3, type: 3}
+  unselectedTab: {fileID: -1421091864, guid: bb035e8d675cd524d966c83ad81471e3, type: 3}
   settingsTabs:
   - button: {fileID: 1237482915584059933}
+    image: {fileID: 1266549322317476542}
     text: {fileID: 6823595548622567249}
   - button: {fileID: 8868868021817634262}
+    image: {fileID: 4979015158556126587}
     text: {fileID: 1557375441879612844}
   - button: {fileID: 5069441902244841733}
+    image: {fileID: 8873709785727891126}
     text: {fileID: 8818264202220511701}
   boolItems:
     _serializedList:
@@ -3216,7 +3221,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 240330175, guid: bb035e8d675cd524d966c83ad81471e3, type: 3}
+  m_Sprite: {fileID: -1421091864, guid: bb035e8d675cd524d966c83ad81471e3, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3247,7 +3252,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 5069441902244841733}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 1}
+    m_NormalColor: {r: 0.8867924, g: 0.8867924, b: 0.8867924, a: 1}
     m_HighlightedColor: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
     m_PressedColor: {r: 0.8584906, g: 0.8584906, b: 0.8584906, a: 1}
     m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
@@ -3497,7 +3502,7 @@ RectTransform:
   m_Father: {fileID: 53236408056230940}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
@@ -3607,7 +3612,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 55
-    m_Right: 55
+    m_Right: 0
     m_Top: 55
     m_Bottom: 55
   m_ChildAlignment: 0
@@ -3687,7 +3692,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 55
-    m_Right: 55
+    m_Right: 0
     m_Top: 55
     m_Bottom: 55
   m_ChildAlignment: 0
