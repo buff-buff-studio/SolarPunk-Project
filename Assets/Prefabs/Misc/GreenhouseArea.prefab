@@ -7004,6 +7004,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8357623865959518376}
     m_Modifications:
+    - target: {fileID: -7511558181221131132, guid: 1cf28f0771f0b1c42a26f8a93e4379fc, type: 3}
+      propertyPath: m_SelectedEditorRenderState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -5754084199372789682, guid: 1cf28f0771f0b1c42a26f8a93e4379fc, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -6593678172696870230, guid: 1cf28f0771f0b1c42a26f8a93e4379fc, type: 3}
     - target: {fileID: 3502822707186793393, guid: a851148c51152974887421cdb09d80cc, type: 3}
       propertyPath: m_Name
       value: Bush02_Prefab
@@ -7060,14 +7068,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 1cf28f0771f0b1c42a26f8a93e4379fc, type: 3}
-      propertyPath: m_SelectedEditorRenderState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -5754084199372789682, guid: 1cf28f0771f0b1c42a26f8a93e4379fc, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: -6593678172696870230, guid: 1cf28f0771f0b1c42a26f8a93e4379fc, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -34542,11 +34542,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3329819442276300357, guid: d2e184f365b261d41b189c6e6b4a6fd4, type: 3}
       propertyPath: id.low
-      value: 752354247
+      value: 346209580
       objectReference: {fileID: 0}
     - target: {fileID: 3329819442276300357, guid: d2e184f365b261d41b189c6e6b4a6fd4, type: 3}
       propertyPath: id.high
-      value: 1712415131
+      value: 983650015
       objectReference: {fileID: 0}
     - target: {fileID: 8081280454382572780, guid: d2e184f365b261d41b189c6e6b4a6fd4, type: 3}
       propertyPath: ignoreColliders.Array.size
