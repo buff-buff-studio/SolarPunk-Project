@@ -239,6 +239,7 @@ namespace Solis.Circuit.Components
             {
                 case Mode.Error:
                     statusTitle.text = "Error";
+                    statusInfo.text = "";
                     statusDescription.text = currentError switch
                     {
                         Error.LiquidAOverflow => "Liquid A overflowed, close the valve A and B and flush the system",
