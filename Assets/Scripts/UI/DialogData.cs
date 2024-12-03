@@ -77,15 +77,12 @@ namespace UI
     public class DialogStruct
     {
         public CharacterTypeEmote characterType;
-        
-        private TextMeshProUGUI _textField;
         [TextArea]
         public string textValue;
       //  public Emojis[] emojis;
-    
     }
     
-    [CreateAssetMenu(fileName = "Dialog", menuName = "Solis/Game/Dialog")]
+    [CreateAssetMenu(fileName = "Dialog", menuName = "Solis/Game/Dialog/Dialog")]
     public class DialogData : ScriptableObject
     {
         public List<DialogStruct> dialogs;
