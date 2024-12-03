@@ -18,6 +18,7 @@ using Solis.Misc.Integrations;
 using Solis.Misc.Multicam;
 using Solis.Misc.Props;
 using Solis.Packets;
+using UI;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -724,6 +725,10 @@ namespace Solis.Player
                 // });
             }
             if(DialogPanel.IsDialogPlaying)
+                if(SolisInput.GetKeyDown("Skip"))
+                    SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
+            
+            if(InteractablePanel.IsDialogPlaying)
                 if(SolisInput.GetKeyDown("Skip"))
                     SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
         }
