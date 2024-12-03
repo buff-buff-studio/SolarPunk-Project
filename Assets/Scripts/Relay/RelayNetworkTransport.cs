@@ -124,7 +124,7 @@ namespace NetBuff.Relays
 						var connectionEvent = new UtpConnectionEvent()
 						{
 							eventType = (byte)ConnectionEventType.OnReceivedData,
-							eventData = _GetFixedList(nativeMessage),
+							eventData = new DataBuffer(nativeMessage),
 							connectionId = connections[index].GetHashCode()
 						};
 
@@ -144,26 +144,6 @@ namespace NetBuff.Relays
 						connectionsEventsQueue.Enqueue(connectionEvent);
 					}
 				}
-			}
-
-			/// <summary>
-			/// Convert unmanaged native array to 4096 Byte list. Uses unsafe code.
-			/// </summary>
-			/// <param name="data">The data to convert.</param>
-			/// <returns>An unmanaged fixed list of data.</returns>
-			private FixedList4096Bytes<byte> _GetFixedList(NativeArray<byte> data)
-			{
-				var retVal = new FixedList4096Bytes<byte>();
-
-				if (data.Length > 0)
-				{
-					unsafe
-					{
-						retVal.AddRange(data.GetUnsafePtr(), data.Length);
-					}
-				}
-
-				return retVal;
 			}
 		}
 
@@ -271,7 +251,7 @@ namespace NetBuff.Relays
 								{
 									eventType = (byte)ConnectionEventType.OnReceivedData,
 									connectionId = connection.GetHashCode(),
-									eventData = _GetFixedList(nativeMessage)
+									eventData = new DataBuffer(nativeMessage)
 								};
 
 								//Queue event
@@ -296,21 +276,6 @@ namespace NetBuff.Relays
 
 					}
 				}
-			}
-
-			private FixedList4096Bytes<byte> _GetFixedList(NativeArray<byte> data)
-			{
-				FixedList4096Bytes<byte> retVal = new FixedList4096Bytes<byte>();
-
-				if (data.Length > 0)
-				{
-					unsafe
-					{
-						retVal.AddRange(data.GetUnsafePtr(), data.Length);
-					}
-				}
-
-				return retVal;
 			}
 		}
 
@@ -378,11 +343,11 @@ namespace NetBuff.Relays
 		    /// The event type.
 		    /// </summary>
 		    public byte eventType;
-
+		    
 		    /// <summary>
 		    /// Event data, only used for OnReceived event.
 		    /// </summary>
-		    public FixedList4096Bytes<byte> eventData;
+		    public DataBuffer eventData;
 
 		    /// <summary>
 		    /// The connection ID of the connection corresponding to this event.
@@ -604,7 +569,7 @@ namespace NetBuff.Relays
 						    {
 							    var id = binaryReader.ReadInt32();
 							    var packet = PacketRegistry.CreatePacket(id);
-		
+							    
 							    packet.Deserialize(binaryReader);
 							    transport.OnClientPacketReceived?.Invoke(packet);
 						    }
@@ -775,15 +740,16 @@ namespace NetBuff.Relays
 	        if(Type is EnvironmentType.Host or EnvironmentType.Client)
 		        throw new InvalidOperationException("Client is already running");
 	        
+	        var settings = new NetworkSettings();
+	        settings.WithNetworkConfigParameters(disconnectTimeoutMS: timeout);
+	        settings.WithFragmentationStageParameters(payloadCapacity: 16384);
+	        
 	        if (usingRelay)
 	        {
 		        _client.connectionsEventsQueue = new NativeQueue<UtpConnectionEvent>(Allocator.Persistent);
 		        
 		        var relayServerData = RelayUtils.PlayerRelayData(JoinAllocation, RelayServerEndpoint.NetworkOptions.Udp);
-
-		        var settings = new NetworkSettings();
 		        settings.WithRelayParameters(ref relayServerData);
-		        settings.WithFragmentationStageParameters(payloadCapacity: 16384);
 
 		        _client.driver = NetworkDriver.Create(settings);
 		        _client.reliablePipeline = _client.driver.CreatePipeline(typeof(FragmentationPipelineStage), typeof(ReliableSequencedPipelineStage));
@@ -818,10 +784,7 @@ namespace NetBuff.Relays
 		        }
 
 		        _client.connectionsEventsQueue = new NativeQueue<UtpConnectionEvent>(Allocator.Persistent);
-
-		        var settings = new NetworkSettings();
-		        settings.WithNetworkConfigParameters(disconnectTimeoutMS: timeout);
-
+		        
 		        _client.driver = NetworkDriver.Create(settings);
 		        _client.reliablePipeline = _client.driver.CreatePipeline(typeof(FragmentationPipelineStage), typeof(ReliableSequencedPipelineStage));
 		        _client.unreliablePipeline = _client.driver.CreatePipeline(typeof(UnreliableSequencedPipelineStage));
