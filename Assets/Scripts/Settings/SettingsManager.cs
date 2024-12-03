@@ -19,6 +19,8 @@ namespace Solis.Settings
         
         [SerializeField]
         private SettingsData settingsData;
+
+        public Sprite selectedTab, unselectedTab;
         
         public SettingsTab[] settingsTabs;
 
@@ -253,11 +255,11 @@ namespace Solis.Settings
             {
                 if (i == index)
                 {
-                    settingsTabs[i].SelectTab();
+                    settingsTabs[i].SelectTab(selectedTab);
                 }
                 else
                 {
-                    settingsTabs[i].DeselectTab();
+                    settingsTabs[i].DeselectTab(unselectedTab);
                 }
             }
         }
@@ -326,17 +328,20 @@ namespace Solis.Settings
         public struct SettingsTab
         {
             public Button button;
+            public Image image;
             public TextMeshProUGUI text;
             
-            public void SelectTab()
+            public void SelectTab(Sprite spr)
             {
+                image.sprite = spr;
                 text.color = Color.black;
                 text.fontSize = 45;
                 button.interactable = false;
             }
             
-            public void DeselectTab()
+            public void DeselectTab(Sprite spr)
             {
+                image.sprite = spr;
                 text.color = Color.white;
                 text.fontSize = 40;
                 button.interactable = true;
