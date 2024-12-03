@@ -32,7 +32,6 @@ Transform:
   - {fileID: 1983016438425551439}
   - {fileID: 8380960979238873312}
   - {fileID: 2545662558932271344}
-  - {fileID: 4175344953059664921}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2022027776808248740
@@ -93,7 +92,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4902f302696d79940bce256b5b0b7ff6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4175344953059664921}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4902f302696d79940bce256b5b0b7ff6, type: 3}
       insertIndex: -1
@@ -202,19 +204,19 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2950336503759590894}
+    m_TransformParent: {fileID: 1983016438425551439}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 431bd61505c0bf848a74b9cf83291195, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.007
+      value: 0.0069999695
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 431bd61505c0bf848a74b9cf83291195, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.777
+      value: 0.25299978
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 431bd61505c0bf848a74b9cf83291195, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.014
+      value: -0.013999939
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 431bd61505c0bf848a74b9cf83291195, type: 3}
       propertyPath: m_LocalRotation.w
@@ -244,6 +246,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 431bd61505c0bf848a74b9cf83291195, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9d657678297b87f48a644474a9e86cfd, type: 2}
     - target: {fileID: 919132149155446097, guid: 431bd61505c0bf848a74b9cf83291195, type: 3}
       propertyPath: m_Name
       value: LavaArea
