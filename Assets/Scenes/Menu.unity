@@ -661,7 +661,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'V: 0.9.1'
+  m_text: 'V: 0.9.12'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
   m_sharedMaterial: {fileID: 6976116800014725505, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
@@ -5999,7 +5999,9 @@ PrefabInstance:
       propertyPath: m_PolyMesh.m_Mesh
       value: 
       objectReference: {fileID: 1592455412}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4267284322165961700, guid: f09bffc2dee6c124c91877fe860086b4, type: 3}
+    - {fileID: 210029643485710213, guid: f09bffc2dee6c124c91877fe860086b4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -6924,7 +6926,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1100427202}
   serializedVersion: 2
-  m_LocalRotation: {x: -9.3132246e-10, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8025,7 +8027,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1315375430}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.011117354, y: -0.08788477, z: -0.0009809028, w: 0.9960682}
+  m_LocalRotation: {x: -0.011117355, y: -0.08788477, z: -0.0009809029, w: 0.9960682}
   m_LocalPosition: {x: 0, y: 8.14, z: -13.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

@@ -100,7 +100,7 @@ namespace Solis.Player
             {
                 DiscordController.LobbyStartTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 DiscordController.Instance!.SetGameActivity(characterType, true,
-                    SolisNetworkManager.usingRelay ? SolisNetworkManager.relayCode : null);
+                    SolisNetworkManager.relayCode);
             }
         }
 
@@ -117,7 +117,7 @@ namespace Solis.Player
                                 : CharacterType.Human);
 
                         if(DiscordController.Instance != null)
-                            DiscordController.Instance!.SetGameActivity(characterType, true, SolisNetworkManager.usingRelay ? SolisNetworkManager.relayCode : null);
+                            DiscordController.Instance!.SetGameActivity(characterType, true, SolisNetworkManager.relayCode);
                         break;
                 }
             }

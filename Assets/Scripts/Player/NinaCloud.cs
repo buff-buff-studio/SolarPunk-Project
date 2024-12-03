@@ -63,22 +63,24 @@ public class NinaCloud : NetworkBehaviour
             _lifeTime.Value = 0;
         }
     }
-    
+
+    private static readonly Collider[] Results = new Collider[16];
     private bool _CheckPlatform()
     {
-        Collider[] results = Array.Empty<Collider>();
-        var count = Physics.OverlapBoxNonAlloc(transform.position + checkOffset, checkSize / 2, results, transform.rotation);
+        var count = Physics.OverlapBoxNonAlloc(transform.position + checkOffset, checkSize, Results, transform.rotation);
 
         for (var i = 0; i < count; i++)
         {
-            if (results[i] == null)
+            if (Results[i] == null)
                 continue;
-                
-            if (results[i].TryGetComponent(out IHeavyObject _))
+            if (Results[i].TryGetComponent(out IHeavyObject _))
+            {
+                Debug.Log($"The cloud doesn't support heavy objects", Results[i]);
                 return false;
+            }
         }
             
-        return !results.Take(count).Any(col => col.TryGetComponent(out IHeavyObject _));
+        return !Results.Take(count).Any(col => col.TryGetComponent(out IHeavyObject _));
     }
 
     private void OnDrawGizmosSelected()

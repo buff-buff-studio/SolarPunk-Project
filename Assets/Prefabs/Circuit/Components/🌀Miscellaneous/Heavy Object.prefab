@@ -82,14 +82,56 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 645c75d5eaf533e4abb4d0b383454cd3, type: 2}
     - target: {fileID: 9116801756860443593, guid: fc0603dbfd745f147be6d59f1004342c, type: 3}
       propertyPath: id.low
-      value: -1990116657
+      value: -431483091
       objectReference: {fileID: 0}
     - target: {fileID: 9116801756860443593, guid: fc0603dbfd745f147be6d59f1004342c, type: 3}
       propertyPath: id.high
-      value: 492870333
+      value: -1420504474
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6621709742318782139, guid: fc0603dbfd745f147be6d59f1004342c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5543034213146780115, guid: fc0603dbfd745f147be6d59f1004342c, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: -4475689090601496028}
   m_SourcePrefab: {fileID: 100100000, guid: fc0603dbfd745f147be6d59f1004342c, type: 3}
+--- !u!114 &6515247766672743592 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8654741218048202814, guid: fc0603dbfd745f147be6d59f1004342c, type: 3}
+  m_PrefabInstance: {fileID: 2481797972591789206}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7970753572833666373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86cf07713ee8455cb312a38d0b413f9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &7970753572833666373 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5543034213146780115, guid: fc0603dbfd745f147be6d59f1004342c, type: 3}
+  m_PrefabInstance: {fileID: 2481797972591789206}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-4475689090601496028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7970753572833666373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87acb4fe8c0c62342bd3ac3f3cc8e56f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 3
+  dotThreshold: 0.2
+  playerTypeFilter: 2
+  isOn:
+    value: 0
+    type: 2
+  networkRigidbodyTransform: {fileID: 6515247766672743592}
+  objectSize:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
