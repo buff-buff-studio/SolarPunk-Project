@@ -13,7 +13,7 @@ public class CameraSettings : MonoBehaviour
     [SerializeField]
     private CinemachineFreeLook freeLookCamera;
     [SerializeField]
-    private Volume volumePFX;
+    private List<VolumeProfile> pfxVolumes;
     [SerializeField]
     private SettingsData settingsData;
 
@@ -71,8 +71,14 @@ public class CameraSettings : MonoBehaviour
         }
         freeLookCamera.m_XAxis.m_InvertInput = settingsData.toggleItems["invertXAxis"];
         freeLookCamera.m_YAxis.m_InvertInput = settingsData.toggleItems["invertYAxis"];
-        volumePFX.profile.TryGet(out MotionBlur motionBlur);
-        motionBlur.active = settingsData.toggleItems["motionBlur"];
+
+        pfxVolumes.ForEach(pfx =>
+        {
+            if(pfx.TryGet(out MotionBlur motionBlur))
+                motionBlur.active = settingsData.TryGet<bool>("motionBlur");
+            if(pfx.TryGet(out VolumetricFogVolumeComponent volumetricFog))
+                volumetricFog.active = settingsData.TryGet<bool>("volumetricLight");
+        });
     }
     
     private void OnLevelCutsceneOnOnCinematicStarted() => freeLookCamera.enabled = false;

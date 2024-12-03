@@ -22,5 +22,26 @@ namespace Solis.Data
         {
             JsonUtility.FromJsonOverwrite(json, this);
         }
+
+        public T TryGet<T>(string key)
+        {
+            if (typeof(T) == typeof(bool))
+            {
+                if (toggleItems.TryGetValue(key, out var value))
+                    return (T) (object) value;
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                if (arrowItems.TryGetValue(key, out var value))
+                    return (T) (object) value;
+            }
+            else if (typeof(T) == typeof(float))
+            {
+                if (sliderItems.TryGetValue(key, out var value))
+                    return (T) (object) value;
+            }
+            Debug.LogWarning($"Key {key} not found in settings data", this);
+            return default;
+        }
     }
 }
