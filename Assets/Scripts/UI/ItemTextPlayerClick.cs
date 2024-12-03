@@ -28,8 +28,10 @@ namespace UI
         
         private bool OnClickDialog(PlayerInteractPacket arg1, int arg2)
         {
+            Debug.Log("Click");
             if (IsDialogPlaying) return false;
-            if (!PlayerChecker(arg1)) return false;
+            Debug.Log("Clickss");
+        //    if (!PlayerChecker(arg1)) return false;
             
             PlayDialog();
             return true;
@@ -80,14 +82,14 @@ namespace UI
     
 #if UNITY_EDITOR
     
-        [CustomEditor(typeof(DialogPlayerClick)),CanEditMultipleObjects]
-        public class DialogPlayerEditor : Editor
+        [CustomEditor(typeof(ItemTextPlayerClick)),CanEditMultipleObjects]
+        public class ItemTextPlayerClickEditor : Editor
         {
-            private DialogPlayerClick targetClass;
+            private ItemTextPlayerClick targetClass;
 
             private void OnEnable()
             {
-                targetClass = target as DialogPlayerClick;
+                targetClass = target as ItemTextPlayerClick;
             }
 
             void OnSceneGUI()

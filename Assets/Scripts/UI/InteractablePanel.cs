@@ -32,8 +32,8 @@ namespace UI
             get => _index;
             set
             {
-                UpdateDialog(_index, value);
                 _index = value;
+                UpdateDialog(_index);
             }
         }
 
@@ -42,13 +42,11 @@ namespace UI
          protected void OnEnable()
         {
             PacketListener.GetPacketListener<PlayerInputPackage>().AddServerListener(OnClickDialog);
-
         }
         protected void OnDisable()
         {
             PacketListener.GetPacketListener<PlayerInputPackage>().RemoveServerListener(OnClickDialog);
         }
-
         private void Awake()
         {
             /*if (_instance != null)
@@ -59,6 +57,7 @@ namespace UI
             
             _instance = this;
             nextImage.TryGetComponent(out nextImageAnimator);
+            _index = -1;
         }
 
 #if UNITY_EDITOR
@@ -77,6 +76,7 @@ namespace UI
 
         public bool OnClickDialog(PlayerInputPackage playerInputPackage, int i)
         {
+            Debug.Log("ON INPUT");
             if (!IsDialogPlaying) return false;
             if(playerInputPackage.Key != KeyCode.Return) return false;
             if(!orderTextGameObject.activeSelf) return false;
@@ -89,10 +89,10 @@ namespace UI
                 textWriterSingle.SkipText();
                 return true;
             }
-            if (Index != -1)
+            /*if (Index != -1)
             {
                 return true;
-            }
+            }*/
             
             if(currentDialog == null) return false;
             if (Index+ 1 > currentDialog.currentDialog.texts.Count - 1) 
@@ -103,15 +103,18 @@ namespace UI
             return true;
         }
 
-        public void UpdateDialog(int oldValue, int newValue)
+        public void UpdateDialog(int newValue)
         {
             if (newValue == -1) ClosePanel();
             else
             {
                 if (nextImage.activeSelf) nextImageAnimator.Play("NextDialogClose");
                 IsDialogPlaying = true;
+                Debug.Log(Index);
                 TypeWriteText(currentDialog.currentDialog.texts[Index], () =>
                 {
+                    if (nextImage.activeSelf) nextImageAnimator.Play("NextDialogOpen");
+                    else nextImage.SetActive(true);
                 });
             }
         }
@@ -122,9 +125,6 @@ namespace UI
             IsDialogPlaying = false;
             orderTextGameObject.SetActive(false);
             nextImage.SetActive(false);
-            if(!CinematicController.IsPlaying)
-                MulticamCamera.Instance!.ChangeCameraState(MulticamCamera.CameraState.Gameplay,
-                CinemachineBlendDefinition.Style.EaseInOut, 1);
         }
 
         private void TypeWriteText(string dialogData, Action callback)
@@ -136,37 +136,6 @@ namespace UI
         public string GetFormattedString(string text)
         {
             effectsAndWords.Clear();
-            
-            /*
-            for (int i = 0; i < emojis.Length; i++)
-            {
-                EmojisStructure emojisStructure = DialogPanel.Instance.emojisStructure.First(c => c.emoji == emojis[i]);
-                var field = emojisStructure.emojiNameDisplay;
-                string value = $"<sprite name=\"{emojisStructure.emojiNameInSpriteEditor}\"> <color=#{emojisStructure.textColor.ToHexString()}>{field}</color>";
-                _instancedValues.Add(value);
-            }
-            */
-            
-            /*
-            string pattern = @"\{\{(\w+)\}\}";
-            string newText = Regex.Replace(text, pattern, match =>
-            {
-                string emojiName = match.Groups[1].Value;
-
-                // Procura na estrutura de emojis
-                var emojiStructure = emojisStructure.FirstOrDefault(c => c.emoji.ToString() == emojiName);
-
-                if (emojiStructure != null)
-                {
-                    Debug.Log("Emoji encontrado: " + emojiStructure.emojiNameInSpriteEditor);
-
-                    // Retorna a substituição com o sprite e a cor do texto
-                    return $"<sprite name=\"{emojiStructure.emojiNameInSpriteEditor}\"><color=#{emojiStructure.textColor.ToHexString()}>{emojiStructure.emojiNameDisplay}</color>";
-                }
-
-                // Caso não encontre, mantém o texto original
-                return match.Value;
-            });*/
             
             string newText = text;
             foreach (var emojiStructure in emojisStructure.emojisStructure)

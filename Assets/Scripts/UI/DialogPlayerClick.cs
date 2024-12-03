@@ -28,7 +28,12 @@ public class DialogPlayerClick : DialogPlayerBase
     private bool OnClickDialog(PlayerInteractPacket arg1, int arg2)
     {
         if (IsDialogPlaying) return false;
-        if (!PlayerChecker(arg1)) return false;
+        /*if (!PlayerChecker(arg1))
+        {
+            Debug.Log("Click");
+            return false;
+        }*/
+        
             
         PlayDialog();
         return true;
