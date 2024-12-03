@@ -11,11 +11,13 @@ namespace Circuit
         [SerializeField]private Transform point2;
         private Vector3 _point1Pos;
         private Vector3 _point2Pos;
+
+        public bool isLocalPosition = true;
         private void Awake()
         {
             _line = GetComponent<LineRenderer>();
-            _point1Pos = point1.localPosition;
-            _point2Pos = point2.localPosition;
+            _point1Pos = isLocalPosition ? point1.localPosition : point1.position;
+            _point2Pos = isLocalPosition ? point2.localPosition : point2.position;
             _line.SetPosition(0, _point1Pos);
             _line.SetPosition(1, _point2Pos);
         }
@@ -23,14 +25,14 @@ namespace Circuit
         private void Update()
         {
         
-            if (_point1Pos != point1.localPosition || _point2Pos != point2.localPosition)
+            if (_point1Pos != (isLocalPosition ? point1.localPosition : point1.position) || _point2Pos != (isLocalPosition ? point2.localPosition : point2.position))
             {
                 _line.SetPosition(0, _point1Pos);
                 _line.SetPosition(1, _point2Pos);
             }
 
-            _point1Pos = point1.localPosition;
-            _point2Pos = point2.localPosition;
+            _point1Pos = isLocalPosition ? point1.localPosition : point1.position;
+            _point2Pos = isLocalPosition ? point2.localPosition : point2.position;
         }
     }
 }

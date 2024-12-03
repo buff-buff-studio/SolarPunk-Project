@@ -251,7 +251,7 @@ namespace Solis.Misc.Multicam
         {
             if(state == CameraState.Gameplay)
             {
-                SetCameraBlend(CinemachineBlendDefinition.Style.EaseInOut, 1f);
+                SetCameraBlend(CinemachineBlendDefinition.Style.EaseInOut, .25f);
                 focusCamera.gameObject.SetActive(active);
                 
             }

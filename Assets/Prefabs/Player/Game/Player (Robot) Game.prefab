@@ -1433,8 +1433,8 @@ MonoBehaviour:
     type: 0
   focusBody: {fileID: 352223577318632510}
   focusLookAt: {fileID: 2666103151249624597}
-  focusAcceleration: 0.3
-  focusMaxVelocity: 1
+  focusAcceleration: 0.75
+  focusMaxVelocity: 1.25
   angleLimits: {x: 30, y: 40}
   magnetReferenceLocalPosition: {x: 0, y: 2, z: 0}
   magnetAnchor: {fileID: 0}
@@ -1452,6 +1452,7 @@ MonoBehaviour:
   grapplingLine: {fileID: 8313758403032373377}
   attachedTo: {fileID: 0}
   attachedToLocalPoint: {x: 0, y: 0, z: 0}
+  grapplingVelocity: 20
   grapplingAnimationTime: 1
   grapplingHook:
     value: 0

@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1412727
 RectTransform:
   m_ObjectHideFlags: 0
@@ -176,9 +176,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: dfd46682bd0e55d479e86d090a065fd5, type: 3}
-  m_Type: 1
-  m_PreserveAspect: 0
+  m_Sprite: {fileID: -298686212, guid: bb035e8d675cd524d966c83ad81471e3, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -4321,7 +4321,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7598923037180890041, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.00000035762787
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7598923037180890041, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4329,7 +4329,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7598923037180890041, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0000019073486
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7598923037180890041, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5756,7 +5756,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   crosshairImage: {fileID: 1412728}
   characterType: 0
-  defaultCrosshair: {fileID: 21300000, guid: dfd46682bd0e55d479e86d090a065fd5, type: 3}
+  defaultCrosshair: {fileID: -298686212, guid: bb035e8d675cd524d966c83ad81471e3, type: 3}
   ninaCrosshair: {fileID: -1307333056, guid: 62fce72888160a84a9666e72aab0880f, type: 3}
   ramCrosshair: {fileID: -750823431, guid: 62fce72888160a84a9666e72aab0880f, type: 3}
   blockCrosshair: {fileID: 1924274285, guid: 62fce72888160a84a9666e72aab0880f, type: 3}

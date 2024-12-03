@@ -25,6 +25,7 @@ namespace Solis.Player
         public Vector3 attachedToLocalPoint;
 
         [Range(0,2)]
+        public float grapplingVelocity = 20f;
         public float grapplingAnimationTime = 1f;
         public FloatNetworkValue grapplingHook = new(0f);
         public Vector3NetworkValue grapplingHookPosition = new(Vector3.zero);
@@ -119,7 +120,7 @@ namespace Solis.Player
             if (!_isHooking) return;
 
             var deltaTime = Time.fixedDeltaTime;
-            grapplingHook.Value = Mathf.Lerp(grapplingHook.Value,  1f, deltaTime * 10f);
+            grapplingHook.Value = Mathf.Lerp(grapplingHook.Value,  1f, deltaTime * grapplingVelocity);
             grapplingHookPosition.Value = attachedTo.TransformPoint(attachedToLocalPoint);
 
             HandleGrapplingHookRemote();
@@ -150,7 +151,7 @@ namespace Solis.Player
         protected override void HandleGrapplingHookRemote()
         {
             var start = grapplingLine.transform.position;
-            grapplingLine.SetPositions(new[] {start, Vector3.Lerp(start, grapplingHookPosition.Value, grapplingHook.Value)});
+            grapplingLine.SetPositions(new[] {Vector3.Lerp(start, grapplingHookPosition.Value, grapplingHook.Value), start});
         }
         #endregion
 
