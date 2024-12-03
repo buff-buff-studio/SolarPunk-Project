@@ -16,7 +16,6 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
-using UnityEngine;
 
 namespace NetBuff.Relays
 {
@@ -124,7 +123,7 @@ namespace NetBuff.Relays
 						var connectionEvent = new UtpConnectionEvent()
 						{
 							eventType = (byte)ConnectionEventType.OnReceivedData,
-							eventData = new DataBuffer(nativeMessage),
+							eventData = _ToFixed(nativeMessage),
 							connectionId = connections[index].GetHashCode()
 						};
 
@@ -144,6 +143,16 @@ namespace NetBuff.Relays
 						connectionsEventsQueue.Enqueue(connectionEvent);
 					}
 				}
+			}
+			
+			private FixedList4096Bytes<byte> _ToFixed(NativeArray<byte> data)
+			{
+				var fixedList = new FixedList4096Bytes<byte>();
+				unsafe
+				{
+					fixedList.AddRange(data.GetUnsafePtr(), data.Length);
+				}
+				return fixedList;
 			}
 		}
 
@@ -251,7 +260,7 @@ namespace NetBuff.Relays
 								{
 									eventType = (byte)ConnectionEventType.OnReceivedData,
 									connectionId = connection.GetHashCode(),
-									eventData = new DataBuffer(nativeMessage)
+									eventData = _ToFixed(nativeMessage)
 								};
 
 								//Queue event
@@ -276,6 +285,16 @@ namespace NetBuff.Relays
 
 					}
 				}
+			}
+			
+			private FixedList4096Bytes<byte> _ToFixed(NativeArray<byte> data)
+			{
+				var fixedList = new FixedList4096Bytes<byte>();
+				unsafe
+				{
+					fixedList.AddRange(data.GetUnsafePtr(), data.Length);
+				}
+				return fixedList;
 			}
 		}
 
@@ -326,8 +345,8 @@ namespace NetBuff.Relays
 	    #region Types
 	    private static class Channels
 	    {
-		    public const int RELIABLE = 0;
-		    public const int UNRELIABLE = 1;
+		    public const int Reliable = 0;
+		    public const int Unreliable = 1;
 	    }
 	    
 	    private enum ConnectionEventType
@@ -347,13 +366,19 @@ namespace NetBuff.Relays
 		    /// <summary>
 		    /// Event data, only used for OnReceived event.
 		    /// </summary>
-		    public DataBuffer eventData;
+		    public FixedList4096Bytes<byte> eventData;
 
 		    /// <summary>
 		    /// The connection ID of the connection corresponding to this event.
 		    /// </summary>
 		    public int connectionId;
 	    }
+	    
+	    private class FragmentState
+        {
+            public byte[] buffer = new byte[4096];
+            public int bufferOffset;
+        }
 	    
 	    private class UtpEnd
 	    {
@@ -368,8 +393,9 @@ namespace NetBuff.Relays
 	    {
 		    public NativeList<NetworkConnection> connections;
 		    
-		    private const int _NUM_PIPELINES = 2;
-		    private readonly int[] _driverMaxHeaderSize = new int[_NUM_PIPELINES];
+		    private const int NumPipelines = 2;
+		    private readonly int[] _driverMaxHeaderSize = new int[NumPipelines];
+		    private readonly Dictionary<int, FragmentState> _fragmentStates = new();
 		    
 		    public bool TryGetConnection(int connectionId, out NetworkConnection connection)
 		    {
@@ -395,8 +421,6 @@ namespace NetBuff.Relays
 			    return default;
 		    }
 		    
-		    
-
 		    public void Update()
 		    {
 			    if (!driver.IsCreated)
@@ -409,8 +433,8 @@ namespace NetBuff.Relays
                 _ProcessIncomingEvents();
                 
                 jobHandle.Complete();
-                _driverMaxHeaderSize[Channels.RELIABLE] = driver.MaxHeaderSize(reliablePipeline);
-                _driverMaxHeaderSize[Channels.UNRELIABLE] = driver.MaxHeaderSize(unreliablePipeline);
+                _driverMaxHeaderSize[Channels.Reliable] = driver.MaxHeaderSize(reliablePipeline);
+                _driverMaxHeaderSize[Channels.Unreliable] = driver.MaxHeaderSize(unreliablePipeline);
                 
                 // Create a new jobs
                 var serverUpdateJob = new ServerUpdateJob
@@ -445,12 +469,14 @@ namespace NetBuff.Relays
 					    case ((byte)ConnectionEventType.OnConnected):
 					    {
 						    transport.OnClientConnected?.Invoke(connectionEvent.connectionId);
+						    _fragmentStates.Add(connectionEvent.connectionId, new FragmentState());
 						    break;
 					    }
 
 					    //Receive data action
 					    case ((byte)ConnectionEventType.OnReceivedData):
 					    {
+						    /*
 						    var data = connectionEvent.eventData.ToArray();
 						    var binaryReader = new BinaryReader(new MemoryStream(data));
 	                            
@@ -462,6 +488,52 @@ namespace NetBuff.Relays
 							    packet.Deserialize(binaryReader);
 							    transport.OnServerPacketReceived?.Invoke(connectionEvent.connectionId, packet);
 						    }
+						    */
+						    
+						    var data = connectionEvent.eventData.ToArray();
+						    var fragments = data[0];
+						    var fragmentState = _fragmentStates[connectionEvent.connectionId];
+
+						    if (fragments == 1)
+						    {
+							    var binaryReader = new BinaryReader(new MemoryStream(data));
+							    binaryReader.ReadByte();
+							    
+							    while (binaryReader.BaseStream.Position < binaryReader.BaseStream.Length)
+							    {
+								    var id = binaryReader.ReadInt32();
+								    var packet = PacketRegistry.CreatePacket(id);
+
+								    packet.Deserialize(binaryReader);
+								    transport.OnServerPacketReceived?.Invoke(connectionEvent.connectionId, packet);
+							    }
+						    }
+						    else
+						    {
+							    var fragmentIndex = data[1];
+							    
+							    if (fragmentState.bufferOffset + data.Length - 2 > fragmentState.buffer.Length)
+							    {
+								    Array.Resize(ref fragmentState.buffer, fragmentState.buffer.Length * 2);
+							    }
+							    
+							    Array.Copy(data, 2, fragmentState.buffer, fragmentState.bufferOffset, data.Length - 2);
+							    fragmentState.bufferOffset += data.Length - 2;
+							    
+							    if (fragmentIndex == fragments - 1)
+							    {
+								    var id = BitConverter.ToInt32(fragmentState.buffer, 0);
+								    var packet = PacketRegistry.CreatePacket(id);
+								    
+								    using var memoryStream = new MemoryStream(fragmentState.buffer, 4, fragmentState.bufferOffset - 4);
+								    using var reader = new BinaryReader(memoryStream);
+								    
+								    packet.Deserialize(reader);
+								    transport.OnServerPacketReceived?.Invoke(connectionEvent.connectionId, packet);
+								    
+								    fragmentState.bufferOffset = 0;
+							    }
+						    }
 						    break;
 					    }
 
@@ -469,6 +541,7 @@ namespace NetBuff.Relays
 					    case ((byte)ConnectionEventType.OnDisconnected):
 					    {
 						    transport.OnClientDisconnected?.Invoke(connectionEvent.connectionId, "connection_shutdown");
+						    _fragmentStates.Remove(connectionEvent.connectionId);
 						    break;
 					    }
 				    }
@@ -501,8 +574,9 @@ namespace NetBuff.Relays
 	    private class UtpClient : UtpEnd
 	    {
 		    public NetworkConnection connection;
-		    private const int _NUM_PIPELINES = 2;
-            private int[] _driverMaxHeaderSize = new int[_NUM_PIPELINES];
+		    private const int NumPipelines = 2;
+            private int[] _driverMaxHeaderSize = new int[NumPipelines];
+            private readonly FragmentState _fragmentState = new();
 
 		    public void Update()
 		    {
@@ -522,14 +596,14 @@ namespace NetBuff.Relays
 			    if (driver.IsCreated)
 			    {
 				    jobHandle.Complete();
-				    _driverMaxHeaderSize[Channels.RELIABLE] = driver.MaxHeaderSize(reliablePipeline);
-				    _driverMaxHeaderSize[Channels.UNRELIABLE] = driver.MaxHeaderSize(unreliablePipeline);
+				    _driverMaxHeaderSize[Channels.Reliable] = driver.MaxHeaderSize(reliablePipeline);
+				    _driverMaxHeaderSize[Channels.Unreliable] = driver.MaxHeaderSize(unreliablePipeline);
 			    }
 			    
 			    // Need to ensure the driver did not become inactive
 			    if (!driver.IsCreated)
 			    {
-				    _driverMaxHeaderSize = new int[_NUM_PIPELINES];
+				    _driverMaxHeaderSize = new int[NumPipelines];
 				    return;
 			    }
 
@@ -563,16 +637,48 @@ namespace NetBuff.Relays
 					    case ((byte)ConnectionEventType.OnReceivedData):
 					    {
 						    var data = connectionEvent.eventData.ToArray();
-						    var binaryReader = new BinaryReader(new MemoryStream(data));
-	                            
-						    while (binaryReader.BaseStream.Position < binaryReader.BaseStream.Length)
+						    var fragments = data[0];
+						    
+						    if (fragments == 1)
 						    {
-							    var id = binaryReader.ReadInt32();
-							    var packet = PacketRegistry.CreatePacket(id);
+							    var binaryReader = new BinaryReader(new MemoryStream(data));
+							    binaryReader.ReadByte();
+
+							    while (binaryReader.BaseStream.Position < binaryReader.BaseStream.Length)
+							    {
+								    var id = binaryReader.ReadInt32();
+								    var packet = PacketRegistry.CreatePacket(id);
 							    
-							    packet.Deserialize(binaryReader);
-							    transport.OnClientPacketReceived?.Invoke(packet);
+								    packet.Deserialize(binaryReader);
+								    transport.OnClientPacketReceived?.Invoke(packet);
+							    }
 						    }
+						    else
+						    {
+							    var fragmentIndex = data[1];
+							    if (_fragmentState.bufferOffset + data.Length - 2> _fragmentState.buffer.Length)
+							    {
+								    Array.Resize(ref _fragmentState.buffer, _fragmentState.buffer.Length * 2);
+							    }
+								    
+							    Array.Copy(data, 2, _fragmentState.buffer, _fragmentState.bufferOffset, data.Length - 2);
+							    _fragmentState.bufferOffset += data.Length - 2;
+								    
+							    if (fragmentIndex == fragments - 1)
+							    {
+								    var id = BitConverter.ToInt32(_fragmentState.buffer, 0);
+								    var packet = PacketRegistry.CreatePacket(id);
+									    
+								    using var memoryStream = new MemoryStream(_fragmentState.buffer, 4, _fragmentState.bufferOffset - 4);
+								    using var reader = new BinaryReader(memoryStream);
+									    
+								    packet.Deserialize(reader);
+								    transport.OnClientPacketReceived?.Invoke(packet);
+									    
+								    _fragmentState.bufferOffset = 0;
+							    }
+						    }
+						    
 						    break;
 					    }
     
@@ -588,11 +694,12 @@ namespace NetBuff.Relays
 	    }
 	    #endregion
 	    
+	    private const int MaxPacketSize = 1010;
+	    
 	    #region Buffers
 	    private static readonly byte[] _Buffer0 = new byte[65535];
 	    private static readonly BinaryWriter _Writer0 = new(new MemoryStream(_Buffer0));
 	    #endregion
-
 	    public bool usingRelay = true;
 	    public int timeout = 3000;
 	    public string address = "localhost";
@@ -714,7 +821,7 @@ namespace NetBuff.Relays
 	        _server.connections = new NativeList<NetworkConnection>(16, Allocator.Persistent);
 	        _server.connectionsEventsQueue = new NativeQueue<UtpConnectionEvent>(Allocator.Persistent);
 	        
-	        _server.reliablePipeline = _server.driver.CreatePipeline(typeof(FragmentationPipelineStage), typeof(ReliableSequencedPipelineStage));
+	        _server.reliablePipeline = _server.driver.CreatePipeline(typeof(ReliableSequencedPipelineStage));
 	        _server.unreliablePipeline = _server.driver.CreatePipeline(typeof(UnreliableSequencedPipelineStage));
 
 	        _server.driver.Bind(endpoint);
@@ -752,7 +859,7 @@ namespace NetBuff.Relays
 		        settings.WithRelayParameters(ref relayServerData);
 
 		        _client.driver = NetworkDriver.Create(settings);
-		        _client.reliablePipeline = _client.driver.CreatePipeline(typeof(FragmentationPipelineStage), typeof(ReliableSequencedPipelineStage));
+		        _client.reliablePipeline = _client.driver.CreatePipeline(typeof(ReliableSequencedPipelineStage));
 		        _client.unreliablePipeline = _client.driver.CreatePipeline( typeof(UnreliableSequencedPipelineStage));
 
 		        _client.connection = _client.driver.Connect(relayServerData.Endpoint);
@@ -786,7 +893,7 @@ namespace NetBuff.Relays
 		        _client.connectionsEventsQueue = new NativeQueue<UtpConnectionEvent>(Allocator.Persistent);
 		        
 		        _client.driver = NetworkDriver.Create(settings);
-		        _client.reliablePipeline = _client.driver.CreatePipeline(typeof(FragmentationPipelineStage), typeof(ReliableSequencedPipelineStage));
+		        _client.reliablePipeline = _client.driver.CreatePipeline(typeof(ReliableSequencedPipelineStage));
 		        _client.unreliablePipeline = _client.driver.CreatePipeline(typeof(UnreliableSequencedPipelineStage));
 
 		        _client.connection = _client.driver.Connect(endpoint);
@@ -895,32 +1002,82 @@ namespace NetBuff.Relays
 
         public override void ClientSendPacket(IPacket packet, bool reliable = false)
         {
-	        _client.jobHandle.Complete();
-	        
 	        _Writer0.BaseStream.Position = 0;
 	        var id = PacketRegistry.GetId(packet);
 	        _Writer0.Write(id);
 	        packet.Serialize(_Writer0);
 	        var segment = new ArraySegment<byte>(_Buffer0, 0, (int)_Writer0.BaseStream.Position);
-	        
-	        //Get pipeline for job
-	        var pipeline = reliable ? _client.reliablePipeline : _client.unreliablePipeline;
 
-	        //Convert ArraySegment to NativeArray for burst compile
-	        var segmentArray = new NativeArray<byte>(segment.Count, Allocator.Persistent);
-	        NativeArray<byte>.Copy(segment.Array, segment.Offset, segmentArray, 0, segment.Count);
-
-	        // Create a new job
-	        var job = new ClientSendJob
+	        if (reliable)
 	        {
-		        driver = _client.driver,
-		        pipeline = pipeline,
-		        connection = _client.connection,
-		        data = segmentArray
-	        };
+		        if (segment.Count > MaxPacketSize)
+		        {
+			        var fragments = (int)Math.Ceiling((double)segment.Count / MaxPacketSize);
+			        for (var i = 0; i < fragments; i++)
+			        {
+				        var fragmentSize = Math.Min(MaxPacketSize, segment.Count - i * MaxPacketSize);
 
-	        // Schedule job
-	        _client.jobHandle = job.Schedule(_client.jobHandle);
+				        var segmentArray = new NativeArray<byte>(fragmentSize + 2, Allocator.Persistent);
+				        NativeArray<byte>.Copy(segment.Array, segment.Offset + i * MaxPacketSize, segmentArray, 2, fragmentSize);
+
+				        segmentArray[0] = (byte)fragments;
+				        segmentArray[1] = (byte)i;
+					        
+				        // Create a new job
+				        var job = new ClientSendJob
+				        {
+					        driver = _client.driver,
+					        pipeline = _client.unreliablePipeline,
+					        connection = _client.connection,
+					        data = segmentArray
+				        };
+
+				        // Schedule job
+				        _client.jobHandle.Complete();  
+				        _client.jobHandle = job.Schedule(_client.jobHandle);
+			        }
+		        }
+		        else
+		        {
+			        var segmentArray = new NativeArray<byte>(segment.Count + 1, Allocator.Persistent);
+			        NativeArray<byte>.Copy(segment.Array, segment.Offset, segmentArray, 1, segment.Count);
+			        segmentArray[0] = 1;
+			        
+			        // Create a new job
+			        var job = new ClientSendJob
+			        {
+				        driver = _client.driver,
+				        pipeline = _client.reliablePipeline,
+				        connection = _client.connection,
+				        data = segmentArray
+			        };
+
+			        _client.jobHandle.Complete();  
+			        _client.jobHandle = job.Schedule(_client.jobHandle);
+		        }
+		        
+	        }
+	        else
+	        {
+		        if(segment.Count > MaxPacketSize)
+			        throw new InvalidOperationException("Packet size is too large");
+		        
+		        var segmentArray = new NativeArray<byte>(segment.Count + 1, Allocator.Persistent);
+		        NativeArray<byte>.Copy(segment.Array, segment.Offset, segmentArray, 1, segment.Count);
+		        segmentArray[0] = 1;
+		        
+		        // Create a new job
+		        var job = new ClientSendJob
+		        {
+			        driver = _client.driver,
+			        pipeline = _client.unreliablePipeline,
+			        connection = _client.connection,
+			        data = segmentArray
+		        };
+
+		        _client.jobHandle.Complete();  
+		        _client.jobHandle = job.Schedule(_client.jobHandle);
+	        }
         }
 
         public override void ServerSendPacket(IPacket packet, int target = -1, bool reliable = false)
@@ -930,7 +1087,7 @@ namespace NetBuff.Relays
 	        _Writer0.Write(id);
 	        packet.Serialize(_Writer0);
 	        var segment = new ArraySegment<byte>(_Buffer0, 0, (int)_Writer0.BaseStream.Position);
-	        
+
 	        if (target == -1)
 	        {
 		        _server.jobHandle.Complete();
@@ -946,29 +1103,77 @@ namespace NetBuff.Relays
 
         private void _SendTo(ArraySegment<byte> segment, int connectionId, bool reliable)
         {
-	        _server.jobHandle.Complete();
-	        
-
 	        if (_server.TryGetConnection(connectionId, out NetworkConnection connection))
 	        {
-		        //Get pipeline for job
-		        var pipeline = reliable ? _server.reliablePipeline : _server.unreliablePipeline;
-		        
-		        //Convert ArraySegment to NativeArray for burst compile
-		        var segmentArray = new NativeArray<byte>(segment.Count, Allocator.Persistent);
-		        NativeArray<byte>.Copy(segment.Array, segment.Offset, segmentArray, 0, segment.Count);
-		        
-		        // Create a new job
-		        var job = new ServerSendJob
+		        if (reliable)
 		        {
-			        driver = _server.driver,
-			        pipeline = pipeline,
-			        connection = connection,
-			        data = segmentArray
-		        };
+			        if (segment.Count > MaxPacketSize)
+			        {
+				        var fragments = (int)Math.Ceiling((double)segment.Count / MaxPacketSize);
+				        for (var i = 0; i < fragments; i++)
+				        {
+					        var fragmentSize = Math.Min(MaxPacketSize, segment.Count - i * MaxPacketSize);
 
-		        // Schedule job
-		        _server.jobHandle = job.Schedule(_server.jobHandle);
+					        var segmentArray = new NativeArray<byte>(fragmentSize + 2, Allocator.Persistent);
+					        NativeArray<byte>.Copy(segment.Array, segment.Offset + i * MaxPacketSize, segmentArray, 2, fragmentSize);
+
+					        segmentArray[0] = (byte)fragments;
+					        segmentArray[1] = (byte)i;
+					        
+					        // Create a new job
+					        var job = new ServerSendJob
+					        {
+						        driver = _server.driver,
+						        pipeline = _server.reliablePipeline,
+						        connection = connection,
+						        data = segmentArray
+					        };
+				        
+					        _server.jobHandle.Complete();
+					        _server.jobHandle = job.Schedule(_server.jobHandle);
+				        }
+			        }
+			        else
+			        {
+				        var segmentArray = new NativeArray<byte>(segment.Count + 1, Allocator.Persistent);
+				        NativeArray<byte>.Copy(segment.Array, segment.Offset, segmentArray, 1, segment.Count);
+				        
+				        segmentArray[0] = 1;
+				        
+				        // Create a new job
+				        var job = new ServerSendJob
+				        {
+					        driver = _server.driver,
+					        pipeline = _server.reliablePipeline,
+					        connection = connection,
+					        data = segmentArray
+				        };
+				        
+				        _server.jobHandle.Complete();
+				        _server.jobHandle = job.Schedule(_server.jobHandle);
+			        }
+		        }
+		        else
+		        {
+			        if(segment.Count > MaxPacketSize)
+				        throw new InvalidOperationException("Packet size is too large");
+			        
+			        var segmentArray = new NativeArray<byte>(segment.Count + 1, Allocator.Persistent);
+			        NativeArray<byte>.Copy(segment.Array, segment.Offset, segmentArray, 1, segment.Count);
+			        segmentArray[0] = 1;
+			        
+			        // Create a new job
+			        var job = new ServerSendJob
+			        {
+				        driver = _server.driver,
+				        pipeline = _server.unreliablePipeline,
+				        connection = connection,
+				        data = segmentArray
+			        };
+
+			        _server.jobHandle.Complete();
+			        _server.jobHandle = job.Schedule(_server.jobHandle);
+		        }
 	        }
         }
         
