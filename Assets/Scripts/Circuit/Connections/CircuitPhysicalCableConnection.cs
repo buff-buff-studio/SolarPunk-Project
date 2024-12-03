@@ -324,11 +324,15 @@ namespace Solis.Circuit.Connections
                             return false;
                         
                         var distance = Vector3.Distance(transform1.position, socket.transform.position);
-                        
+                  
                         //do raycast and check if it's has view to the socket
-                        if (distance > 0.5f && Physics.Raycast(transform1.position, socket.transform.position - transform1.position, out var hit, distance - 0.5f))
-                            continue;
-
+                        if (Physics.Raycast(transform1.position,
+                                socket.transform.position - transform1.position, out var hit, distance - 0.5f))
+                        {
+                            if(!hit.collider.gameObject.transform.IsChildOf(socket.transform)) 
+                                continue;
+                        }
+                        
                         if (distance < closestDistance)
                         {
                             closestSocket = socket;
@@ -349,8 +353,7 @@ namespace Solis.Circuit.Connections
                 });
                 return true;
             }
-
-
+            
             if (Vector3.Distance(player.transform.position, Head.gameObject.transform.position) < radius)
             {
                 Holder = hand;
