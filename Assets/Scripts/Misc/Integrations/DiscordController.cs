@@ -37,6 +37,7 @@ namespace Solis.Misc.Integrations
 
         private void Start()
         {
+#if PLATFORM_STANDALONE_WIN
             Debug.Log("Starting Discord Rich Presence");
 
             try
@@ -131,7 +132,11 @@ namespace Solis.Misc.Integrations
                 this.enabled = false;
                 throw;
             }
-
+#else
+            Debug.LogWarning("Discord Rich Presence is not supported on this platform");
+            IsConnected = false;
+            this.enabled = false;
+#endif
         }
 
         private void Update()
