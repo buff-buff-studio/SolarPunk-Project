@@ -96,7 +96,7 @@ namespace Solis.Misc.Multicam
 
         private void OnSkipCountChange(int old, int @new)
         {
-            skipCinematicText.text = $"{@new}/2";
+            //skipCinematicText.text = $"{@new}/2";
 #if UNITY_EDITOR
             if (@new >= 1) CinematicController.Instance.Stop();
 #endif
@@ -139,7 +139,7 @@ namespace Solis.Misc.Multicam
 
         private void SetCameraBlend(CinemachineBlendDefinition.Style blend, float blendTime)
         {
-            _cinemachineBrain.m_DefaultBlend = new CinemachineBlendDefinition(blend, blendTime);
+            //_cinemachineBrain.m_DefaultBlend = new CinemachineBlendDefinition(blend, blendTime);
         }
 
         public Transform SetPlayerTarget(Transform follow, Transform lookAt, Transform focusBody, Transform focusLookAt)
