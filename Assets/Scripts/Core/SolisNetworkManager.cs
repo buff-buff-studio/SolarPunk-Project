@@ -23,9 +23,9 @@ namespace Solis.Core
         
         public static string networkAddress;
         public static string username;
-        #if UNITY_EDITOR
+        //#if UNITY_EDITOR
         public static string sceneToLoad;
-        #endif
+        //#endif
         public static bool isJoining;
         public static CharacterType defaultType = CharacterType.Human;
         public static bool usingRelay;
@@ -37,9 +37,11 @@ namespace Solis.Core
         {
             if (EnvironmentType is NetworkTransport.EnvironmentType.None)
             {
-                #if UNITY_EDITOR
+                //#if UNITY_EDITOR
                 var scene = sceneToLoad ?? "Lobby";
                 VersionMagicNumber = SOLIS_MAGIC_NUMBER;
+                
+                Debug.LogError("Scene: " + scene);
 
                 if (string.IsNullOrEmpty(username))
                     username = "test_" + Random.Range(0, 1000);
@@ -117,6 +119,7 @@ namespace Solis.Core
                 sceneToLoad = null;
                 networkAddress = null;
                 username = null;
+                /*
                 #else
                 VersionMagicNumber = SOLIS_MAGIC_NUMBER;
 
@@ -194,6 +197,7 @@ namespace Solis.Core
                 networkAddress = null;
                 username = null;
                 #endif
+                */
             }
         }
         #endregion

@@ -1,11 +1,11 @@
 ﻿using NetBuff;
 using UnityEngine;
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 using UnityEngine.SceneManagement;
 using Solis.Core;
 using Solis.Data;
-#endif
+//#endif
 
 namespace Solis.Misc
 {
@@ -16,9 +16,9 @@ namespace Solis.Misc
     public class GameInitializerHelper : MonoBehaviour
     {
         #region Inspector Fields
-        #if UNITY_EDITOR
+        //#if UNITY_EDITOR
         public CharacterType defaultType = CharacterType.Human;
-        #endif
+        //#endif
         #endregion
         
         #region Unity Callbacks
@@ -32,11 +32,12 @@ namespace Solis.Misc
                 #endif
             }
             
-            #if UNITY_EDITOR
+            //#if UNITY_EDITOR
+            SolisNetworkManager.usingRelay = false;
             SolisNetworkManager.sceneToLoad = gameObject.scene.name;
             SolisNetworkManager.defaultType = defaultType;
             SceneManager.LoadScene("Core");
-            #endif
+            //#endif
         }
         #endregion
     }
