@@ -131,7 +131,6 @@ namespace Solis.Circuit.Components
             {
                 mode.Value = (int)Mode.Idle;
             }
-            mode.Value = (int)Mode.Idle;
             statusTitle.text = "Idle";
             statusDescription.text = "Waiting for input";
             statusInfo.text = "";
