@@ -11,6 +11,7 @@ namespace Video
 
         private void Update()
         {
+            QualitySettings.SetQualityLevel(QualitySettings.count - 1);
             if(Keyboard.current.aKey.wasPressedThisFrame)
                 controller.Play();
         }
