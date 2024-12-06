@@ -10,6 +10,7 @@ namespace Misc.Props
 {
     public abstract class AnimalState
     {
+        
         protected AnimalController animalController;
         protected float timeInState;
         
@@ -35,6 +36,10 @@ namespace Misc.Props
         private float _timeToNextState;
         public IdleState(AnimalController animalController) : base(animalController)
         {
+            if(animalController.animalAnimator != null && animalController.hasAnimations)
+            {
+                animalController.animalAnimator.SetBool("Walking", false);
+            }
         }
         public override void OnEnter()
         {
@@ -64,6 +69,10 @@ namespace Misc.Props
         
         public WalkingState(AnimalController animalController) : base(animalController)
         {
+            if(animalController.animalAnimator != null && animalController.hasAnimations)
+            {
+                animalController.animalAnimator.SetBool("Walking", true);
+            }
         }
 
         public override void OnEnter()
@@ -179,6 +188,7 @@ namespace Misc.Props
     public class AnimalController : MonoBehaviour
     {
        private AnimalState _state;
+       public bool hasAnimations = true;
        public Animator animalAnimator;
        public NavMeshAgent agent;
        public float runRadius = 4;
