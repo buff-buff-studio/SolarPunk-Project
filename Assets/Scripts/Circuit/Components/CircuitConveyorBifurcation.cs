@@ -59,6 +59,9 @@ namespace Solis.Circuit.Components
             if (!HasAuthority)
                 return;
 
+            if(!isBifurcationA.AttachedTo)
+                isBifurcationA.AttachedTo = this;
+
             isBifurcationA.Value = data.ReadOutput().IsPowered;
         }
     }

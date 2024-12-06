@@ -15,8 +15,8 @@ namespace Solis.Circuit.Components
         public CircuitPlug input;
         public CircuitPlug data;
 
-        public BoolNetworkValue isOnValue = new BoolNetworkValue();
-        public FloatNetworkValue speedValue = new FloatNetworkValue();
+        public BoolNetworkValue isOnValue = new(false);
+        public FloatNetworkValue speedValue = new(0);
 
         public List<CircuitConveyorBelt> connectedBelts;
 
@@ -98,6 +98,11 @@ namespace Solis.Circuit.Components
         {
             if (!HasAuthority)
                 return;
+
+            if (!isOnValue.AttachedTo)
+            {
+                isOnValue.AttachedTo = this;
+            }
 
             isOnValue.Value = input.ReadOutput().power > 0.5f;
             _speed = data.ReadOutput().power < 0.5f ? speed : -speed;
