@@ -8,6 +8,8 @@ namespace Solis.Circuit.Components
     public class CircuitConveyorBelt : CircuitComponent
     {
         private Rigidbody _rb;
+        public Renderer conveyorRenderer;
+        public int[] materialIndices = new int[1]{1};
         public float speed = 3f;
         public float acceleration = 5f;
         public CircuitPlug input;
@@ -16,8 +18,14 @@ namespace Solis.Circuit.Components
         public BoolNetworkValue isOnValue = new BoolNetworkValue();
         public FloatNetworkValue speedValue = new FloatNetworkValue();
 
+        public List<CircuitConveyorBelt> connectedBelts;
+
         private float _speed;
-        
+
+        private static readonly int Inverse = Shader.PropertyToID("_Inverse");
+        private static readonly int IsOff = Shader.PropertyToID("_IsOff");
+        private static readonly int Speed = Shader.PropertyToID("_ScrollSpeedY");
+
         protected override void OnEnable()
         {
             WithValues(isOnValue, speedValue);
@@ -27,6 +35,29 @@ namespace Solis.Circuit.Components
             
             if (HasAuthority)
                 speedValue.Value = isOnValue.Value ? speed : 0f;
+
+            if(conveyorRenderer)
+            {
+                isOnValue.OnValueChanged += IsOnValueChanged;
+                speedValue.OnValueChanged += SpeedValueOnValueChanged;
+            }
+
+        }
+
+        private void SpeedValueOnValueChanged(float oldvalue, float newvalue)
+        {
+            foreach (var i in materialIndices)
+            {
+                conveyorRenderer.materials[i].SetInt(Inverse, newvalue < 0 ? 0 : 1);
+            }
+        }
+
+        private void IsOnValueChanged(bool oldvalue, bool newvalue)
+        {
+            foreach (var i in materialIndices)
+            {
+                conveyorRenderer.materials[i].SetInt(IsOff, !newvalue ? 1 : 0);
+            }
         }
 
         protected override void OnDisable()
@@ -67,8 +98,10 @@ namespace Solis.Circuit.Components
         {
             if (!HasAuthority)
                 return;
+
             isOnValue.Value = input.ReadOutput().power > 0.5f;
             _speed = data.ReadOutput().power < 0.5f ? speed : -speed;
+            connectedBelts.ForEach(belt => belt.OnRefresh());
         }
 
         private void FixedUpdate()
