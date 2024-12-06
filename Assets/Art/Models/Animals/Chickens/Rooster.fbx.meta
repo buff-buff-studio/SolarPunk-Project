@@ -3,7 +3,12 @@ guid: eb3a479ba5bfff74f8b07603db76274f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rooster_Material
+    second: {fileID: 2100000, guid: c007b30542373c048af70567e87d61e1, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
