@@ -130,9 +130,9 @@ namespace Solis.Misc.Multicam
             if(newState == CameraState.Cinematic)
             {
                 _hasSkipped.Clear();
-                skipCinematicText.text = "0/2";
-                cinematicCanvas.SetActive(true);
-            }else cinematicCanvas.SetActive(false);
+                //skipCinematicText.text = "0/2";
+                //cinematicCanvas.SetActive(true);
+            }else //cinematicCanvas.SetActive(false);
 
             state = newState;
         }

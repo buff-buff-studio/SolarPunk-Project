@@ -88,8 +88,8 @@ namespace Solis.Misc.Multicam
             if(!IsPlaying) return;
 
 #if UNITY_EDITOR
-            if (!MulticamCamera.Instance.PlayerFound && SolisInput.GetKeyDown("Skip"))
-                Stop();
+            //if (!MulticamCamera.Instance.PlayerFound && SolisInput.GetKeyDown("Skip"))
+                //Stop();
 #endif
 
             if (!animation.isPlaying) Stop();
