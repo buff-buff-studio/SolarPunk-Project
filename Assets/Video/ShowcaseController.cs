@@ -1,4 +1,5 @@
 using System;
+using NetBuff;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -28,28 +29,30 @@ namespace Video
         private static readonly int _TimeOffset = Shader.PropertyToID("_TimeOffset");
 
         private float _timer = 0f;
-
+        
         public bool IsDone { get; private set; }
 
-        private void _Next()
+        public void Next()
         {
+            _timer = 0;
             if (currentShowcaseIndex == showcaseData.Length - 1)
                 IsDone = true;
             else
                 currentShowcaseIndex = (currentShowcaseIndex + 1) % showcaseData.Length;
         }
 
-        private void Update()
+        public void Update()
         {
             _timer += Time.deltaTime;
             if (_timer > showcaseData[currentShowcaseIndex].time)
             {
-                _timer = 0f;
-                _Next();
+                Next();
             }
-            
-            if(Keyboard.current.aKey.wasPressedThisFrame)
-                _Next();
+
+            if (Keyboard.current.aKey.wasPressedThisFrame)
+            {
+                Next();
+            }
             
             if (currentShowcaseIndex != _lastShowcaseIndex)
             {
