@@ -154,9 +154,9 @@ namespace Solis.Misc
         public void NextPhase()
         {
             if (!IsCheatsEnabled) return;
-
             if(!IsServer) return;
 
+            _pauseManager.ResumeGame();
             GameManager.Instance.SaveData.currentLevel++;
             GameManager.Instance.LoadLevel();
         }
@@ -167,6 +167,7 @@ namespace Solis.Misc
 
             if(!IsServer) return;
 
+            _pauseManager.ResumeGame();
             GameManager.Instance.SaveData.currentLevel--;
             GameManager.Instance.LoadLevel();
         }

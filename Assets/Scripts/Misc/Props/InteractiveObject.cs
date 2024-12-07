@@ -25,8 +25,8 @@ namespace Misc.Props
 
             _originalLayer = gameObject.layer;
             _layerMask = ~(playerTypeFilter != CharacterTypeFilter.Both
-                ? LayerMask.GetMask("Ignore Raycast", playerTypeFilter == CharacterTypeFilter.Human ? "Human" : "Robot")
-                : LayerMask.GetMask("Ignore Raycast", "Human", "Robot"));
+                ? LayerMask.GetMask("Ignore Raycast", "CubeTrigger", "PressurePlate", playerTypeFilter == CharacterTypeFilter.Human ? "Human" : "Robot")
+                : LayerMask.GetMask("Ignore Raycast", "CubeTrigger", "PressurePlate", "Human", "Robot"));
         }
 
         protected virtual void OnDisable()
@@ -42,6 +42,7 @@ namespace Misc.Props
         protected bool PlayerChecker(PlayerInteractPacket arg1, out PlayerControllerBase player)
         {
             player = null;
+
             // Check if player is within radius
             var networkObject = GetNetworkObject(arg1.Id);
             var dist = Vector3.Distance(networkObject.transform.position, transform.position);

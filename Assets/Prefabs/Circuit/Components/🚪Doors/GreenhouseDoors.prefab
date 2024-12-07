@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   acceptMultipleConnections: 0
+  inputSelfPowered: 0
 --- !u!1001 &487052140016422286
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -182,8 +183,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id:
-    high: -1798828557
-    low: -427545601
+    high: -186231656
+    low: -1246022
   ownerId: -1
   prefabId:
     high: 0
@@ -244,6 +245,7 @@ MonoBehaviour:
   isOpen:
     value: 0
     type: 0
+  canTurnOff: 1
 --- !u!1 &3321588352157543403 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6279429280952146331, guid: f4b7ff3ca03fc614ab15cdb931f0ac6c, type: 3}
