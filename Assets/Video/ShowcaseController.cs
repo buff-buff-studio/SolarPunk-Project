@@ -29,17 +29,27 @@ namespace Video
 
         private float _timer = 0f;
 
+        public bool IsDone { get; private set; }
+
+        private void _Next()
+        {
+            if (currentShowcaseIndex == showcaseData.Length - 1)
+                IsDone = true;
+            else
+                currentShowcaseIndex = (currentShowcaseIndex + 1) % showcaseData.Length;
+        }
+
         private void Update()
         {
             _timer += Time.deltaTime;
             if (_timer > showcaseData[currentShowcaseIndex].time)
             {
                 _timer = 0f;
-                currentShowcaseIndex = (currentShowcaseIndex + 1) % showcaseData.Length;
+                _Next();
             }
             
             if(Keyboard.current.aKey.wasPressedThisFrame)
-                currentShowcaseIndex = (currentShowcaseIndex + 1) % showcaseData.Length;
+                _Next();
             
             if (currentShowcaseIndex != _lastShowcaseIndex)
             {
@@ -54,7 +64,7 @@ namespace Video
                 var desc = showcaseData[currentShowcaseIndex].description;
                 text.text = $"<size=70><b>{title}</b></size>\n{desc}";
                 
-                material.SetFloat("_TimeOffset", material.GetFloat(_TimeOffset) + timeOffset);
+                material.SetFloat(_TimeOffset, material.GetFloat(_TimeOffset) + timeOffset);
             }
             
             if (showcaseData[currentShowcaseIndex].spin)

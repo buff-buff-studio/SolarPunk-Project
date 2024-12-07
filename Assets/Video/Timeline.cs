@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Video
 {
@@ -29,6 +30,8 @@ namespace Video
         public AnimationCurve size;
         public RectTransform barFill;
         public AnimationCurve sizeCircles;
+        
+        private bool _running = false;
 
         public float creationTime = 1f;
         private void OnEnable()
@@ -42,6 +45,14 @@ namespace Video
 
         public void Update()
         {
+            if(!_running)
+            {
+                if(Keyboard.current.aKey.wasPressedThisFrame)
+                    _running = true;
+                else
+                    return;
+            }
+        
             timer += Time.deltaTime;
             timer = Mathf.Clamp(timer, 0, duration);
             marker.anchoredPosition = new Vector2(timer / duration * bar.rect.width, 0);
@@ -62,12 +73,18 @@ namespace Video
                 }
             }
 
-            if(points[currentPoint].time <= timer)
+            if(points[currentPoint].time - 0.25f <= timer)
             {
                 StartCoroutine(_Plup(label.transform, 0.5f, size));
-                label.text = points[currentPoint].label;
+                StartCoroutine(_SetTextAfter(label, points[currentPoint].label, 0.25f));
                 currentPoint++;
             }
+        }
+        
+        private IEnumerator _SetTextAfter(TMP_Text t, string text, float time)
+        {
+            yield return new WaitForSeconds(time);
+            t.text = text;
         }
 
         private IEnumerator _Plup(Transform t, float time, AnimationCurve curve)
