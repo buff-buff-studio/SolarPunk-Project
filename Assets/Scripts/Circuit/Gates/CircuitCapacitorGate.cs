@@ -16,7 +16,7 @@ namespace Solis.Circuit.Gates
         public CircuitPlug output;
 
         [Header("SETTINGS")] 
-        public BoolNetworkValue deliverPower = new(false);
+        public bool deliverPower = false;
         public bool canChange = true;
         public bool invisibleOnPlay = false;
         public bool canTurnOff = true;
@@ -26,7 +26,6 @@ namespace Solis.Circuit.Gates
         protected override void OnEnable()
         {
             base.OnEnable();
-            WithValues(deliverPower);
             if(invisibleOnPlay)
             {
                 transform.GetChild(0).gameObject.SetActive(false);
@@ -37,27 +36,28 @@ namespace Solis.Circuit.Gates
         #region Abstract Methods Implementation
         public override CircuitData ReadOutput(CircuitPlug plug)
         {
-            return new CircuitData(deliverPower.Value ? 1 : 0);
+            //return new CircuitData(deliverPower.Value ? 1 : 0);
+
+            var result = data.ReadInputPower();
+
+            if (canTurnOff || !deliverPower)
+            {
+                if (canChange && result > 0)
+                {
+                    deliverPower = !deliverPower;
+                    canChange = false;
+                }
+                else if (result <= 0)
+                {
+                    canChange = true;
+                }
+            }
+
+            return new CircuitData(deliverPower ? 1 : 0);
         }
 
         protected override void OnRefresh()
-        {
-            if (!HasAuthority) return;
-            if (output.Connections.Length <= 0) return;
-
-            if(!canTurnOff && deliverPower.Value)
-                return;
-
-            if(canChange && data.ReadInputPower() > .5f)
-            {
-                deliverPower.Value = !deliverPower.Value;
-                canChange = false;
-            }
-            else if(data.ReadInputPower() <= .1f)
-            {
-                canChange = true;
-            }
-        }
+        { }
 
         public override IEnumerable<CircuitPlug> GetPlugs()
         {

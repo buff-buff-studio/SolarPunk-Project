@@ -55,6 +55,7 @@ namespace Solis.Misc.Multicam
 
         private void Awake()
         {
+            IsPlaying = false;
             Instance = this;
             currentRoll = 0;
 

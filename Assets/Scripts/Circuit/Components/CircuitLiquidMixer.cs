@@ -155,7 +155,7 @@ namespace Solis.Circuit.Components
                         liquidA.Amount = Mathf.Max(liquidA.Amount - (Time.deltaTime * flushSpeed), 0);
                         liquidB.Amount = Mathf.Max(liquidB.Amount - (Time.deltaTime * flushSpeed), 0);
                     }
-                    else if (!flushIsOpen)
+                    else
                     {
                         mode.Value = (int)Mode.Idle;
                     }

@@ -160,9 +160,9 @@ namespace Solis.Player
         private Transform _camera;
 
         private bool _waitingForInteract;
-        private bool _isInteracting;
+        private protected bool _isInteracting;
         private InteractionType _lastInteractionType;
-        private bool _isCarrying;
+        private protected bool _isCarrying;
 
         private bool _isFocused;
 
@@ -710,7 +710,7 @@ namespace Solis.Player
                 {
                     var size = Physics.OverlapSphere(
                         boxPlacedPosition.position, carriedObject.objectSize.extents.x,
-                        ~LayerMask.GetMask("Box", "CarriedIgnore", "PressurePlate", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
+                        ~LayerMask.GetMask("Box", "CarriedIgnore", "PressurePlate", "CubeTrigger", (CharacterType == CharacterType.Human ? "Human" : "Robot")), QueryTriggerInteraction.Ignore);
 
                     if (size.Length > 0)
                     {

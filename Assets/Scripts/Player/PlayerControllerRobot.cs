@@ -41,6 +41,7 @@ namespace Solis.Player
             base.OnEnable();
             
             WithValues(isRespawning, isPaused, username, grapplingHookPosition, grapplingHook);
+            _isHooking = false;
             grapplingHook.OnValueChanged += (old, @new) => grapplingLine.enabled = @new > 0;
         }
 
@@ -158,6 +159,11 @@ namespace Solis.Player
         #region IMagneticObject Implementation
         public void Magnetize(GameObject magnet, Transform anchor)
         {
+            if (_isInteracting)
+            {
+                _isInteracting = false;
+                OnEndInteract();
+            }
             magnetAnchor = anchor;
             state = State.Magnetized;
         }
