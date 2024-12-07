@@ -83,6 +83,9 @@ namespace Interface
                 settingsManager.Username = inputFieldUsername.text;
             }
 
+#if UNITY_EDITOR
+            inputFieldUsername.text += " (UNITY)";
+#endif
             _firstUsername = inputFieldUsername.text;
 
             //resize the input field to fit the text

@@ -137,8 +137,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id:
-    high: -735312502
-    low: 1940702657
+    high: -1670923751
+    low: 1028187660
   ownerId: -1
   prefabId:
     high: 0
@@ -160,11 +160,10 @@ MonoBehaviour:
       m_Calls: []
   data: {fileID: 2141031966966968122}
   output: {fileID: 2974177557980481246}
-  deliverPower:
-    value: 0
-    type: 2
+  deliverPower: 0
   canChange: 1
   invisibleOnPlay: 0
+  canTurnOff: 1
 --- !u!1 &6698654247391685920
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,6 +210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   acceptMultipleConnections: 1
+  inputSelfPowered: 0
 --- !u!1 &6979854980898867129
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,6 +257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   acceptMultipleConnections: 1
+  inputSelfPowered: 0
 --- !u!1001 &651655158831010685
 PrefabInstance:
   m_ObjectHideFlags: 0

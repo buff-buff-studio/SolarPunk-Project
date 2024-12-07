@@ -238,10 +238,15 @@ namespace Solis.Misc.Multicam
 
         public bool OnChangeScene()
         {
+            CinematicController.IsPlaying = false;
             nullTrack.position = gameplayCamera.Follow.position;
             nullTrack.rotation = gameplayCamera.Follow.rotation;
             gameplayCamera.Follow = nullTrack;
             gameplayCamera.LookAt = nullTrack;
+            _hasSkipped.Clear();
+
+            if(HasAuthority)
+                _skipCount.Value = 0;
 
             ChangeCameraState(CameraState.Gameplay);
             return true;
@@ -251,7 +256,7 @@ namespace Solis.Misc.Multicam
         {
             if(state == CameraState.Gameplay)
             {
-                SetCameraBlend(CinemachineBlendDefinition.Style.EaseInOut, .25f);
+                SetCameraBlend(CinemachineBlendDefinition.Style.EaseInOut, .4f);
                 focusCamera.gameObject.SetActive(active);
                 
             }

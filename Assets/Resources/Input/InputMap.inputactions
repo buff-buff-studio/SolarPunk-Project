@@ -96,21 +96,21 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Cheat",
-                    "type": "Button",
-                    "id": "a9150cb8-a924-45d4-bcd9-bef1c920d9e9",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Focus",
                     "type": "Button",
                     "id": "8745f50e-087c-49d1-9ba2-5185d252683e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Cheat",
+                    "type": "Button",
+                    "id": "a9150cb8-a924-45d4-bcd9-bef1c920d9e9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
                     "initialStateCheck": false
                 }
             ],
@@ -523,6 +523,17 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "",
+                    "id": "157fec72-ab34-4cc7-b661-125f31e98a4f",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Focus",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "Two Modifiers",
                     "id": "ada78f31-a893-42e7-a3a6-f0cb16bee49a",
                     "path": "TwoModifiers",
@@ -612,12 +623,12 @@
                 },
                 {
                     "name": "",
-                    "id": "157fec72-ab34-4cc7-b661-125f31e98a4f",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
+                    "id": "fbaf322d-e94c-490d-bcc6-2a480415054a",
+                    "path": "<Keyboard>/f1",
+                    "interactions": "Hold(duration=2)",
                     "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Focus",
+                    "groups": "",
+                    "action": "Cheat",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

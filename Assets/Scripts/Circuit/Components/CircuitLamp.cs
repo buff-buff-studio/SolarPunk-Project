@@ -58,8 +58,12 @@ namespace Solis.Circuit.Components
 
         protected override void OnRefresh()
         {
-            if(powered.CheckPermission())
+            if(HasAuthority)
+            {
+                if (!powered.AttachedTo)
+                    powered.AttachedTo = this;
                 powered.Value = input.ReadOutput().power;
+            }
         }
 
         public override IEnumerable<CircuitPlug> GetPlugs()

@@ -28,6 +28,8 @@ namespace Solis.Player
         [ColorUsage(false, true)]
         public Color specialOnColor, specialOffColor;
 
+        private bool IsSpecialBlocked => _flyMode || _isSpecialBlocked || _isCarrying;
+
         private static readonly int EmissionColor2 = Shader.PropertyToID("_EmissionColor_2");
 
         protected override void OnEnable()
@@ -47,7 +49,7 @@ namespace Solis.Player
         {
             base._Timer();
 
-            if(_flyMode || _isSpecialBlocked) return;
+            if(IsSpecialBlocked) return;
             if (_specialTimer > 0)
             {
                 _specialTimer -= Time.deltaTime;
@@ -62,7 +64,7 @@ namespace Solis.Player
 
         protected override void _Special()
         {
-            if(_flyMode || _isSpecialBlocked)
+            if(IsSpecialBlocked)
             {
                 _specialTimer = specialCooldown / 2;
                 _isSpecialOn.Value = false;
