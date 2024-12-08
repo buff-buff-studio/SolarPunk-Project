@@ -19,7 +19,9 @@ namespace Solis.Circuit
 
         [Header("SETTINGS")]
         public CharacterTypeFilter playerTypeFilter = CharacterTypeFilter.Both;
+        public int minPlayers = 2;
         public bool exitTrigger;
+        public bool canBeTurnedOff = false;
         private int _triggerCount;
         private static int _playerCount;
 
@@ -75,7 +77,8 @@ namespace Solis.Circuit
                 return;
 
             _triggerCount++;
-            if (_triggerCount == _playerCount)
+            _triggerCount = Mathf.Clamp(_triggerCount, 0, _playerCount);
+            if (_triggerCount >= minPlayers)
             {
                 isOn.Value = true;
             }
@@ -83,7 +86,7 @@ namespace Solis.Circuit
 
         private void OnTriggerExit(Collider other)
         {
-            if (isOn.Value)
+            if (isOn.Value && !canBeTurnedOff)
                 return;
 
             if(!exitTrigger)
