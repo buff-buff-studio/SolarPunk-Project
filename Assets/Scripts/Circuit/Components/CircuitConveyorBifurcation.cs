@@ -30,8 +30,12 @@ namespace Solis.Circuit.Components
 
         private void IsBifurcationAOnValueChanged(bool oldvalue, bool newvalue)
         {
-            ConveyorBeltB.localPosition = new Vector3(ConveyorBeltB.localPosition.x, newvalue ? 0 : turnOnYPosition, ConveyorBeltB.localPosition.z);
-            ConveyorBeltA.localPosition = new Vector3(ConveyorBeltA.localPosition.x, newvalue ? turnOnYPosition : 0, ConveyorBeltA.localPosition.z);
+            ConveyorBeltA.localPosition = new Vector3(ConveyorBeltA.localPosition.x, newvalue ? 0 : -turnOnYPosition, ConveyorBeltA.localPosition.z);
+            ConveyorBeltB.localPosition = new Vector3(ConveyorBeltB.localPosition.x, newvalue ? -turnOnYPosition : 0, ConveyorBeltB.localPosition.z);
+            bifurcationA.ColliderEnabled = newvalue;
+            bifurcationA.connectedBelts.ForEach(belt => belt.ColliderEnabled = newvalue);
+            bifurcationB.ColliderEnabled = !newvalue;
+            bifurcationB.connectedBelts.ForEach(belt => belt.ColliderEnabled = !newvalue);
         }
 
         public override CircuitData ReadOutput(CircuitPlug plug)

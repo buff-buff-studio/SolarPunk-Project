@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using NetBuff.Components;
 using Solis.Circuit;
 using UnityEngine;
 
-namespace Solis.Misc
+namespace Solis.Misc.Conveyor
 {
     public class SpawnerConveyorObject : CircuitComponent
     {
@@ -32,7 +30,8 @@ namespace Solis.Misc
                 if (index == _lastSpawnIndex)
                     index = (index + 1) % objectsToSpawn.Length;
                 _lastSpawnIndex = index;
-                Spawn(objectsToSpawn[index], transform.position, transform.rotation);
+                var obj = objectsToSpawn[index];
+                Spawn(obj, transform.position, transform.rotation, obj.transform.localScale, true);
             }
         }
 

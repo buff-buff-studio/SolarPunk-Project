@@ -8,6 +8,7 @@ namespace Solis.Circuit.Components
     public class CircuitConveyorBelt : CircuitComponent
     {
         private Rigidbody _rb;
+        private Collider _collider;
         public Renderer conveyorRenderer;
         public int[] materialIndices = new int[1]{1};
         public float speed = 3f;
@@ -20,6 +21,12 @@ namespace Solis.Circuit.Components
 
         public List<CircuitConveyorBelt> connectedBelts;
 
+        public bool ColliderEnabled
+        {
+            get => _collider.enabled;
+            set => _collider.enabled = value;
+        }
+
         private float _speed;
 
         private static readonly int Inverse = Shader.PropertyToID("_Inverse");
@@ -31,6 +38,7 @@ namespace Solis.Circuit.Components
             WithValues(isOnValue, speedValue);
             base.OnEnable();
             _rb = gameObject.AddComponent<Rigidbody>();
+            TryGetComponent(out _collider);
             _rb.isKinematic = true;
             
             if (HasAuthority)

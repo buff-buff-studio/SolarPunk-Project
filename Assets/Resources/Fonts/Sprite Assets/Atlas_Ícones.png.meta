@@ -106,6 +106,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -853,7 +866,7 @@ TextureImporter:
         width: 516
         height: 491
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -861,6 +874,27 @@ TextureImporter:
       bones: []
       spriteID: a7b49256903708242b748af8bcc0badc
       internalID: 1536769570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Atlas_I\u0301cones_0"
+      rect:
+        serializedVersion: 2
+        x: 2859
+        y: 1103
+        width: 515
+        height: 488
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e70b13fec402e1049b227c25552eb756
+      internalID: -1258577910
       vertices: []
       indices: 
       edges: []
@@ -912,6 +946,7 @@ TextureImporter:
       7: -856523470
       8: 1965083150
       9: 1994227204
+      "Atlas_I\u0301cones_0": -1258577910
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
