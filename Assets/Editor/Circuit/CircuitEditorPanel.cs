@@ -681,7 +681,7 @@ namespace Editor.Circuit
                             }
                             else
                             {
-                                Handles.color = Color.yellow;
+                                Handles.color = plug.IsDataPlug ? Color.magenta : Color.yellow;
                             }
 
                             var distance = HandleUtility.DistanceToCircle(position, 0.25f);

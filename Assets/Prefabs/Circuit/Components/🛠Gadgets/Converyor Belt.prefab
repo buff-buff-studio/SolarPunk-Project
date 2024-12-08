@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   acceptMultipleConnections: 0
+  inputSelfPowered: 0
 --- !u!1 &3550931746173257912
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   acceptMultipleConnections: 0
+  inputSelfPowered: 0
 --- !u!1 &4748358510317506502
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +110,7 @@ GameObject:
   - component: {fileID: 244603754469892638}
   m_Layer: 0
   m_Name: Converyor Belt
-  m_TagString: Untagged
+  m_TagString: Conveyor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -216,8 +218,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id:
-    high: -1603778766
-    low: 1138288382
+    high: 389467883
+    low: 1618074625
   ownerId: -1
   prefabId:
     high: 0
@@ -237,6 +239,8 @@ MonoBehaviour:
   onToggleComponent:
     m_PersistentCalls:
       m_Calls: []
+  conveyorRenderer: {fileID: 0}
+  materialIndices: 00000000
   speed: 1
   acceleration: 5
   input: {fileID: 255722078179019873}
@@ -247,3 +251,4 @@ MonoBehaviour:
   speedValue:
     value: 0
     type: 0
+  connectedBelts: []
