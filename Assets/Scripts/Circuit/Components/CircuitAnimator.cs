@@ -52,8 +52,11 @@ namespace Solis.Circuit.Components
 
         protected override void OnRefresh()
         {
-            if(isOpen.AttachedTo != null && HasAuthority)
+            if(HasAuthority)
             {
+                if(!isOpen.AttachedTo)
+                    isOpen.AttachedTo = this;
+
                 var power = input.ReadOutput().power > 0;
                 if(!canTurnOff && isOpen.Value && !power) return;
 

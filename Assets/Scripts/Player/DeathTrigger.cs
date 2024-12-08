@@ -1,3 +1,4 @@
+using System;
 using NetBuff.Components;
 using Solis.Packets;
 using Solis.Player;
@@ -21,7 +22,9 @@ namespace Solis.Player
                 ? new Color(1, 0, 0, .25f)
                 : new Color(1, .25f, 0, .25f);
 
-            if(_collider == null) _collider = gameObject.AddComponent<MeshCollider>();
+            if(_collider == null)
+                if(!TryGetComponent(out _collider))
+                    _collider = gameObject.AddComponent<MeshCollider>();
 
             switch (_collider.GetType().Name)
             {

@@ -34,6 +34,13 @@ namespace Solis.Player
 
         protected override void OnEnable()
         {
+            if(FindAnyObjectByType<PlayerControllerHuman>() != this)
+            {
+                Debug.LogError("There can only be one Nina in the scene");
+                Destroy(gameObject);
+                return;
+            }
+
             base.OnEnable();
             WithValues(isRespawning, isPaused, username, _isSpecialOn);
             _isSpecialOn.OnValueChanged += _OnSpecialValueChanged;

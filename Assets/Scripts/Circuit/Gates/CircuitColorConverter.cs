@@ -37,6 +37,10 @@ namespace Solis.Circuit.Gates
         {
             base.OnEnable();
             WithValues(power);
+
+            if(!power.AttachedTo)
+                power.AttachedTo = this;
+
             UpdateMaterial();
             if(invisibleOnPlay)
             {
@@ -59,6 +63,9 @@ namespace Solis.Circuit.Gates
             var pow = 0f;
             for(var i = 0; i < count; i++)
                 pow += input.ReadOutput(i).power;
+
+            if(!power.AttachedTo)
+                power.AttachedTo = this;
 
             power.Value = pow;
 

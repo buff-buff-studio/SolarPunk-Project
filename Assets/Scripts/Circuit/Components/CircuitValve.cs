@@ -22,6 +22,9 @@ public class CircuitValve : CircuitInteractive
          base.OnEnable();
          WithValues(isOn);
 
+         if(!isOn.AttachedTo)
+             isOn.AttachedTo = this;
+
          isOn.OnValueChanged += _OnValueChanged;
 
          valve.localEulerAngles = new Vector3(270, 0, isOn.Value ? valveAngle : 0);

@@ -38,6 +38,13 @@ namespace Solis.Player
 
         protected override void OnEnable()
         {
+            if(FindAnyObjectByType<PlayerControllerRobot>() != this)
+            {
+                Debug.LogError("There can only be one RAM in the scene");
+                Destroy(gameObject);
+                return;
+            }
+
             base.OnEnable();
             
             WithValues(isRespawning, isPaused, username, grapplingHookPosition, grapplingHook);

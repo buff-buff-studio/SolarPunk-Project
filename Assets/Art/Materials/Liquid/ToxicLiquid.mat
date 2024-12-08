@@ -8,18 +8,24 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ToxicLiquid
-  m_Shader: {fileID: -6465566751694194690, guid: ec84547782c30f746bbb70b1bd665613, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 7a4cc0de81613ef419f4b72c38413e46, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHAPREMULTIPLY_ON
+  - _RECEIVE_SHADOWS_OFF
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3010
-  stringTagMap: {}
+  m_CustomRenderQueue: -1
+  stringTagMap:
+    RenderType: Transparent
   disabledShaderPasses:
   - MOTIONVECTORS
+  - SHADOWCASTER
+  - DepthOnly
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -92,7 +98,7 @@ Material:
     - _BorderThickness: 0.062
     - _BumpScale: 1
     - _CastShadows: 0
-    - _CausticsSpeed: 0.025
+    - _CausticsSpeed: 0.001
     - _CellSize: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
@@ -102,7 +108,7 @@ Material:
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DisplacementMultiplier: 0
-    - _DstBlend: 0
+    - _DstBlend: 10
     - _DstBlendAlpha: 0
     - _EdgeWidth: 0.27
     - _EnvironmentReflections: 1
@@ -122,40 +128,40 @@ Material:
     - _Parallax: 0.005
     - _QueueControl: 1
     - _QueueOffset: 0
-    - _ReceiveShadows: 1
-    - _SideScale: 10
+    - _ReceiveShadows: 0
+    - _SideScale: 0.62
     - _SmoothBorders: 0.5
-    - _Smoothness: 0.7
+    - _Smoothness: 0.615
     - _SmoothnessTextureChannel: 0
     - _SmoothstepValue: 0
     - _Softness: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
-    - _Surface: 0
+    - _Surface: 1
     - _TimeMultiplier: 0
     - _TopSpread: 0.04
-    - _VertSpeed: 4
-    - _Warp: 0.2
+    - _VertSpeed: 0
+    - _Warp: 0.19
     - _WarpNoiseScale: 4
     - _WaterfallNoiseScale: 0.5
     - _WaveSpeed: 0
     - _WaveStrength: 0
     - _WorkflowMode: 1
     - _ZTest: 4
-    - _ZWrite: 1
+    - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _CausticsColor: {r: 0.57537603, g: 0.8113208, b: 0.14159843, a: 1}
+    - _CausticsColor: {r: 6.009763, g: 8.47419, b: 1.4789859, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DeepColor: {r: 0.14574693, g: 0.38679248, b: 0.041963343, a: 1}
+    - _DeepColor: {r: 2.478712, g: 8.262375, b: 0, a: 1}
     - _DirtyCausticsColor: {r: 0.68315923, g: 0.764151, b: 0.21266466, a: 0}
     - _DirtyWaterColor: {r: 0.764151, g: 0.7027848, b: 0.11894804, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FoamColor: {r: 0.43282828, g: 0.5754717, b: 0.13300997, a: 0.40392157}
-    - _OutlineColor: {r: 0.17439651, g: 0.31132078, b: 0, a: 1}
-    - _ShallowColor: {r: 0.29280058, g: 0.5188679, b: 0.14929688, a: 0.3686275}
+    - _FoamColor: {r: 0.43282825, g: 0.57547164, b: 0.13300994, a: 0.46666667}
+    - _OutlineColor: {r: 14.902025, g: 26.600813, b: 0, a: 1}
+    - _ShallowColor: {r: 1.240522, g: 4.1509433, b: 1.1952977, a: 0.45490196}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
