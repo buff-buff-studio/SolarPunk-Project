@@ -4,6 +4,7 @@ using System.Linq;
 using NetBuff.Misc;
 using Solis.Circuit;
 using Solis.Packets;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -19,27 +20,51 @@ namespace Solis.Misc.Conveyor
             public Sprite sprite;
         }
 
+        [Header("CIRCUIT")]
         public CircuitPlug inputReset;
         public CircuitPlug output;
         public CircuitPlug outputIsOn;
         public CircuitPlug outputError;
 
+        [Header("HUD")]
+        public GameObject startPage;
+        public GameObject loadingPage;
+        public GameObject finishPage;
+        public GameObject errorPage;
         public Image filterImage;
+        public Image[] loadedImages;
+        public TextMeshProUGUI loadCountText;
 
+        [Header("SETTINGS")]
         public List<ObjectData> filterList;
         public IntNetworkValue filterIndex = new IntNetworkValue(0);
         public BoolNetworkValue started = new BoolNetworkValue(false);
         public BoolNetworkValue finished = new BoolNetworkValue(false);
         public BoolNetworkValue error = new BoolNetworkValue(false);
 
+        private IntNetworkValue _mode = new IntNetworkValue(0);
+        private IntNetworkValue _loadCount = new IntNetworkValue(-1);
+
+        private Color _unloadedColor = new Color(0.35f, 0.35f, 0.35f, 1);
+        private Color _loadedColor = new Color(0.2f, .93f, 1, 1);
+
         protected override void OnEnable()
         {
             base.OnEnable();
-            WithValues(filterIndex, finished, error, started);
+            WithValues(filterIndex, finished, error, started, _loadCount, _mode);
             filterIndex.OnValueChanged += _OnFilterIndexChanged;
+            _loadCount.OnValueChanged += _OnLoadCountChanged;
+            _mode.OnValueChanged += _OnModeChanged;
+
+            startPage.SetActive(true);
+            loadingPage.SetActive(false);
+            finishPage.SetActive(false);
+            errorPage.SetActive(false);
 
             PacketListener.GetPacketListener<ShuffleConveyorPacket>().AddClientListener(RandomizeFilter);
             ShuffleFilter();
+            if(HasAuthority)
+                _loadCount.Value = 0;
         }
 
         protected override void OnDisable()
@@ -48,6 +73,46 @@ namespace Solis.Misc.Conveyor
             filterIndex.OnValueChanged -= _OnFilterIndexChanged;
         }
 
+
+        private void _OnModeChanged(int oldvalue, int newvalue)
+        {
+            switch (newvalue)
+            {
+                case 0:
+                    startPage.SetActive(true);
+                    loadingPage.SetActive(false);
+                    finishPage.SetActive(false);
+                    errorPage.SetActive(false);
+                    break;
+                case 1:
+                    startPage.SetActive(false);
+                    loadingPage.SetActive(true);
+                    finishPage.SetActive(false);
+                    errorPage.SetActive(false);
+                    break;
+                case 2:
+                    startPage.SetActive(false);
+                    loadingPage.SetActive(false);
+                    finishPage.SetActive(true);
+                    errorPage.SetActive(false);
+                    break;
+                case 3:
+                    startPage.SetActive(false);
+                    loadingPage.SetActive(false);
+                    finishPage.SetActive(false);
+                    errorPage.SetActive(true);
+                    break;
+            }
+        }
+
+        private void _OnLoadCountChanged(int oldvalue, int newvalue)
+        {
+            loadCountText.text = $"{newvalue}/{loadedImages.Length}";
+            for (int i = 0; i < loadedImages.Length; i++)
+            {
+                loadedImages[i].color = i < newvalue ? _loadedColor : _unloadedColor;
+            }
+        }
         private void _OnFilterIndexChanged(int oldvalue, int newvalue)
         {
             filterImage.sprite = filterList[newvalue].sprite;
@@ -55,7 +120,7 @@ namespace Solis.Misc.Conveyor
 
         private void OnTriggerEnter(Collider col)
         {
-            if(!HasAuthority && finished.Value) return;
+            if(!HasAuthority || finished.Value) return;
 
             if(col.TryGetComponent(out ConveyorObject conveyorObject))
             {
@@ -64,16 +129,19 @@ namespace Solis.Misc.Conveyor
                     if(filterIndex.Value < filterList.Count - 1)
                     {
                         filterIndex.Value++;
+                        _loadCount.Value++;
                     }
                     else
                     {
                         finished.Value = true;
+                        _mode.Value = 2;
                         Refresh();
                     }
                 }
                 else
                 {
                     error.Value = true;
+                    _mode.Value = 3;
                     Refresh();
                 }
             }
@@ -145,6 +213,8 @@ namespace Solis.Misc.Conveyor
                 if(inputReset.ReadOutput().IsPowered)
                 {
                     error.Value = false;
+                    _loadCount.Value = 0;
+                    _mode.Value = 1;
                     ShuffleFilter();
                 }
             }else if(!started.Value)
@@ -152,6 +222,8 @@ namespace Solis.Misc.Conveyor
                 if(inputReset.ReadOutput().IsPowered)
                 {
                     started.Value = true;
+                    _loadCount.Value = 0;
+                    _mode.Value = 1;
                 }
             }
         }
