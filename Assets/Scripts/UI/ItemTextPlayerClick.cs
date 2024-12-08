@@ -1,9 +1,11 @@
+using System;
 using NetBuff.Misc;
 using Solis.Data;
 using Solis.Packets;
 using Solis.Player;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace UI
 {
@@ -14,16 +16,26 @@ namespace UI
 
         private Vector3 _objectCenter;
         private int _originalLayer, _ignoreRaycastLayer = 2;
+        [SerializeField]private InputActionProperty _inputAction;
         protected void OnEnable()
         {
-            PacketListener.GetPacketListener<PlayerInteractPacket>().AddServerListener(OnClickDialog);
+           // PacketListener.GetPacketListener<PlayerInteractPacket>().AddServerListener(OnClickDialog);
             _objectCenter = GetComponentInChildren<Collider>().bounds.center;
             _originalLayer = gameObject.layer;
+            _inputAction.action.performed += OnPerformed;
+
         }
-    
+        private void OnPerformed(InputAction.CallbackContext callbackContext)
+        {
+            OnClickDialog(null, 0);
+        }
+        
+
         protected void OnDisable()
         {
-            PacketListener.GetPacketListener<PlayerInteractPacket>().RemoveServerListener(OnClickDialog);
+            _inputAction.action.performed -= OnPerformed;
+
+           // PacketListener.GetPacketListener<PlayerInteractPacket>().RemoveServerListener(OnClickDialog);
         }
         
         private bool OnClickDialog(PlayerInteractPacket arg1, int arg2)

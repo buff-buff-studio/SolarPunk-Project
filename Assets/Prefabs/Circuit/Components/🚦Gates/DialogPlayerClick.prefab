@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   acceptMultipleConnections: 1
+  inputSelfPowered: 0
 --- !u!1 &6949316071307896813
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,8 +194,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id:
-    high: 1559201641
-    low: -607310419
+    high: 139050868
+    low: -67208197
   ownerId: -1
   prefabId:
     high: 0
@@ -232,6 +233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentDialog: {fileID: 11400000, guid: a0424513360b4de4eb2f98a5e45abe1b, type: 2}
+  canBeReplayed: 1
 --- !u!1 &7815499682554039784
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,6 +280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   acceptMultipleConnections: 1
+  inputSelfPowered: 0
 --- !u!1001 &3581011510056720954
 PrefabInstance:
   m_ObjectHideFlags: 0

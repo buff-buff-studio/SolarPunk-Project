@@ -56,8 +56,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id:
-    high: -1057782011
-    low: 1275039707
+    high: 11287691
+    low: 1772846674
   ownerId: -1
   prefabId:
     high: 0
@@ -74,9 +74,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52c0b5ea4a80ed04186370a006d85c5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentDialog: {fileID: 0}
+  currentDialog: {fileID: 11400000, guid: d2058727cfb37704bb82148143beb7a3, type: 2}
+  canBeReplayed: 0
   radius: 2
   minDistance: 1.3
+  _inputAction:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Input
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 55e9c997-ada7-4500-a227-f87eeb3e3975
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 1120369429361536294, guid: fdadb7b91cf828b4aa270c7ff4a15688, type: 3}
 --- !u!1001 &7212730250482247197
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -14,6 +14,7 @@ using TMPro;
 using UI;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 [Serializable]
@@ -64,6 +65,7 @@ namespace _Scripts.UI
         [SerializeField]private GameObject orderTextGameObject;
         [SerializeField] private Image characterImage;
         [SerializeField] private TMP_Text characterName;
+        [SerializeField] private GameObject characterPanel;
         [SerializeField] private List<CharacterTypeAndImages> characterTypesAndEmotions;
         
         public NetworkBehaviourNetworkValue<DialogPlayerBase> currentDialog = new(); 
@@ -202,7 +204,7 @@ namespace _Scripts.UI
 
         private void TypeWriteText(DialogStruct dialogData, Action callback)
         {
-            characterImage.gameObject.SetActive(false);
+            characterPanel.gameObject.SetActive(false);
             EnterImage(dialogData.characterType);
             var newText = LanguagePalette.Localize(dialogData.textValue);
             Debug.Log(newText);
@@ -298,7 +300,12 @@ namespace _Scripts.UI
 
         private void EnterImage(CharacterTypeEmote characterType)
         {
+            if (characterType == CharacterTypeEmote.None)
+            {
+                return;
+            }
             characterImage.gameObject.SetActive(true);
+            characterPanel.gameObject.SetActive(true);
             var choosed = characterTypesAndEmotions.FirstOrDefault(c => c.characterType == characterType);
             var sprite = choosed.image;
             characterImage.sprite = sprite;
