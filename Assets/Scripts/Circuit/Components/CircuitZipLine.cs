@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NetBuff.Components;
@@ -47,6 +48,13 @@ namespace Solis.Circuit.Components
         #endregion
 
         #region Unity Callbacks
+
+        private void Awake()
+        {
+            if(!position.AttachedTo)
+                position.AttachedTo = this;
+        }
+
         protected override void OnEnable()
         {
             WithValues(position);
