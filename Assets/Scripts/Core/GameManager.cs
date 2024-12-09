@@ -284,8 +284,7 @@ namespace Solis.Core
                 {
                     _LoadSceneInternal(scene, (_) =>
                     {
-                        foreach (var clientId in manager.GetConnectedClients())
-                            _RespawnPlayerForClient(clientId);
+                        After();
                     });
                 });
             }
@@ -293,11 +292,18 @@ namespace Solis.Core
             {
                 _LoadSceneInternal(scene, (_) =>
                 {
-                    foreach (var clientId in manager.GetConnectedClients())
-                        _RespawnPlayerForClient(clientId);
+                    After();
                 });
             }
             #endregion
+        }
+        
+        private async Awaitable After()
+        {
+            var manager = NetworkManager.Instance!;
+            await Awaitable.WaitForSecondsAsync(2f);
+            foreach (var clientId in manager.GetConnectedClients())
+                _RespawnPlayerForClient(clientId);
         }
         
         /// <summary>
@@ -478,7 +484,7 @@ namespace Solis.Core
         private async Awaitable _Fade(bool @in)
         {
             if (!@in)
-                await Awaitable.WaitForSecondsAsync(0.5f);
+                await Awaitable.WaitForSecondsAsync(2.5f);
             
             fadeScreen.gameObject.SetActive(true);
             
