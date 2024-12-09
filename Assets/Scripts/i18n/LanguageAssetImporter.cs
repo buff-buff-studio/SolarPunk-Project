@@ -21,8 +21,8 @@ namespace Solis.i18n
             {
                 if (line.StartsWith("#"))
                     continue;
-                
-                var parts = line.Split('=');
+
+                var parts = line.Split('=', 2);
 
                 if (parts.Length == 2)
                     language.entries.Add(Language.Hash(parts[0]), parts[1]);
