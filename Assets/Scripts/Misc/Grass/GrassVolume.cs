@@ -161,7 +161,7 @@ namespace Solis.Misc.Grass
             _mesh.RecalculateNormals();
             _mesh.RecalculateBounds();
             var bounds = _mesh.bounds;
-            bounds.Expand(new Vector3(0, 2, 0));
+            bounds.Expand(new Vector3(0, 4, 0));
             _mesh.bounds = bounds;
         }
 
