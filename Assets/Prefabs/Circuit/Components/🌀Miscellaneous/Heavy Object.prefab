@@ -97,6 +97,17 @@ PrefabInstance:
       insertIndex: 1
       addedObject: {fileID: -4475689090601496028}
   m_SourcePrefab: {fileID: 100100000, guid: fc0603dbfd745f147be6d59f1004342c, type: 3}
+--- !u!114 &3897489823328777314 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1470342004619112692, guid: fc0603dbfd745f147be6d59f1004342c, type: 3}
+  m_PrefabInstance: {fileID: 2481797972591789206}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7970753572833666373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa6028ac29aebb47b1a322b8ba03d51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6515247766672743592 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8654741218048202814, guid: fc0603dbfd745f147be6d59f1004342c, type: 3}
@@ -132,6 +143,24 @@ MonoBehaviour:
     value: 0
     type: 2
   networkRigidbodyTransform: {fileID: 6515247766672743592}
+  onCarry:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrop:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3897489823328777314}
+        m_TargetAssemblyTypeName: Solis.Audio.Players.PlayAudio, Assembly-CSharp
+        m_MethodName: PlayAudioName
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   objectSize:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}

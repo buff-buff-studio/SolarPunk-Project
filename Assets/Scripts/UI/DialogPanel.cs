@@ -6,6 +6,7 @@ using Cinemachine;
 using DefaultNamespace;
 using NetBuff.Components;
 using NetBuff.Misc;
+using Solis.Audio;
 using Solis.i18n;
 using Solis.Misc.Multicam;
 using Solis.Packets;
@@ -15,6 +16,7 @@ using UI;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 [Serializable]
 public enum Emotion
@@ -76,6 +78,7 @@ namespace _Scripts.UI
         [SerializeField] private TextMeshProUGUI playersText;
         
         private Animator nextImageAnimator;
+        
         
         #region MonoBehaviour
 
@@ -167,6 +170,8 @@ namespace _Scripts.UI
             playersText.text = charactersReady.Value + "/2";
         }
 
+        private AudioPlayer _audioPlayer;
+
         public void UpdateDialog(int oldValue, int newValue)
         {
             if (newValue == -1) ClosePanel();
@@ -174,10 +179,21 @@ namespace _Scripts.UI
             {
                 if (nextImage.activeSelf) nextImageAnimator.Play("NextDialogClose");
                 IsDialogPlaying = true;
+                var character = currentDialog.Value.currentDialog.dialogs[index.Value].characterType;
+
+                if (character != CharacterTypeEmote.None)
+                {
+                    var stringAudio = character == CharacterTypeEmote.Diluvio
+                        ? character.ToString()
+                        : character.ToString() + Random.Range(0, 3);
+                    _audioPlayer = AudioSystem.PlayVfxStatic(stringAudio, true);
+                }
                 TypeWriteText(currentDialog.Value.currentDialog.dialogs[index.Value], () =>
                 {
                     if (nextImage.activeSelf) nextImageAnimator.Play("NextDialogOpen");
                     else nextImage.SetActive(true);
+                    
+                    AudioSystem.Instance.Kill(_audioPlayer);
                 });
             }
         }

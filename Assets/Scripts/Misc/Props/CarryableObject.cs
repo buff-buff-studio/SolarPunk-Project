@@ -9,6 +9,7 @@ using Solis.Data;
 using Solis.Packets;
 using Solis.Player;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Solis.Misc.Props
 {
@@ -23,6 +24,9 @@ namespace Solis.Misc.Props
         private PlayerControllerBase playerHolding;
         private Rigidbody rb;
         private Transform _originalParent;
+
+        [SerializeField]private UnityEvent onCarry;
+        [SerializeField]private UnityEvent onDrop;
         
         #endregion
 
@@ -244,7 +248,8 @@ namespace Solis.Misc.Props
                     HandId = player.Id.ToString(),
                     IsCarrying = false
                 });
-
+                
+                onDrop?.Invoke();
                 return true;
             }
 
@@ -256,6 +261,7 @@ namespace Solis.Misc.Props
 
             playerHolding = player;
             isOn.Value = true;
+            onCarry?.Invoke();
             player.PlayInteraction(InteractionType.Box);
             player.carriedObject = this;
             transform.SetParent(player.handPosition, true);

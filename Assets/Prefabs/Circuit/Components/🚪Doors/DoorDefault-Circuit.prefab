@@ -59,6 +59,7 @@ GameObject:
   - component: {fileID: 7607824450606554974}
   - component: {fileID: 8645770364987828493}
   - component: {fileID: 6477676027205000356}
+  - component: {fileID: 6917361151762875706}
   m_Layer: 0
   m_Name: DoorDefault-Circuit
   m_TagString: Untagged
@@ -96,8 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id:
-    high: 1870197920
-    low: -463073214
+    high: 1186034348
+    low: -1126557828
   ownerId: -1
   prefabId:
     high: 0
@@ -116,7 +117,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onToggleComponent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6917361151762875706}
+        m_TargetAssemblyTypeName: Solis.Audio.Players.PlayAudio, Assembly-CSharp
+        m_MethodName: PlayAudioName
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   input: {fileID: 3108220294197194754}
   animator: {fileID: 8789758761313145289}
   isOpen:
@@ -137,6 +150,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tickRate: -1
   animator: {fileID: 8789758761313145289}
+--- !u!114 &6917361151762875706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6007571554149248996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa6028ac29aebb47b1a322b8ba03d51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioName: DoorOpen
 --- !u!1001 &8486576314190358690
 PrefabInstance:
   m_ObjectHideFlags: 0
