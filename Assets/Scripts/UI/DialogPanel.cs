@@ -65,6 +65,7 @@ namespace _Scripts.UI
         
         [SerializeField]private GameObject orderTextGameObject;
         [SerializeField] private Image characterImage;
+        [SerializeField] private GameObject characterInfo;
         [SerializeField] private TMP_Text characterName;
         [SerializeField] private List<CharacterTypeAndImages> characterTypesAndEmotions;
         
@@ -192,8 +193,7 @@ namespace _Scripts.UI
                 {
                     if (nextImage.activeSelf) nextImageAnimator.Play("NextDialogOpen");
                     else nextImage.SetActive(true);
-                    
-                    AudioSystem.Instance.Kill(_audioPlayer);
+                    if(_audioPlayer != null) AudioSystem.Instance.Kill(_audioPlayer);
                 });
             }
         }
@@ -217,7 +217,7 @@ namespace _Scripts.UI
 
         private void TypeWriteText(DialogStruct dialogData, Action callback)
         {
-            characterImage.gameObject.SetActive(false);
+            characterInfo.gameObject.SetActive(false);
             EnterImage(dialogData.characterType);
             var newText = LanguagePalette.Localize(dialogData.textValue);
             Debug.Log(newText);
@@ -313,7 +313,11 @@ namespace _Scripts.UI
 
         private void EnterImage(CharacterTypeEmote characterType)
         {
-            characterImage.gameObject.SetActive(true);
+            if (characterType == CharacterTypeEmote.None)
+            {
+                return;
+            }
+            characterInfo.gameObject.SetActive(true);
             var choosed = characterTypesAndEmotions.FirstOrDefault(c => c.characterType == characterType);
             var sprite = choosed.image;
             characterImage.sprite = sprite;

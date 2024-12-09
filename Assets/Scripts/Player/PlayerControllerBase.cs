@@ -974,6 +974,7 @@ namespace Solis.Player
             SendPacket(packet);
         }
 
+        public static Action onRespawn;
         private void _Respawn()
         {
             if (HasAuthority && IsOwnedByClient)
@@ -982,7 +983,8 @@ namespace Solis.Player
                 SetFocus(false);
                 RespawnHUD.Instance.ShowHUD(CharacterType, 1);
             }
-
+            
+            //onRespawn?.Invoke();
             velocity = Vector3.zero;
             _positionReset = false;
 
@@ -1002,7 +1004,7 @@ namespace Solis.Player
         public void PlayerDeath(Death death)
         {
             Debug.Log("Player ID: " + Id + " died with type: " + death);
-
+            onRespawn?.Invoke();
             switch (death)
             {
                 case Death.Stun:

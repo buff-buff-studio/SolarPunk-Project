@@ -1,11 +1,9 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Solis.Audio.Players
 {
     public class PlayAudio : MonoBehaviour
     {
-        [FormerlySerializedAs("_audioName")] 
         public string audioName;
 
         public void Play(string audio)

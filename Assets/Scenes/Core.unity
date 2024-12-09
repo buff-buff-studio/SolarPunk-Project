@@ -4311,7 +4311,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4536168840266829936, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.00000035762787
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4536168840266829936, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4319,7 +4319,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4536168840266829936, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0000019073486
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4536168840266829936, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4331,7 +4331,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4536168840266829936, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.08788599
+      value: 0.08788598
       objectReference: {fileID: 0}
     - target: {fileID: 4536168840266829936, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalRotation.z
@@ -4919,6 +4919,10 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2410190581695380881, guid: 3c29dab53b4f3764195e8357c6fd6fa2, type: 3}
+      propertyPath: characterInfo
+      value: 
+      objectReference: {fileID: 2780360728817725720}
     - target: {fileID: 2410190581695380881, guid: 3c29dab53b4f3764195e8357c6fd6fa2, type: 3}
       propertyPath: emojisStructure
       value: 
@@ -5922,6 +5926,11 @@ MonoBehaviour:
   ramCrosshair: {fileID: -750823431, guid: 62fce72888160a84a9666e72aab0880f, type: 3}
   blockCrosshair: {fileID: 1924274285, guid: 62fce72888160a84a9666e72aab0880f, type: 3}
   graplingCrosshair: {fileID: 21300000, guid: 9f1bf832e3e8f594fbb1beb9a1f088e4, type: 3}
+--- !u!1 &2780360728817725720 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6603601421199757187, guid: 3c29dab53b4f3764195e8357c6fd6fa2, type: 3}
+  m_PrefabInstance: {fileID: 2780360728817725716}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
