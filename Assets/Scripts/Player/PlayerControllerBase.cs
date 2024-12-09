@@ -146,7 +146,7 @@ namespace Solis.Player
         
         private bool _isFalling;
         
-        private bool _isCinematicRunning = true;
+        private bool _isCinematicRunning = false;
 
         private bool _positionReset;
         private float _respawnTimer;

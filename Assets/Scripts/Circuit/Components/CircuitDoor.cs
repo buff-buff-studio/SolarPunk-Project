@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NetBuff.Misc;
 using UnityEngine;
 
@@ -17,6 +18,13 @@ namespace Solis.Circuit.Components
         #endregion
 
         #region Unity Callbacks
+
+        private void Awake()
+        {
+            if(!isOpen.AttachedTo)
+                isOpen.AttachedTo = this;
+        }
+
         protected override void OnEnable()
         {
             WithValues(isOpen);

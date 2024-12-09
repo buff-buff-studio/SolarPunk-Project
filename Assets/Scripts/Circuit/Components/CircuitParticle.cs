@@ -21,6 +21,13 @@ namespace Solis.Circuit.Components
 
         private void Awake()
         {
+            if(!powered.AttachedTo)
+                powered.AttachedTo = this;
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
             WithValues(powered);
             powered.OnValueChanged += RefreshParticles;
         }

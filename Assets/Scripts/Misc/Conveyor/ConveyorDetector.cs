@@ -177,7 +177,8 @@ namespace Solis.Misc.Conveyor
                 (filterList[i], filterList[newIndex]) = (filterList[newIndex], filterList[i]);
             }
             filterIndex.Value = 0;
-            filterImage.sprite = filterList[0].sprite;
+            if(filterImage.sprite != null)
+             filterImage.sprite = filterList[0].sprite;
         }
 
         #endregion
