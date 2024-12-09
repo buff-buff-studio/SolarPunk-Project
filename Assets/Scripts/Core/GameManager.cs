@@ -465,12 +465,16 @@ namespace Solis.Core
         [ServerOnly]
         private async Awaitable _FadeGameServer()
         {
-            await _Fade(true);
+            /*await*/ _Fade(true);
             ServerBroadcastPacket(new FadePacket { IsIn = true });
         }
         
-        private async Awaitable _Fade(bool @in)
+        private /*async Awaitable*/ void _Fade(bool @in)
         {
+            fadeScreen.gameObject.SetActive(@in);
+            fadeScreen.alpha = @in ? 1f : 0f;
+
+            /*
             if (!@in)
                 await Awaitable.WaitForSecondsAsync(0.5f);
             
@@ -490,6 +494,7 @@ namespace Solis.Core
             
             fadeScreen.alpha = target;
             fadeScreen.gameObject.SetActive(@in);
+            */
         }
         #endregion
 

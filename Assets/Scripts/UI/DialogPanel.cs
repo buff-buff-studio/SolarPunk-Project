@@ -127,7 +127,6 @@ namespace _Scripts.UI
 
         public bool OnClickDialog(PlayerInputPackage playerInputPackage, int i)
         {
-            Debug.Log("ON INPUT");
             if (!IsDialogPlaying) return false;
             if(playerInputPackage.Key != KeyCode.Return) return false;
             if(hasSkipped.Contains(i)) return false;
