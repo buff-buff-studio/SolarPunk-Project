@@ -204,7 +204,7 @@ namespace Solis.Core
                     manager.UnloadScene(s);
             }
             
-            await _FadeGameServer(true);
+            _FadeGameServer(true);
             var waiting = true;
             
             if (!manager.IsSceneLoaded(registry.sceneLobby.Name))
@@ -285,8 +285,6 @@ namespace Solis.Core
                     {
                         foreach (var clientId in manager.GetConnectedClients())
                             _RespawnPlayerForClient(clientId);
-                        
-                        //_FadeGameServer(false);
                     });
                 });
             }
@@ -296,8 +294,6 @@ namespace Solis.Core
                 {
                     foreach (var clientId in manager.GetConnectedClients())
                         _RespawnPlayerForClient(clientId);
-                    
-                    //_FadeGameServer(false);
                 });
             }
             #endregion
@@ -442,7 +438,11 @@ namespace Solis.Core
             isGameStarted = scene != registry.sceneLobby.Name;
             if (!manager.IsSceneLoaded(scene))
             {
-                manager.LoadScene(scene).Then(then);
+                manager.LoadScene(scene).Then((x) =>
+                {
+                    then?.Invoke(x);
+                    _FadeGameServer(false);
+                });
             }
             else
             {
@@ -465,8 +465,8 @@ namespace Solis.Core
         [ServerOnly]
         private async Awaitable _FadeGameServer(bool @in)
         {
-            _Fade(@in);
             ServerBroadcastPacket(new FadePacket { IsIn = @in });
+            await _Fade(@in);
         }
         
         private async Awaitable _Fade(bool @in)
