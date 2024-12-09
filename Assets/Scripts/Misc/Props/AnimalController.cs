@@ -21,6 +21,7 @@ namespace Misc.Props
         public float runRadius = 4;
         public float walkingRadius = 5;
         public LayerMask playerLayer;
+        private Collider[] _results = new Collider[10];
 
         private void OnEnable()
         {
@@ -46,16 +47,15 @@ namespace Misc.Props
             if (!HasAuthority)
                 return;
             
-            var objects = Physics.OverlapSphere(transform.position, runRadius, playerLayer);
-            if (objects.Length > 0)
+            var size = Physics.OverlapSphereNonAlloc(transform.position, runRadius, _results, playerLayer);
+            if (_results.Length > 0)
             {
                 state = 2;
-                GenerateGetAwayDestination(objects[0].transform);
+                GenerateGetAwayDestination(_results[0].transform);
             }
             
             switch (state)
             {
-                //idle
                 case 0:
                     animator.SetBool(_Walking, false);
                     if((timer += Time.deltaTime) > next)
