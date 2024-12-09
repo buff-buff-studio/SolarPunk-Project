@@ -96,6 +96,7 @@ namespace Solis.Core
         #region Unity Callbacks
         private void OnEnable()
         {
+            Application.backgroundLoadingPriority = ThreadPriority.BelowNormal;
             PacketListener.GetPacketListener<FadePacket>().AddClientListener(OnReceiveFadePacket);
             
             Instance = this;
@@ -283,8 +284,7 @@ namespace Solis.Core
                 {
                     _LoadSceneInternal(scene, (_) =>
                     {
-                        foreach (var clientId in manager.GetConnectedClients())
-                            _RespawnPlayerForClient(clientId);
+                        After();
                     });
                 });
             }
@@ -292,11 +292,20 @@ namespace Solis.Core
             {
                 _LoadSceneInternal(scene, (_) =>
                 {
-                    foreach (var clientId in manager.GetConnectedClients())
-                        _RespawnPlayerForClient(clientId);
+                    After();
                 });
             }
             #endregion
+        }
+        
+        private async Awaitable After()
+        {
+            var manager = NetworkManager.Instance!;
+            await Awaitable.WaitForSecondsAsync(2f);
+            foreach (var clientId in manager.GetConnectedClients())
+                _RespawnPlayerForClient(clientId);
+
+            _FadeGameServer(false);
         }
         
         /// <summary>
@@ -384,8 +393,10 @@ namespace Solis.Core
         [ServerOnly]
         private void _RespawnPlayerForClient(int clientId)
         {
+            Debug.Log("Respawning player for client: " + clientId);
             if (NetworkManager.Instance.TryGetSessionData<SolisSessionData>(clientId, out var data))
             {
+                Debug.Log("Player data found: " + data.Username + " " + data.PlayerCharacterType);
                 #region Remove Existing
                 var existingPlayer = FindObjectsByType<PlayerLobby>(FindObjectsSortMode.None)
                     .FirstOrDefault(x => x.OwnerId == clientId);
@@ -398,6 +409,8 @@ namespace Solis.Core
                 
                 var existingPlayerController = FindObjectsByType<PlayerControllerBase>(FindObjectsSortMode.None)
                     .FirstOrDefault(x => x.OwnerId == clientId);
+                
+                Debug.Log("Existing player controller: " + existingPlayerController);
 
                 if (existingPlayerController != null)
                     return;
@@ -427,6 +440,7 @@ namespace Solis.Core
                     : (IsOnLobby ? playerRobotLobbyPrefab : playerRobotGamePrefab);
                 
                 Spawn(prefab, spawnPos, Quaternion.identity, Vector3.one, true, clientId);
+                Debug.Log("Player spawned for client: " + clientId);
 
                 #endregion
             }
@@ -441,7 +455,7 @@ namespace Solis.Core
                 manager.LoadScene(scene).Then((x) =>
                 {
                     then?.Invoke(x);
-                    _FadeGameServer(false);
+                    //_FadeGameServer(false);
                 });
             }
             else
@@ -453,7 +467,7 @@ namespace Solis.Core
                     {
                         waiting = false;
                         then?.Invoke(x);
-                        _FadeGameServer(false);
+                        //_FadeGameServer(false);
                     });
                 });
                 
@@ -495,9 +509,6 @@ namespace Solis.Core
 
         public override void OnSceneLoaded(int sceneId)
         {
-            if(!GetSceneName(sceneId).Contains("Core"))
-                _Fade(false);
-            
             copyCode.gameObject.SetActive(IsOnLobby);
             leaveGame.gameObject.SetActive(!IsOnLobby);
             restartLevel.gameObject.SetActive(!IsOnLobby && IsServer);

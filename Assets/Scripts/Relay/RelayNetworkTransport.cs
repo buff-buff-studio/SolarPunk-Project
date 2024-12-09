@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using NetBuff.Discover;
 using NetBuff.Interface;
+using NetBuff.Packets;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
@@ -16,6 +17,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
+using UnityEngine;
 
 namespace NetBuff.Relays
 {
@@ -648,7 +650,7 @@ namespace NetBuff.Relays
 							    {
 								    var id = binaryReader.ReadInt32();
 								    var packet = PacketRegistry.CreatePacket(id);
-							    
+								    
 								    packet.Deserialize(binaryReader);
 								    transport.OnClientPacketReceived?.Invoke(packet);
 							    }
@@ -793,8 +795,11 @@ namespace NetBuff.Relays
 		        throw new InvalidOperationException("Server or Client is already running");
 	        
 	        var settings = new NetworkSettings();
+	        settings.WithBaselibNetworkInterfaceParameters(
+		        receiveQueueCapacity: 1024,
+		        sendQueueCapacity: 1024);
 	        settings.WithNetworkConfigParameters(disconnectTimeoutMS: timeout);
-	        settings.WithFragmentationStageParameters(payloadCapacity: 16384);
+	        settings.WithFragmentationStageParameters(payloadCapacity: 1_000_000);
 
 	        //Create IPV4 endpoint
 	        var endpoint = NetworkEndPoint.AnyIpv4;
@@ -821,8 +826,8 @@ namespace NetBuff.Relays
 	        _server.connections = new NativeList<NetworkConnection>(16, Allocator.Persistent);
 	        _server.connectionsEventsQueue = new NativeQueue<UtpConnectionEvent>(Allocator.Persistent);
 	        
-	        _server.reliablePipeline = _server.driver.CreatePipeline(typeof(ReliableSequencedPipelineStage));
-	        _server.unreliablePipeline = _server.driver.CreatePipeline(typeof(UnreliableSequencedPipelineStage));
+	        _server.reliablePipeline = _server.driver.CreatePipeline(typeof(FragmentationPipelineStage), typeof(ReliableSequencedPipelineStage));
+	        _server.unreliablePipeline = _server.driver.CreatePipeline(typeof(FragmentationPipelineStage), typeof(UnreliableSequencedPipelineStage));
 
 	        _server.driver.Bind(endpoint);
 	        if (!_server.driver.Bound)
@@ -849,7 +854,7 @@ namespace NetBuff.Relays
 	        
 	        var settings = new NetworkSettings();
 	        settings.WithNetworkConfigParameters(disconnectTimeoutMS: timeout);
-	        settings.WithFragmentationStageParameters(payloadCapacity: 16384);
+	        settings.WithFragmentationStageParameters(payloadCapacity: 10_000);
 	        
 	        if (usingRelay)
 	        {
@@ -859,8 +864,8 @@ namespace NetBuff.Relays
 		        settings.WithRelayParameters(ref relayServerData);
 
 		        _client.driver = NetworkDriver.Create(settings);
-		        _client.reliablePipeline = _client.driver.CreatePipeline(typeof(ReliableSequencedPipelineStage));
-		        _client.unreliablePipeline = _client.driver.CreatePipeline( typeof(UnreliableSequencedPipelineStage));
+		        _client.reliablePipeline = _client.driver.CreatePipeline(typeof(FragmentationPipelineStage), typeof(ReliableSequencedPipelineStage));
+		        _client.unreliablePipeline = _client.driver.CreatePipeline(typeof(FragmentationPipelineStage),  typeof(UnreliableSequencedPipelineStage));
 
 		        _client.connection = _client.driver.Connect(relayServerData.Endpoint);
 
@@ -893,8 +898,8 @@ namespace NetBuff.Relays
 		        _client.connectionsEventsQueue = new NativeQueue<UtpConnectionEvent>(Allocator.Persistent);
 		        
 		        _client.driver = NetworkDriver.Create(settings);
-		        _client.reliablePipeline = _client.driver.CreatePipeline(typeof(ReliableSequencedPipelineStage));
-		        _client.unreliablePipeline = _client.driver.CreatePipeline(typeof(UnreliableSequencedPipelineStage));
+		        _client.reliablePipeline = _client.driver.CreatePipeline(typeof(FragmentationPipelineStage), typeof(ReliableSequencedPipelineStage));
+		        _client.unreliablePipeline = _client.driver.CreatePipeline(typeof(FragmentationPipelineStage), typeof(UnreliableSequencedPipelineStage));
 
 		        _client.connection = _client.driver.Connect(endpoint);
 

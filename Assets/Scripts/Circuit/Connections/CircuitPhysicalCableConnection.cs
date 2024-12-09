@@ -354,8 +354,10 @@ namespace Solis.Circuit.Connections
                 return true;
             }
 
-            if (Physics.Raycast(hand.transform.position,
+            /*
+            if (!Physics.Raycast(hand.transform.position,
                     Head.gameObject.transform.position - hand.transform.position, out var hit2, radius - 0.5f))
+                    */
             {
                 if (Vector3.Distance(player.transform.position, Head.gameObject.transform.position) < radius)
                 {

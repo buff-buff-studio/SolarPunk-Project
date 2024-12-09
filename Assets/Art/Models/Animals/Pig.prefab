@@ -60,6 +60,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 6208
+  hasAnimation: 1
 --- !u!195 &5106262130929255236
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -294,7 +295,7 @@ Animator:
   m_GameObject: {fileID: 5310673690086114812}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 33235c48a8583d64c956b3d1ef00420c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

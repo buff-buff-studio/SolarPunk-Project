@@ -21,8 +21,8 @@ namespace Misc.Props
         public float runRadius = 4;
         public float walkingRadius = 5;
         public LayerMask playerLayer;
-
-        /*
+        public bool hasAnimation;
+        
         private void OnEnable()
         {
             if (!HasAuthority)
@@ -40,9 +40,24 @@ namespace Misc.Props
             CancelInvoke(nameof(_UpdateState));
         }
 
+        private void OnDrawGizmos()
+        {
+            var pos = transform.position + Vector3.up;
+            var fw1 = transform.forward;
+            var fw2 = agent.velocity.normalized;
+            
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(pos, fw1);
+            
+            Gizmos.color = Color.blue;
+            Gizmos.DrawRay(pos, fw2);
+        }
+
         private void FixedUpdate()
         {
-            agent.speed = state == 2 ? speed * 2 : speed;
+            //Facing forward
+            //var s = agent.transform.InverseTransformDirection(agent.velocity).normalized;
+            agent.speed = (state == 2 ? speed * 2 : speed);// * (1f - Mathf.Abs(s.x));
             
             if (!HasAuthority)
                 return;
@@ -51,19 +66,20 @@ namespace Misc.Props
             if (objects.Length > 0)
             {
                 state = 2;
-                GenerateGetAwayDestination(objects[0].transform);
+                _GenerateGetAwayDestination(objects[0].transform);
             }
             
             switch (state)
             {
                 case 0:
-                    animator.SetBool(_Walking, false);
+                    if(hasAnimation)
+                        animator.SetBool(_Walking, false);
                     if((timer += Time.deltaTime) > next)
                     {
                         ResetState();
                         state = Random.Range(0, 3) < 2 ? 1 : 0;
                         if (state == 1)
-                            GenerateRandomDestination();
+                            _GenerateRandomDestination();
                     }
                     break;
                 case 1:
@@ -77,9 +93,10 @@ namespace Misc.Props
                         ResetState();
                         state = Random.Range(0, 3) < 2 ? 0 : 1;
                         if (state == 1)
-                            GenerateRandomDestination();
+                            _GenerateRandomDestination();
                     }
-                    animator.SetBool(_Walking, true);
+                    if(hasAnimation)
+                        animator.SetBool(_Walking, true);
                     break;
                 case 2:
                     if ((timer += Time.deltaTime) > 20)
@@ -92,7 +109,8 @@ namespace Misc.Props
                         ResetState();
                         state = 0;
                     }
-                    animator.SetBool(_Walking, true);
+                    if(hasAnimation)
+                        animator.SetBool(_Walking, true);
                     break;
             }
         }
@@ -134,7 +152,7 @@ namespace Misc.Props
             });
         }
         
-        public void SetDestination(Vector3 destination)
+        private void _SetDestination(Vector3 destination)
         {
             if (!HasAuthority)
                 return;
@@ -148,38 +166,39 @@ namespace Misc.Props
             agent.SetDestination(destination);
         }
         
-        public void GenerateRandomDestination()
+        private void _GenerateRandomDestination()
         {
-            int maxAttempts = 20;
-            for (int i = 0; i < maxAttempts; i++)
+            var maxAttempts = 20;
+            for (var i = 0; i < maxAttempts; i++)
             {
-                Vector3 randomPoint = transform.position + new Vector3(Random.insideUnitCircle.x, 0, Random.insideUnitCircle.y) * walkingRadius;
+                var randomPoint = transform.position + new Vector3(Random.insideUnitCircle.x, 0, Random.insideUnitCircle.y) * walkingRadius;
                 if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 5, NavMesh.AllAreas))
                 {
-                    SetDestination(hit.position);
+                    _SetDestination(hit.position);
                     return;
                 }
             }
         }
-        
-        public void GenerateGetAwayDestination(Transform target)
+
+        private void _GenerateGetAwayDestination(Transform target)
         {
-            int maxAttempts = 10;
-            for (int i = 0; i < maxAttempts; i++)
+            var maxAttempts = 10;
+            for (var i = 0; i < maxAttempts; i++)
             {
-                Vector3 randomPoint = Random.insideUnitCircle * (walkingRadius + runRadius);
-                Vector3 awayDirection = (transform.position - target.position).normalized;
-                Vector3 awayPosition = transform.position + awayDirection * runRadius;
-                Vector3 randomAwayPosition = awayPosition + randomPoint;
+                var randomPoint = Random.insideUnitCircle * (walkingRadius + runRadius);
+                var position = transform.position;
+                var awayDirection = (position - target.position);
+                awayDirection = new Vector3(awayDirection.x, 0, awayDirection.y).normalized;
+                var awayPosition = position + awayDirection * runRadius;
+                var randomAwayPosition = awayPosition + (Vector3) randomPoint;
         
                 if (NavMesh.SamplePosition(randomAwayPosition, out NavMeshHit hit, 5, NavMesh.AllAreas))
                 {
-                    SetDestination(hit.position);
+                    _SetDestination(hit.position);
                     return;
                 }
             }
         }
-        */
     }
 
     [Serializable]

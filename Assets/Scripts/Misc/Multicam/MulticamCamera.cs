@@ -72,6 +72,7 @@ namespace Solis.Misc.Multicam
         private void OnDisable()
         {
             PacketListener.GetPacketListener<PlayerInputPackage>().RemoveServerListener(OnInput);
+            PacketListener.GetPacketListener<NetworkUnloadScenePacket>().RemoveClientListener(_ => OnChangeScene());
         }
 
         #endregion
@@ -126,13 +127,18 @@ namespace Solis.Misc.Multicam
                 ChangeCameraState(CameraState.Gameplay);
                 return;
             }
+            else CinematicController.IsPlaying = false;
 
             if(newState == CameraState.Cinematic)
             {
                 _hasSkipped.Clear();
                 skipCinematicText.text = "0/2";
                 cinematicCanvas.SetActive(true);
-            }else cinematicCanvas.SetActive(false);
+            }else
+            {
+                CinematicController.IsPlaying = false;
+                cinematicCanvas.SetActive(false);
+            }
 
             state = newState;
         }
