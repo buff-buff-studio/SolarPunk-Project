@@ -1,6 +1,7 @@
 using System;
 using NetBuff.Misc;
 using Solis.Data;
+using Solis.Interface.Input;
 using Solis.Packets;
 using Solis.Player;
 using UnityEditor;
@@ -16,26 +17,25 @@ namespace UI
 
         private Vector3 _objectCenter;
         private int _originalLayer, _ignoreRaycastLayer = 2;
-        [SerializeField]private InputActionProperty _inputAction;
         protected void OnEnable()
         {
-           // PacketListener.GetPacketListener<PlayerInteractPacket>().AddServerListener(OnClickDialog);
+            PacketListener.GetPacketListener<PlayerInteractPacket>().AddServerListener(OnClickDialog);
             _objectCenter = GetComponentInChildren<Collider>().bounds.center;
             _originalLayer = gameObject.layer;
-            _inputAction.action.performed += OnPerformed;
+          //  _inputAction.action.performed += OnPerformed;
 
         }
-        private void OnPerformed(InputAction.CallbackContext callbackContext)
+        private void OnPerformed()
         {
-            OnClickDialog(null, 0);
+            //OnClickDialog(InteractablePanel.Instance.OnClickDialog(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, 0);, 0);
         }
         
 
         protected void OnDisable()
         {
-            _inputAction.action.performed -= OnPerformed;
+           // _inputAction.action.performed -= OnPerformed;
 
-           // PacketListener.GetPacketListener<PlayerInteractPacket>().RemoveServerListener(OnClickDialog);
+            PacketListener.GetPacketListener<PlayerInteractPacket>().RemoveServerListener(OnClickDialog);
         }
         
         private bool OnClickDialog(PlayerInteractPacket arg1, int arg2)
@@ -43,7 +43,7 @@ namespace UI
             Debug.Log("Click");
             if (IsDialogPlaying) return false;
             Debug.Log("Clickss");
-        //    if (!PlayerChecker(arg1)) return false;
+            if (!PlayerChecker(arg1)) return false;
             
             PlayDialog();
             return true;

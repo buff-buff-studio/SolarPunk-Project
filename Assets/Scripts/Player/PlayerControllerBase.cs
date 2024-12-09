@@ -740,10 +740,16 @@ namespace Solis.Player
             if(DialogPanel.IsDialogPlaying)
                 if(SolisInput.GetKeyDown("Skip"))
                     SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
-            
-            if(InteractablePanel.IsDialogPlaying)
-                if(SolisInput.GetKeyDown("Skip"))
-                    SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
+
+            if (InteractablePanel.IsDialogPlaying)
+            {
+                if (SolisInput.GetKeyDown("Skip"))
+                {
+                    //SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
+                    InteractablePanel.Instance.OnClickDialog(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, 0);
+                }
+            }
+                
         }
 
         private void _Focus()

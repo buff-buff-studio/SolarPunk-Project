@@ -41,11 +41,11 @@ namespace UI
         private Animator nextImageAnimator;
          protected void OnEnable()
         {
-            PacketListener.GetPacketListener<PlayerInputPackage>().AddServerListener(OnClickDialog);
+           // PacketListener.GetPacketListener<PlayerInputPackage>().AddServerListener(OnClickDialog);
         }
         protected void OnDisable()
         {
-            PacketListener.GetPacketListener<PlayerInputPackage>().RemoveServerListener(OnClickDialog);
+           // PacketListener.GetPacketListener<PlayerInputPackage>().RemoveServerListener(OnClickDialog);
         }
         private void Awake()
         {
@@ -73,6 +73,7 @@ namespace UI
             currentDialog = dialogData;
             Index = 0;
         }
+        
 
         public bool OnClickDialog(PlayerInputPackage playerInputPackage, int i)
         {
