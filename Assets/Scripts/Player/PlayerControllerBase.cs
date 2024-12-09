@@ -618,6 +618,7 @@ namespace Solis.Player
             _camera = MulticamCamera.Instance.SetPlayerTarget(transform, lookAt, focusBody, focusLookAt);
             username.Value = NetworkManager.Instance.Name;
 
+            if (!HasAuthority || !IsOwnedByClient) return;
             if (DiscordController.Instance)
                 DiscordController.Instance!.SetGameActivity(CharacterType, false, null);
         }

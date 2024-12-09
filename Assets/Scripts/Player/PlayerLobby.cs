@@ -96,6 +96,7 @@ namespace Solis.Player
                 SolisInput.GamepadLight(characterType == CharacterType.Robot ? new Color(0.392f, 0.788f, 0.886f) : new Color(0.341f, 0.373f, 0.254f));
             }
 
+            if (!HasAuthority || !IsOwnedByClient) return;
             if(DiscordController.Instance != null)
             {
                 DiscordController.LobbyStartTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -116,6 +117,7 @@ namespace Solis.Player
                                 ? CharacterType.Robot
                                 : CharacterType.Human);
 
+                        if (!HasAuthority || !IsOwnedByClient) return;
                         if(DiscordController.Instance != null)
                             DiscordController.Instance!.SetGameActivity(characterType, true, SolisNetworkManager.relayCode);
                         break;

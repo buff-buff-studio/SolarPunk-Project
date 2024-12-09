@@ -69,7 +69,8 @@ public class PauseManager : WindowManager
     {
         if(!isPaused) return;
 
-        if (string.IsNullOrEmpty(ninaUsernameText))
+        if (string.IsNullOrEmpty(ninaUsernameText) ||
+            string.Equals(ninaUsernameText, "Default", StringComparison.InvariantCultureIgnoreCase))
         {
             var n = FindFirstObjectByType<PlayerControllerHuman>();
             if (n != null)
@@ -83,7 +84,8 @@ public class PauseManager : WindowManager
                 ninaPing.text = "'-'";
             }
         }
-        if (string.IsNullOrEmpty(ramUsernameText))
+        if (string.IsNullOrEmpty(ramUsernameText) ||
+            string.Equals(ninaUsernameText, "Default", StringComparison.InvariantCultureIgnoreCase))
         {
             var r = FindFirstObjectByType<PlayerControllerRobot>();
             if (r != null)

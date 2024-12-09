@@ -216,8 +216,17 @@ namespace Solis.Misc.Integrations
                     }
                 }
                 else
-                    Debug.LogError("Failed to update Discord Rich Presence");
+                {
+                    ErrorResult();
+                }
             });
+        }
+
+        private void ErrorResult()
+        {
+            IsConnected = false;
+            Discord.Dispose();
+            Debug.LogError("Failed to update Discord Rich Presence");
         }
 
         public void SetMenuActivity()
@@ -243,7 +252,7 @@ namespace Solis.Misc.Integrations
                 if (result == Result.Ok)
                     Debug.Log("Discord Rich Presence updated successfully");
                 else
-                    Debug.LogError("Failed to update Discord Rich Presence");
+                    ErrorResult();
             });
         }
 
