@@ -304,6 +304,8 @@ namespace Solis.Core
             await Awaitable.WaitForSecondsAsync(2f);
             foreach (var clientId in manager.GetConnectedClients())
                 _RespawnPlayerForClient(clientId);
+
+            _FadeGameServer(false);
         }
         
         /// <summary>
@@ -453,7 +455,7 @@ namespace Solis.Core
                 manager.LoadScene(scene).Then((x) =>
                 {
                     then?.Invoke(x);
-                    _FadeGameServer(false);
+                    //_FadeGameServer(false);
                 });
             }
             else
@@ -465,7 +467,7 @@ namespace Solis.Core
                     {
                         waiting = false;
                         then?.Invoke(x);
-                        _FadeGameServer(false);
+                        //_FadeGameServer(false);
                     });
                 });
                 
@@ -484,7 +486,7 @@ namespace Solis.Core
         private async Awaitable _Fade(bool @in)
         {
             if (!@in)
-                await Awaitable.WaitForSecondsAsync(2.5f);
+                await Awaitable.WaitForSecondsAsync(0.5f);
             
             fadeScreen.gameObject.SetActive(true);
             
@@ -507,9 +509,6 @@ namespace Solis.Core
 
         public override void OnSceneLoaded(int sceneId)
         {
-            if(!GetSceneName(sceneId).Contains("Core"))
-                _Fade(false);
-            
             copyCode.gameObject.SetActive(IsOnLobby);
             leaveGame.gameObject.SetActive(!IsOnLobby);
             restartLevel.gameObject.SetActive(!IsOnLobby && IsServer);
