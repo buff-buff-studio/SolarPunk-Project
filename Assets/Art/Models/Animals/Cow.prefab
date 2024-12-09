@@ -49,18 +49,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a81595c5b4649419923f7da1af9d2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasAnimations: 1
-  animalAnimator: {fileID: 313038403592968643}
+  state: 0
   agent: {fileID: 8494233836537878993}
+  animator: {fileID: 313038403592968643}
+  timer: 0
+  next: 0
+  speed: 1.5
   runRadius: 4
   walkingRadius: 7
   playerLayer:
     serializedVersion: 2
     m_Bits: 6208
-  walkArea: Walkable
-  animalSkins:
-  - {fileID: 2100000, guid: 3e5b948cef8ee1546b5d21abece4d7aa, type: 2}
-  rend: {fileID: 6879619167292664571}
 --- !u!195 &8494233836537878993
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -275,11 +274,6 @@ CapsuleCollider:
   m_Height: 3.76939
   m_Direction: 2
   m_Center: {x: 0, y: 1.5827303, z: 0.39855456}
---- !u!137 &6879619167292664571 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 862250419370276350, guid: 3f81d1b258aeaf542a7eb97ef9ed0d23, type: 3}
-  m_PrefabInstance: {fileID: 6092812976338607877}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7906580386864931154 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4122999169355497047, guid: 3f81d1b258aeaf542a7eb97ef9ed0d23, type: 3}

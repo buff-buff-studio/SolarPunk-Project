@@ -66,7 +66,6 @@ GameObject:
   - component: {fileID: 1751767849529728417}
   - component: {fileID: 3306407840510582059}
   - component: {fileID: 4908997985118609735}
-  - component: {fileID: 1463505834238740183}
   m_Layer: 0
   m_Name: Chicken
   m_TagString: Untagged
@@ -103,19 +102,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a81595c5b4649419923f7da1af9d2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasAnimations: 1
-  animalAnimator: {fileID: 2904687247698195205}
+  state: 0
   agent: {fileID: 1751767849529728417}
+  animator: {fileID: 2904687247698195205}
+  timer: 0
+  next: 0
+  speed: 1
   runRadius: 4
   walkingRadius: 8
   playerLayer:
     serializedVersion: 2
     m_Bits: 6208
-  walkArea: Walkable
-  animalSkins:
-  - {fileID: 2100000, guid: c007b30542373c048af70567e87d61e1, type: 2}
-  - {fileID: 2100000, guid: c4584eee14903d345abe6ea711bed4e4, type: 2}
-  rend: {fileID: 5547744956129052756}
 --- !u!195 &1751767849529728417
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -171,23 +168,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tickRate: 10
   animator: {fileID: 2904687247698195205}
---- !u!114 &1463505834238740183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4454030587608473739}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6e25519dc96460b8011f9bfd913a40f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tickRate: 20
-  positionThreshold: 0.001
-  rotationThreshold: 0.001
-  scaleThreshold: 0.001
-  syncMode: 63
 --- !u!1001 &2372623802657115001
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -280,8 +260,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!137 &5547744956129052756 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -1436423551639223507, guid: 8143290aba41267428c33fed0153e06d, type: 3}
-  m_PrefabInstance: {fileID: 2372623802657115001}
-  m_PrefabAsset: {fileID: 0}
