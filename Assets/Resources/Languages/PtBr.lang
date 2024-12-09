@@ -5,41 +5,94 @@ list.empty=No Entries Found
 
 #Server List Screen
 servers.Local=Servidor Local
-servers.title=Server List
-servers.refresh_list=Refresh List
-servers.host_server=Host Server
-servers.username=Username
+servers.title=Lista de Servidores
+servers.refresh_list=Recarregar Lista
+servers.host_server=Hospedar Servidor
+servers.username=Usuário
+servers.paused=Pausado
 
 #Relay Screen
-relay.title=Create or Join Room
-relay.username=Username
-relay.host=Host
-relay.join=Join
-relay.code=Room Code
+relay.title=Criar ou Entrar em Sala
+relay.username=Usuário
+relay.host=Hospedar
+relay.join=Entrar
+relay.code=Código da Sala
 relay.logged_in=Conectado como:
 
 #Lobby Screen
-lobby.room_control=Room Control
-lobby.start_game=Start Game
-lobby.close_room=Close Room
-lobby.leave_room=Leave Room
-lobby.select_save=Select Save
-lobby.players=Players
-lobby.save_profile=Save Profile
-lobby.press_to_change=Change character
+lobby.room_control=Sala de Controle
+lobby.start_game=Começar o Jogo
+lobby.close_room=Fechar a Sala
+lobby.leave_room=Sair da Sala
+lobby.select_save=Selecionar Perfil
+lobby.players=Jogadores
+lobby.save_profile=Perfil de Jogo
+lobby.press_to_change=Mudar Personagem
 
 #Save List Screen
-saves.title=Save List
-saves.refresh_list=Refresh List
-saves.create_new=Create New Save
+saves.title=Lista de Saves
+saves.refresh_list=Recarregar Lista
+saves.create_new=Criar novo Save
+saves.name=Nome do Save
 
 #Game Screen
-game.leave=Leave Game
-game.restart_level=Restart Level
-game.copy_code=Copy Code
+game.leave=Sair do Jogo
+game.restart_level=Reiniciar Nível
+game.copy_code=Copiar Código
+
+#In Game Esc
+ingame.back=Continuar
+ingame.settings=Opções
+ingame.report=Reportar Erro
+ingame.restart=Reiniciar Nível
+ingame.back_to_menu=Voltar Ao Menu
+
+#Main Menu
+main.start=Start
+main.settings=Settings
+main.features=Features
+main.credits=Credits
+main.exit=Exit
+main.back=Back
+
+#Credits
+credits.devs=Desenvolvedores
+credits.artist=Artistas
+credits.arnilsen=Arnilsen Arthur\n<size=40>Rede, Circuitos & Shaders</size>
+credits.giovana=Giovana Melo\n<size=40>Dialogo & Sistemas</size>
+credits.helena=Helena Mansur\n<size=40>Modelagem & Texturas</size>
+credits.julia=Júlia Moraes\n<size=40>Gerência, Modelagem & Texturas, 2D, VFX</size>
+credits.quinino=Lucas Quinino\n<size=40>Modelagem & Texturas, Animação, Level Design, Shaders</size>
+credits.bozzi=Luiz Bozzi\n<size=40>Modelagem & Texturas, Animação</size>
+credits.renzo=Renzo Diniz\n<size=40>Game Design, Level Design, Sound Design</size>
+credits.sergio=Sérgio Macellani\n<size=40>Direcão, Programação de Gameplay, Level Design & Game Design</size>
+credits.douglas=Douglas Gustavo\n<size=40>Música</size>
+
+#Settings
+settings.header=Opções
+settings.graphics=Gráficos
+settings.gameplay=Jogabilidade
+settings.audio=Áudio
+settings.resolution=Resolução
+settings.graphics_quality_performance=Performance
+settings.graphics_quality_balanced=Balanceado
+settings.graphics_quality_quality=Qualidade
+settings.graphics_fullscreen=Tela Cheia
+settings.graphics_vsync=Sincronização Vertical
+settings.graphics_motionblur=Desfoque de Movimento
+settings.graphics_volumetriclight=Luz Volumétrica
+settings.gameplay_mousesensitivity=Sensibilidade de Mouse
+settings.gameplay_invertxaxis=Inverter Mouse Horizontalmente
+settings.gameplay_invertyaxis=Inverter Mouse Verticalmente
+settings.audio_master=Mestre
+settings.audio_character=Personagens
+settings.audio_sfx=Efeitos Sonoros
+settings.audio_music=Música
+settings.save=Salvar
+settings.reset=Resetar Values
 
 #Cutscene Screen
-cutscene.skip=Skip
+cutscene.skip=Pular
 
 #Player Stats
 stats.pause=|| PAUSADO ||
