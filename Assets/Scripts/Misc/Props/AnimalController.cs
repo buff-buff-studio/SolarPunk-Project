@@ -1,272 +1,231 @@
 using System;
+using System.IO;
 using NetBuff.Components;
-using Unity.VisualScripting;
-using UnityEditor;
+using NetBuff.Interface;
+using NetBuff.Misc;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Misc.Props
 {
-    public abstract class AnimalState
+    public class AnimalController : NetworkBehaviour
     {
-        protected AnimalController animalController;
-        protected float timeInState;
-        
-        public AnimalState(AnimalController animalController)
-        {
-            this.animalController = animalController;
-        }
-        
-        public abstract void OnEnter();
-        public virtual void OnExit(){}
-
-        public virtual void OnUpdate(float deltaTime)
-        {
-            timeInState += Time.deltaTime;
-        }
-        public virtual void OnFixedUpdate(){}
-        public abstract override string ToString(); 
-    }
-    
-    public class IdleState : AnimalState
-    {
-        private float _timeToNextState;
         private static readonly int _Walking = Animator.StringToHash("Walking");
+        public int state;
+        public NavMeshAgent agent;
+        public Animator animator;
+        public float timer;
+        public float next;
+        public float speed = 2;
+        public float runRadius = 4;
+        public float walkingRadius = 5;
+        public LayerMask playerLayer;
 
-        public IdleState(AnimalController animalController) : base(animalController)
+        private void OnEnable()
         {
-            if(animalController.animalAnimator != null && animalController.hasAnimations)
+            if (!HasAuthority)
+                return;
+            
+            ResetState();
+            InvokeRepeating(nameof(_UpdateState), 0, 0.1f);
+        }
+
+        private void OnDisable()
+        {
+            if (!HasAuthority)
+                return;
+            
+            CancelInvoke(nameof(_UpdateState));
+        }
+
+        private void FixedUpdate()
+        {
+            agent.speed = state == 2 ? speed * 2 : speed;
+            
+            if (!HasAuthority)
+                return;
+            
+            var objects = Physics.OverlapSphere(transform.position, runRadius, playerLayer);
+            if (objects.Length > 0)
             {
-                animalController.animalAnimator.SetBool(_Walking, false);
-            }
-        }
-        public override void OnEnter()
-        {
-            _timeToNextState = Random.Range(3, 6);
-        }
-
-        public override void OnUpdate(float deltaTime)
-        {
-            base.OnUpdate(deltaTime);
-
-            if (timeInState >= _timeToNextState)
-                animalController.SetState(Random.Range(0,3) < 2 ? new WalkingState(animalController) : new IdleState(animalController));
-        }
-
-        public override string ToString() => "Idle";
-    }
-
-    public class WalkingState : AnimalState
-    {
-        private float _checkTime = 0.15f;
-        private float _currentTime = 0f;
-        private static readonly int _Walking = Animator.StringToHash("Walking");
-
-        public WalkingState(AnimalController animalController) : base(animalController)
-        {
-            if(animalController.animalAnimator != null && animalController.hasAnimations)
-            {
-                animalController.animalAnimator.SetBool(_Walking, animalController.agent.velocity.magnitude > 0.1f);
-            }
-        }
-
-        public override void OnEnter()
-        {
-            animalController.SetDestination(GenerateRandomDestination());
-        }
-        
-        public override void OnUpdate(float deltaTime)
-        {
-            base.OnUpdate(deltaTime);
-            _currentTime += deltaTime;
-
-            if (_currentTime >= _checkTime)
-            {
-                _currentTime = 0;
-                ReachedDestination();
+                state = 2;
+                GenerateGetAwayDestination(objects[0].transform);
             }
             
-            if (timeInState >= 20)
-                animalController.SetState(new IdleState(animalController));
+            switch (state)
+            {
+                //idle
+                case 0:
+                    animator.SetBool(_Walking, false);
+                    if((timer += Time.deltaTime) > next)
+                    {
+                        ResetState();
+                        state = Random.Range(0, 3) < 2 ? 1 : 0;
+                        if (state == 1)
+                            GenerateRandomDestination();
+                    }
+                    break;
+                case 1:
+                    if ((timer += Time.deltaTime) > 20)
+                    {
+                        ResetState();
+                        state = 0;
+                    }
+                    else if (agent.remainingDistance < 0.5f)
+                    {
+                        ResetState();
+                        state = Random.Range(0, 3) < 2 ? 0 : 1;
+                        if (state == 1)
+                            GenerateRandomDestination();
+                    }
+                    animator.SetBool(_Walking, true);
+                    break;
+                case 2:
+                    if ((timer += Time.deltaTime) > 20)
+                    {
+                        ResetState();
+                        state = 0;
+                    }
+                    else if (agent.remainingDistance < 0.5f)
+                    {
+                        ResetState();
+                        state = 0;
+                    }
+                    animator.SetBool(_Walking, true);
+                    break;
+            }
         }
-
-        private void ReachedDestination()
+        
+        public void ResetState()
         {
-            if (!animalController.HasReachedDestination()) return;
-            if (Random.Range(0, 5) <= 2)
-                animalController.SetState(new IdleState(animalController));
-            else
-                animalController.SetDestination(GenerateRandomDestination());
+            state = 0;
+            timer = 0;
+            next = Random.Range(3, 6);
         }
 
-        private Vector3 GenerateRandomDestination()
+        public override void OnClientReceivePacket(IOwnedPacket packet)
+        {
+            if (HasAuthority)
+                return;
+            
+            if (packet is AnimalStatePacket statePacket)
+            {
+                state = statePacket.State;
+                transform.position = statePacket.Position;
+                transform.rotation = Quaternion.Euler(0, statePacket.Rotation, 0);
+            }
+            
+            if (packet is AnimalPathfindingPacket pathfindingPacket)
+            {
+                agent.SetDestination(pathfindingPacket.Target);
+            }
+        }
+
+        public void _UpdateState()
+        {
+            var t = transform;
+            SendPacket(new AnimalStatePacket
+            {
+                Id = Id,
+                State = state,
+                Position = t.position,
+                Rotation = t.rotation.eulerAngles.y
+            });
+        }
+        
+        public void SetDestination(Vector3 destination)
+        {
+            if (!HasAuthority)
+                return;
+            
+            SendPacket(new AnimalPathfindingPacket
+            {
+                Id = Id,
+                Target = destination
+            });
+            
+            agent.SetDestination(destination);
+        }
+        
+        public void GenerateRandomDestination()
         {
             int maxAttempts = 20;
             for (int i = 0; i < maxAttempts; i++)
             {
-                Vector3 randomPoint = animalController.transform.position + new Vector3(Random.insideUnitCircle.x, 0, Random.insideUnitCircle.y) * animalController.walkingRadius;
-                if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 5, NavMesh.AllAreas)) return hit.position;
+                Vector3 randomPoint = transform.position + new Vector3(Random.insideUnitCircle.x, 0, Random.insideUnitCircle.y) * walkingRadius;
+                if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 5, NavMesh.AllAreas))
+                {
+                    SetDestination(hit.position);
+                    return;
+                }
             }
-            #if UNITY_EDITOR
-            Debug.Log("Not found a valid destination.");
-            #endif
-            return animalController.transform.position;
-        }
-
-        public override string ToString() => "Walking";
-    }
-
-    public class RunningState : AnimalState
-    {
-        private float _checkTime = 0.15f;
-        private float _currentTime = 0f;
-        private Transform _target;
-        
-        public RunningState(AnimalController animalController, Transform target) : base(animalController)
-        {
-            _target = target;
-        }
-
-        public override void OnEnter()
-        {
-            animalController.SetDestination(GetAwayDestination());
-            animalController.agent.speed *= 2;
-        }
-        public override void OnUpdate(float deltaTime)
-        {
-            base.OnUpdate(deltaTime);
-            _currentTime += deltaTime;
-
-            if (!(_currentTime >= _checkTime)) return;
-            _currentTime = 0;
-            ReachedDestination();
         }
         
-        private void ReachedDestination()
-        {
-            if (!animalController.HasReachedDestination()) return;
-            animalController.SetState(new IdleState(animalController));
-        }
-        private Vector3 GetAwayDestination()
+        public void GenerateGetAwayDestination(Transform target)
         {
             int maxAttempts = 10;
             for (int i = 0; i < maxAttempts; i++)
             {
-                Vector3 randomPoint = Random.insideUnitCircle * (animalController.walkingRadius + animalController.runRadius);
-                Vector3 awayDirection = (animalController.transform.position - _target.position).normalized;
-                Vector3 awayPosition = animalController.transform.position + awayDirection * animalController.runRadius;
+                Vector3 randomPoint = Random.insideUnitCircle * (walkingRadius + runRadius);
+                Vector3 awayDirection = (transform.position - target.position).normalized;
+                Vector3 awayPosition = transform.position + awayDirection * runRadius;
                 Vector3 randomAwayPosition = awayPosition + randomPoint;
         
-                if (NavMesh.SamplePosition(randomAwayPosition, out NavMeshHit hit, 5, NavMesh.AllAreas)) return hit.position;
+                if (NavMesh.SamplePosition(randomAwayPosition, out NavMeshHit hit, 5, NavMesh.AllAreas))
+                {
+                    SetDestination(hit.position);
+                    return;
+                }
             }
-            return animalController.transform.position;
+        }
+    }
+
+    [Serializable]
+    public class AnimalPathfindingPacket : IOwnedPacket
+    {
+        public NetworkId Id { get; set; }
+        public Vector3 Target { get; set; }
+        
+        public void Serialize(BinaryWriter writer)
+        {
+            Id.Serialize(writer);
+            writer.Write(Target.x);
+            writer.Write(Target.y);
+            writer.Write(Target.z);
         }
         
-        public override void OnExit()
+        public void Deserialize(BinaryReader reader)
         {
-            animalController.agent.speed /= 2;
+            Id = NetworkId.Read(reader);
+            Target = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
         }
-
-        public override string ToString() =>"Running";
     }
-    
-    public class AnimalController : NetworkBehaviour
+
+    [Serializable]
+    public class AnimalStatePacket : IOwnedPacket
     {
-       private AnimalState _state;
-       public bool hasAnimations = true;
-       public Animator animalAnimator;
-       public NavMeshAgent agent;
-       public float runRadius = 4;
-       public float walkingRadius = 5;
-       public LayerMask playerLayer;
-       public string walkArea;
-       
-       [SerializeField]
-       private Material[] animalSkins;
-       
-       [SerializeField]
-       private Renderer rend;
-       
-       private void Start()
-       {
-           Debug.Log("ANIMAL = " + gameObject.GetComponent<NetworkIdentity>().Id);
-           agent.enabled = HasAuthority;
-           
-           if (!HasAuthority)
-               return;
-           
-           SetState(new IdleState(this));
-           if(animalSkins.Length != 0)
-               rend.material = animalSkins[Random.Range(0, animalSkins.Length)];
-       }
+        public NetworkId Id { get; set; }
+        public int State { get; set; }
+        public Vector3 Position { get; set; }
+        public float Rotation { get; set; }
 
-       private void Update()
-       {
-           if (!HasAuthority)
-               return;
-           
-           _state.OnUpdate(Time.deltaTime);
-           var objects = Physics.OverlapSphere(transform.position, runRadius, playerLayer);
-           if (objects.Length > 0) 
-               SetState(new RunningState(this, objects[0].transform));
-       }
-       
-       private void FixedUpdate()
-       {
-           if (!HasAuthority)
-               return;
-           
-           _state.OnFixedUpdate();
-       }
-       
-       public void SetState(AnimalState newState)
-       {
-           #if UNITY_EDITOR
-           //Debug.Log($"Changing state from {_state} to {newState}");
-           #endif
-           _state?.OnExit();
-           _state = newState;
-           _state.OnEnter();
-       }
-
-       public void SetDestination(Vector3 newDestination)
-       {
-           if(newDestination == Vector3.zero) return;
-           agent.SetDestination(newDestination);
-       }
-
-       public bool HasReachedDestination()
-       {
-           if (agent.pathPending || !(agent.remainingDistance <= 0.5f) ||
-               agent.remainingDistance == Mathf.Infinity) return false;
-           #if UNITY_EDITOR
-           //Debug.Log("Agent has reached the destination.");
-           #endif
-           return true;
-       }
-    }
-    
-    #if UNITY_EDITOR
-    [CustomEditor(typeof(AnimalController))]
-    public class AnimalControllerEditor : Editor
-    {
-        private AnimalController _animalController;
-        
-        private void OnEnable()
+        public void Serialize(BinaryWriter writer)
         {
-            _animalController = (AnimalController)target;
+            Id.Serialize(writer);
+            writer.Write(State);
+            writer.Write(Position.x);
+            writer.Write(Position.y);
+            writer.Write(Position.z);
+            writer.Write(Rotation);
         }
 
-        private void OnSceneGUI()
+        public void Deserialize(BinaryReader reader)
         {
-            Handles.color = Color.red;
-            Handles.DrawWireDisc(_animalController.transform.position, Vector3.up, _animalController.runRadius);
-            
-            Handles.color = Color.blue;
-            Handles.DrawWireDisc(_animalController.transform.position, Vector3.up, _animalController.walkingRadius);
+            Id = NetworkId.Read(reader);
+            State = reader.ReadInt32();
+            Position = new Vector3(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+            Rotation = reader.ReadSingle();
         }
     }
-    #endif
 }

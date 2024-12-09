@@ -103,19 +103,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a81595c5b4649419923f7da1af9d2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasAnimations: 1
-  animalAnimator: {fileID: 8395150441683549192}
+  state: 0
   agent: {fileID: 5462375559538005414}
+  animator: {fileID: 8395150441683549192}
+  timer: 0
+  next: 0
+  speed: 2
   runRadius: 4
   walkingRadius: 7
   playerLayer:
     serializedVersion: 2
     m_Bits: 6208
-  walkArea: Water
-  animalSkins:
-  - {fileID: 2100000, guid: c007b30542373c048af70567e87d61e1, type: 2}
-  - {fileID: 2100000, guid: c4584eee14903d345abe6ea711bed4e4, type: 2}
-  rend: {fileID: 1071414997434258926}
 --- !u!195 &5462375559538005414
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -248,11 +246,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8395150441683549192}
   m_SourcePrefab: {fileID: 100100000, guid: b3342094e62f2a74b866fb5af3d592b8, type: 3}
---- !u!137 &1071414997434258926 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -5343370704068101996, guid: b3342094e62f2a74b866fb5af3d592b8, type: 3}
-  m_PrefabInstance: {fileID: 4253340768410987898}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4019338651017138219 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b3342094e62f2a74b866fb5af3d592b8, type: 3}
