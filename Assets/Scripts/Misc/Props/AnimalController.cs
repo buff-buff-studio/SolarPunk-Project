@@ -21,8 +21,8 @@ namespace Misc.Props
         public float runRadius = 4;
         public float walkingRadius = 5;
         public LayerMask playerLayer;
-
-        /*
+        public bool hasAnimation;
+        
         private void OnEnable()
         {
             if (!HasAuthority)
@@ -57,7 +57,8 @@ namespace Misc.Props
             switch (state)
             {
                 case 0:
-                    animator.SetBool(_Walking, false);
+                    if(hasAnimation)
+                        animator.SetBool(_Walking, false);
                     if((timer += Time.deltaTime) > next)
                     {
                         ResetState();
@@ -79,7 +80,8 @@ namespace Misc.Props
                         if (state == 1)
                             GenerateRandomDestination();
                     }
-                    animator.SetBool(_Walking, true);
+                    if(hasAnimation)
+                        animator.SetBool(_Walking, true);
                     break;
                 case 2:
                     if ((timer += Time.deltaTime) > 20)
@@ -92,7 +94,8 @@ namespace Misc.Props
                         ResetState();
                         state = 0;
                     }
-                    animator.SetBool(_Walking, true);
+                    if(hasAnimation)
+                        animator.SetBool(_Walking, true);
                     break;
             }
         }
@@ -179,7 +182,6 @@ namespace Misc.Props
                 }
             }
         }
-        */
     }
 
     [Serializable]
