@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 4756645282427255691}
   - component: {fileID: 5553340276120566945}
   - component: {fileID: 5106262130929255236}
+  - component: {fileID: 3378916224709303165}
+  - component: {fileID: 8583211024992433521}
   m_Layer: 0
   m_Name: Pig
   m_TagString: Untagged
@@ -80,6 +82,42 @@ NavMeshAgent:
   m_BaseOffset: -0.17
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &3378916224709303165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7160007565271285358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9078c0bdfc4423ebfcf3a05ad72d048, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id:
+    high: 1995453922
+    low: -1799839320
+  ownerId: -1
+  prefabId:
+    high: 0
+    low: 0
+--- !u!114 &8583211024992433521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7160007565271285358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e25519dc96460b8011f9bfd913a40f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tickRate: 20
+  positionThreshold: 0.001
+  rotationThreshold: 0.001
+  scaleThreshold: 0.001
+  syncMode: 63
 --- !u!1001 &5004102013048699053
 PrefabInstance:
   m_ObjectHideFlags: 0

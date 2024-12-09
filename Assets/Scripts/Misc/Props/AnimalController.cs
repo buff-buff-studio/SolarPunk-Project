@@ -1,4 +1,5 @@
 using System;
+using NetBuff.Components;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +11,6 @@ namespace Misc.Props
 {
     public abstract class AnimalState
     {
-        
         protected AnimalController animalController;
         protected float timeInState;
         
@@ -27,18 +27,19 @@ namespace Misc.Props
             timeInState += Time.deltaTime;
         }
         public virtual void OnFixedUpdate(){}
-        public abstract Vector3 GetWalkInput();
         public abstract override string ToString(); 
     }
     
     public class IdleState : AnimalState
     {
         private float _timeToNextState;
+        private static readonly int _Walking = Animator.StringToHash("Walking");
+
         public IdleState(AnimalController animalController) : base(animalController)
         {
             if(animalController.animalAnimator != null && animalController.hasAnimations)
             {
-                animalController.animalAnimator.SetBool("Walking", false);
+                animalController.animalAnimator.SetBool(_Walking, false);
             }
         }
         public override void OnEnter()
@@ -54,11 +55,6 @@ namespace Misc.Props
                 animalController.SetState(Random.Range(0,3) < 2 ? new WalkingState(animalController) : new IdleState(animalController));
         }
 
-        public override Vector3 GetWalkInput()
-        {
-            throw new NotImplementedException();
-        }
-
         public override string ToString() => "Idle";
     }
 
@@ -66,12 +62,13 @@ namespace Misc.Props
     {
         private float _checkTime = 0.15f;
         private float _currentTime = 0f;
-        
+        private static readonly int _Walking = Animator.StringToHash("Walking");
+
         public WalkingState(AnimalController animalController) : base(animalController)
         {
             if(animalController.animalAnimator != null && animalController.hasAnimations)
             {
-                animalController.animalAnimator.SetBool("Walking", true);
+                animalController.animalAnimator.SetBool(_Walking, animalController.agent.velocity.magnitude > 0.1f);
             }
         }
 
@@ -95,11 +92,6 @@ namespace Misc.Props
                 animalController.SetState(new IdleState(animalController));
         }
 
-        public override Vector3 GetWalkInput()
-        {
-            throw new NotImplementedException();
-        }
-
         private void ReachedDestination()
         {
             if (!animalController.HasReachedDestination()) return;
@@ -114,7 +106,6 @@ namespace Misc.Props
             int maxAttempts = 20;
             for (int i = 0; i < maxAttempts; i++)
             {
-                //Vector3 randomPoint = Random.insideUnitCircle * animalController.walkingRadius;
                 Vector3 randomPoint = animalController.transform.position + new Vector3(Random.insideUnitCircle.x, 0, Random.insideUnitCircle.y) * animalController.walkingRadius;
                 if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 5, NavMesh.AllAreas)) return hit.position;
             }
@@ -177,15 +168,11 @@ namespace Misc.Props
         {
             animalController.agent.speed /= 2;
         }
-        public override Vector3 GetWalkInput()
-        {
-            throw new NotImplementedException();
-        }
 
         public override string ToString() =>"Running";
     }
     
-    public class AnimalController : MonoBehaviour
+    public class AnimalController : NetworkBehaviour
     {
        private AnimalState _state;
        public bool hasAnimations = true;
@@ -195,12 +182,20 @@ namespace Misc.Props
        public float walkingRadius = 5;
        public LayerMask playerLayer;
        public string walkArea;
-       [SerializeField]private Material[] animalSkins;
-       [SerializeField]private Renderer rend;
-  
+       
+       [SerializeField]
+       private Material[] animalSkins;
+       
+       [SerializeField]
+       private Renderer rend;
        
        private void Start()
        {
+           agent.enabled = HasAuthority;
+           
+           if (!HasAuthority)
+               return;
+           
            SetState(new IdleState(this));
            if(animalSkins.Length != 0)
                rend.material = animalSkins[Random.Range(0, animalSkins.Length)];
@@ -208,6 +203,9 @@ namespace Misc.Props
 
        private void Update()
        {
+           if (!HasAuthority)
+               return;
+           
            _state.OnUpdate(Time.deltaTime);
            var objects = Physics.OverlapSphere(transform.position, runRadius, playerLayer);
            if (objects.Length > 0) 
@@ -216,6 +214,9 @@ namespace Misc.Props
        
        private void FixedUpdate()
        {
+           if (!HasAuthority)
+               return;
+           
            _state.OnFixedUpdate();
        }
        

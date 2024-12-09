@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using NetBuff;
 using NetBuff.Components;
+using NetBuff.Interface;
 using NetBuff.Misc;
 using NetBuff.Relays;
 using Solis.Audio.Players;
@@ -14,6 +16,7 @@ using Solis.Misc.Props;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+#pragma warning disable CS4014
 
 namespace Solis.Core
 {
@@ -59,7 +62,7 @@ namespace Solis.Core
         [SerializeField]
         private bool playedCutscene;
 
-        private bool _loadedLobby = false;
+        private bool _loadedLobby;
         #endregion
 
         #region Public Properties
@@ -87,13 +90,14 @@ namespace Solis.Core
         /// </summary>
         public LevelInfo CurrentLevel => save.data.currentLevel < 0 ? null : registry.levels[save.data.currentLevel];
 
-        //[HideInInspector] 
-        public bool isGameStarted = false;
+        public bool isGameStarted;
         #endregion
 
         #region Unity Callbacks
         private void OnEnable()
         {
+            PacketListener.GetPacketListener<FadePacket>().AddClientListener(OnReceiveFadePacket);
+            
             Instance = this;
 #if UNITY_EDITOR
             var scene = SolisNetworkManager.sceneToLoad;
@@ -104,6 +108,15 @@ namespace Solis.Core
             }
 #endif
             LoadingLobby(isGameStarted);
+        }
+
+        private bool OnReceiveFadePacket(FadePacket arg)
+        {
+            if (HasAuthority)
+                return false;
+            
+            _ = _Fade(arg.IsIn);
+            return true;
         }
 
         private void Update()
@@ -127,6 +140,7 @@ namespace Solis.Core
 
         private void OnDisable()
         {
+            PacketListener.GetPacketListener<FadePacket>().RemoveClientListener(OnReceiveFadePacket);
             Instance = null;
         }
         
@@ -189,8 +203,8 @@ namespace Solis.Core
                 if (Array.IndexOf(persistentScenes, s) == -1 && s != name)
                     manager.UnloadScene(s);
             }
-            
-            await _Fade(true);
+
+            await _FadeGameServer(true);
             var waiting = true;
             
             if (!manager.IsSceneLoaded(registry.sceneLobby.Name))
@@ -200,6 +214,7 @@ namespace Solis.Core
                         _RespawnPlayerForClient(clientId);
                     
                     waiting = false;
+                    _FadeGameServer(false);
                 });
             
             while (waiting)
@@ -222,14 +237,15 @@ namespace Solis.Core
                 return;
             }
 
-            MulticamCamera.Instance?.OnChangeScene();
+            if(MulticamCamera.Instance != null)
+                MulticamCamera.Instance.OnChangeScene();
 
             var manager = NetworkManager.Instance!;
             var levelInfo = registry.levels[save.data.currentLevel];
             var scene = levelInfo.scene.Name;
 
             #region Prepare
-            await _Fade(true);
+            await _FadeGameServer(true);
             
             //Unload other scenes
             foreach (var s in manager.LoadedScenes)
@@ -247,12 +263,12 @@ namespace Solis.Core
                 {
                     manager.UnloadScene(registry.sceneLobby.Name).Then((_) =>
                     {
-                        _LoadSceneInternal(registry.sceneCutscene.Name);
+                        _LoadSceneInternal(registry.sceneCutscene.Name, (_) => _FadeGameServer(false));
                     });
                 }
                 else
                 {
-                    _LoadSceneInternal(registry.sceneCutscene.Name);
+                    _LoadSceneInternal(registry.sceneCutscene.Name, (_) => _FadeGameServer(false));
                 }
 
                 playedCutscene = true;
@@ -271,6 +287,8 @@ namespace Solis.Core
                     {
                         foreach (var clientId in manager.GetConnectedClients())
                             _RespawnPlayerForClient(clientId);
+                        
+                        _FadeGameServer(false);
                     });
                 });
             }
@@ -280,6 +298,8 @@ namespace Solis.Core
                 {
                     foreach (var clientId in manager.GetConnectedClients())
                         _RespawnPlayerForClient(clientId);
+                    
+                    _FadeGameServer(false);
                 });
             }
             #endregion
@@ -425,7 +445,6 @@ namespace Solis.Core
             if (!manager.IsSceneLoaded(scene))
             {
                 manager.LoadScene(scene).Then(then);
-                await _Fade(false);
             }
             else
             {
@@ -441,12 +460,21 @@ namespace Solis.Core
                 
                 while (waiting)
                     await Awaitable.EndOfFrameAsync();
-                await _Fade(false);
             }
         }
 
+        [ServerOnly]
+        private async Awaitable _FadeGameServer(bool @in)
+        {
+            await _Fade(@in);
+            ServerBroadcastPacket(new FadePacket { IsIn = @in });
+        }
+        
         private async Awaitable _Fade(bool @in)
         {
+            if (!@in)
+                await Awaitable.WaitForSecondsAsync(0.5f);
+            
             fadeScreen.gameObject.SetActive(true);
             
             const float fadeTime = 0.25f;
@@ -516,6 +544,22 @@ namespace Solis.Core
             _loadedLobby = isDone;
             lobbyLoadingScene.SetActive(!isDone);
             loadingCanvas.SetActive(!isDone);
+        }
+    }
+
+    [Serializable]
+    public class FadePacket : IPacket
+    {
+        public bool IsIn { get; set; }
+        
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.Write(IsIn);
+        }
+
+        public void Deserialize(BinaryReader reader)
+        {
+            IsIn = reader.ReadBoolean();
         }
     }
 }

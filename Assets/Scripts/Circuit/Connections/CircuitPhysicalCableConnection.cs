@@ -353,17 +353,21 @@ namespace Solis.Circuit.Connections
                 });
                 return true;
             }
-            
-            if (Vector3.Distance(player.transform.position, Head.gameObject.transform.position) < radius)
+
+            if (Physics.Raycast(hand.transform.position,
+                    Head.gameObject.transform.position - hand.transform.position, out var hit2, radius - 0.5f))
             {
-                Holder = hand;
-                player.PlayInteraction(InteractionType.Cable);
-                ServerBroadcastPacket(new InteractObjectPacket()
+                if (Vector3.Distance(player.transform.position, Head.gameObject.transform.position) < radius)
                 {
-                    Id = player.Id,
-                    Interaction = InteractionType.Cable
-                });
-                return true;
+                    Holder = hand;
+                    player.PlayInteraction(InteractionType.Cable);
+                    ServerBroadcastPacket(new InteractObjectPacket()
+                    {
+                        Id = player.Id,
+                        Interaction = InteractionType.Cable
+                    });
+                    return true;
+                }
             }
 
             return false;
