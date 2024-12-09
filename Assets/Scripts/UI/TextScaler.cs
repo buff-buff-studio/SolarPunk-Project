@@ -32,7 +32,7 @@ namespace DefaultNamespace
             SetProgress();
             WriteText();
         }
-
+        private AudioPlayer _audioPlayer;
         public void SetText(string dialog, Action callback)
         {
             _currentText = dialog;
@@ -41,7 +41,8 @@ namespace DefaultNamespace
             isWriting = true;
             onFinishWriting = callback;
             _canApplyEffects = false;
-
+            _audioPlayer = AudioSystem.Instance.PlayVfx("Dialog",true);
+            _audioPlayer.SetVolume(0.1f);
             text.ForceMeshUpdate();
             if (text.textInfo != null && text.textInfo.characterCount > 0)
             {
@@ -75,6 +76,8 @@ namespace DefaultNamespace
             {
                 progress = 1;
                 onFinishWriting?.Invoke();
+                AudioSystem.Instance.Kill(_audioPlayer);
+                _audioPlayer.SetVolume(1);
                 isWriting = false;
                 _canApplyEffects = true;
             }
@@ -123,7 +126,7 @@ namespace DefaultNamespace
 
                 var center = (vertices[vertexIndex + 1] + vertices[vertexIndex + 3]) / 2;
                 var charProgress = Mathf.Clamp01(progress * _currentText.Length - i);
-               // AudioSystem.Instance.PlayVfx("Dialog");
+           
                 for (var j = 0; j < 4; j++)
                 {
                     vertices[vertexIndex + j] = center + (vertices[vertexIndex + j] - center) * charProgress;
