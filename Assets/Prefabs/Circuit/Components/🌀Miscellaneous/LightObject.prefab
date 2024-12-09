@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8654741218048202814}
   - component: {fileID: 8515236237766514114}
   - component: {fileID: 2924602707765038533}
+  - component: {fileID: 1470342004619112692}
   m_Layer: 16
   m_Name: LightObject
   m_TagString: Carryable
@@ -57,6 +58,24 @@ MonoBehaviour:
     value: 0
     type: 2
   networkRigidbodyTransform: {fileID: 8654741218048202814}
+  onCarry:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrop:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1470342004619112692}
+        m_TargetAssemblyTypeName: Solis.Audio.Players.PlayAudio, Assembly-CSharp
+        m_MethodName: PlayAudioName
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   objectSize:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
@@ -165,6 +184,19 @@ MonoBehaviour:
   cantBeMagnetized:
     value: 0
     type: 0
+--- !u!114 &1470342004619112692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5543034213146780115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa6028ac29aebb47b1a322b8ba03d51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioName: BoxDrop
 --- !u!1001 &8375038404033783581
 PrefabInstance:
   m_ObjectHideFlags: 0
