@@ -191,6 +191,7 @@ namespace Misc.Props
        
        private void Start()
        {
+           Debug.Log("ANIMAL = " + gameObject.GetComponent<NetworkIdentity>().Id);
            agent.enabled = HasAuthority;
            
            if (!HasAuthority)
