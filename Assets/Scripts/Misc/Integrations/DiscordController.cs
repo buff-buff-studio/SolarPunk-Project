@@ -225,7 +225,6 @@ namespace Solis.Misc.Integrations
         private void ErrorResult()
         {
             IsConnected = false;
-            Discord.Dispose();
             Debug.LogError("Failed to update Discord Rich Presence");
         }
 
