@@ -23,7 +23,7 @@ namespace UI
         public TextScaler textWriterSingle;
         
         [SerializeField]private GameObject orderTextGameObject;
-        public ItemPlayerText currentDialog = new(); 
+        public ItemPlayerText currentDialog; 
         private int _index;
         [SerializeField] private GameObject nextImage;
 

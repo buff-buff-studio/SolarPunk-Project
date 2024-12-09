@@ -1,14 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using NetBuff.Components;
-using NetBuff.Misc;
 using Solis.Circuit;
-using Solis.Packets;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 namespace Solis.Misc.Conveyor
 {
@@ -27,17 +20,7 @@ namespace Solis.Misc.Conveyor
         private float _waitTimer;
         private float _startTimer;
         private float _totalTimer;
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-        }
-
+        
         private void Update()
         {
             if (!HasAuthority || !_resetting)
@@ -80,10 +63,10 @@ namespace Solis.Misc.Conveyor
 
         private void DestroyObjects()
         {
-            var objects = FindObjectsOfType<ConveyorObject>();
+            var objects = FindObjectsByType<ConveyorObject>(FindObjectsSortMode.None);
             foreach (var obj in objects)
             {
-                Destroy(obj.gameObject);
+                obj.Despawn();
             }
         }
 
