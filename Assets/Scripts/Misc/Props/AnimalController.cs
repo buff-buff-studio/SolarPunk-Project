@@ -56,19 +56,25 @@ namespace Misc.Props
         private void FixedUpdate()
         {
             //Facing forward
-            //var s = agent.transform.InverseTransformDirection(agent.velocity).normalized;
-            agent.speed = (state == 2 ? speed * 2 : speed);// * (1f - Mathf.Abs(s.x));
+            var s = agent.velocity.magnitude <= 0.001f ? Vector3.forward : agent.transform.InverseTransformDirection(agent.velocity).normalized;
+            var factor = Mathf.Abs(Vector3.Dot(s, Vector3.forward));
+            
+            agent.speed = (state == 2 ? speed * 2 : speed) * factor;
+            animator.speed = Mathf.Lerp(animator.speed, (state == 2 ? 2 : 1) * factor, Time.fixedDeltaTime * 5f);
             
             if (!HasAuthority)
                 return;
-            
-            var objects = Physics.OverlapSphere(transform.position, runRadius, playerLayer);
-            if (objects.Length > 0)
+
+            if (state != 2)
             {
-                state = 2;
-                _GenerateGetAwayDestination(objects[0].transform);
+                var objects = Physics.OverlapSphere(transform.position, runRadius, playerLayer);
+                if (objects.Length > 0)
+                {
+                    state = 2;
+                    _GenerateGetAwayDestination(objects[0].transform);
+                }
             }
-            
+
             switch (state)
             {
                 case 0:
