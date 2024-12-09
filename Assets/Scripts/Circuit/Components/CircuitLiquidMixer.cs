@@ -135,6 +135,9 @@ namespace Solis.Circuit.Components
             statusDescription.text = "Waiting for input";
             statusInfo.text = "";
 
+            liquidA.bar.fillAmount = 0;
+            liquidB.bar.fillAmount = 0;
+
             SetLiquidIndicator(liquidA.amountIndicator, liquidA.maxAmountRange);
             SetLiquidIndicator(liquidB.amountIndicator, liquidB.maxAmountRange);
         }
