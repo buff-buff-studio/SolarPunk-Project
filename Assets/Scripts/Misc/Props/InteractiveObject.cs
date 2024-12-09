@@ -25,8 +25,8 @@ namespace Misc.Props
 
             _originalLayer = gameObject.layer;
             _layerMask = ~(playerTypeFilter != CharacterTypeFilter.Both
-                ? LayerMask.GetMask("Ignore Raycast", "CubeTrigger", "PressurePlate", playerTypeFilter == CharacterTypeFilter.Human ? "Human" : "Robot")
-                : LayerMask.GetMask("Ignore Raycast", "CubeTrigger", "PressurePlate", "Human", "Robot"));
+                ? LayerMask.GetMask("Ignore Raycast", "Trigger", "CubeTrigger", "PressurePlate", playerTypeFilter == CharacterTypeFilter.Human ? "Human" : "Robot")
+                : LayerMask.GetMask("Ignore Raycast", "Trigger", "CubeTrigger", "PressurePlate", "Human", "Robot"));
         }
 
         protected virtual void OnDisable()
