@@ -3548,9 +3548,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3fdd522c34f4ee5b8aa9e488e6dab6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anchorMin: {x: 0, y: 0}
-  anchorMax: {x: 0, y: 0}
-  offsetMin: {x: 0, y: 0}
+  anchorMin: {x: 1, y: 1}
+  anchorMax: {x: 1, y: 1}
+  offsetMin: {x: -450, y: -876}
   offsetMax: {x: 0, y: 0}
 --- !u!114 &3910117702770296567 stripped
 MonoBehaviour:
@@ -4569,7 +4569,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4085278697264557315, guid: 5153d92c7b95c9e44b9abf334226fc6e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7808074040015305152}
+      addedObject: {fileID: 9210963791235695650}
   m_SourcePrefab: {fileID: 100100000, guid: 5153d92c7b95c9e44b9abf334226fc6e, type: 3}
 --- !u!114 &650303525285261120 stripped
 MonoBehaviour:
@@ -4592,7 +4592,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4085278697264557315, guid: 5153d92c7b95c9e44b9abf334226fc6e, type: 3}
   m_PrefabInstance: {fileID: 5740826686054720792}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7808074040015305152
+--- !u!114 &9210963791235695650
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4605,6 +4605,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anchorMin: {x: 0, y: 0}
-  anchorMax: {x: 1, y: 1}
+  anchorMax: {x: 0, y: 0}
   offsetMin: {x: 0, y: 0}
   offsetMax: {x: 0, y: 0}
