@@ -203,8 +203,8 @@ namespace Solis.Core
                 if (Array.IndexOf(persistentScenes, s) == -1 && s != name)
                     manager.UnloadScene(s);
             }
-
-            await _FadeGameServer();
+            
+            await _FadeGameServer(true);
             var waiting = true;
             
             if (!manager.IsSceneLoaded(registry.sceneLobby.Name))
@@ -243,7 +243,7 @@ namespace Solis.Core
             var scene = levelInfo.scene.Name;
 
             #region Prepare
-            await _FadeGameServer();
+            await _FadeGameServer(true);
             
             //Unload other scenes
             foreach (var s in manager.LoadedScenes)
@@ -453,6 +453,7 @@ namespace Solis.Core
                     {
                         waiting = false;
                         then?.Invoke(x);
+                        _FadeGameServer(false);
                     });
                 });
                 
@@ -462,18 +463,14 @@ namespace Solis.Core
         }
 
         [ServerOnly]
-        private async Awaitable _FadeGameServer()
+        private async Awaitable _FadeGameServer(bool @in)
         {
-            /*await*/ _Fade(true);
-            ServerBroadcastPacket(new FadePacket { IsIn = true });
+            _Fade(@in);
+            ServerBroadcastPacket(new FadePacket { IsIn = @in });
         }
         
-        private /*async Awaitable*/ void _Fade(bool @in)
+        private async Awaitable _Fade(bool @in)
         {
-            fadeScreen.gameObject.SetActive(@in);
-            fadeScreen.alpha = @in ? 1f : 0f;
-
-            /*
             if (!@in)
                 await Awaitable.WaitForSecondsAsync(0.5f);
             
@@ -493,7 +490,6 @@ namespace Solis.Core
             
             fadeScreen.alpha = target;
             fadeScreen.gameObject.SetActive(@in);
-            */
         }
         #endregion
 
