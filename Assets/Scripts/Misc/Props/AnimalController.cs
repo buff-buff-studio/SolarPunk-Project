@@ -22,6 +22,7 @@ namespace Misc.Props
         public float walkingRadius = 5;
         public LayerMask playerLayer;
 
+        /*
         private void OnEnable()
         {
             if (!HasAuthority)
@@ -178,6 +179,7 @@ namespace Misc.Props
                 }
             }
         }
+        */
     }
 
     [Serializable]
