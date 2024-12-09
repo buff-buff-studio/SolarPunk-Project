@@ -14,7 +14,7 @@ namespace Solis.Misc.Conveyor
     public class ConveyorDetector : CircuitComponent
     {
         [Serializable]
-        public struct ObjectData
+        public class ObjectData
         {
             public ObjectType type;
             public Sprite sprite;
@@ -107,6 +107,7 @@ namespace Solis.Misc.Conveyor
 
         private void _OnLoadCountChanged(int oldvalue, int newvalue)
         {
+            if(_mode.Value != 1) return;
             loadCountText.text = $"{newvalue}/{loadedImages.Length}";
             for (int i = 0; i < loadedImages.Length; i++)
             {
@@ -126,13 +127,14 @@ namespace Solis.Misc.Conveyor
             {
                 if (filterList[filterIndex.Value].type.Equals(conveyorObject.objectType))
                 {
-                    if(filterIndex.Value < filterList.Count - 1)
+                    if(filterIndex.Value < 2)
                     {
                         filterIndex.Value++;
                         _loadCount.Value++;
                     }
                     else
                     {
+                        started.Value = false;
                         finished.Value = true;
                         _mode.Value = 2;
                         Refresh();
@@ -177,8 +179,9 @@ namespace Solis.Misc.Conveyor
                 (filterList[i], filterList[newIndex]) = (filterList[newIndex], filterList[i]);
             }
             filterIndex.Value = 0;
+            if(_mode.Value != 1) return;
             if(filterImage.sprite != null)
-             filterImage.sprite = filterList[0].sprite;
+                filterImage.sprite = filterList[0].sprite;
         }
 
         #endregion
@@ -209,6 +212,8 @@ namespace Solis.Misc.Conveyor
 
         protected override void OnRefresh()
         {
+            if(finished.Value) return;
+
             if(error.Value)
             {
                 if(inputReset.ReadOutput().IsPowered)
@@ -225,6 +230,7 @@ namespace Solis.Misc.Conveyor
                     started.Value = true;
                     _loadCount.Value = 0;
                     _mode.Value = 1;
+                    ShuffleFilter();
                 }
             }
         }

@@ -16,6 +16,12 @@ namespace Solis.Misc.Conveyor
 
         private bool _isOn;
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            _timer = spawnInterval - 1f;
+        }
+
         private void Update()
         {
             if (!HasAuthority)
