@@ -115,7 +115,7 @@ namespace Solis.Core
             if (HasAuthority)
                 return false;
             
-            _ = _Fade(arg.IsIn);
+            _Fade(arg.IsIn);
             return true;
         }
 
@@ -218,7 +218,6 @@ namespace Solis.Core
             
             while (waiting)
                 await Awaitable.EndOfFrameAsync();
-            await _Fade(false);
         }
 
         /// <summary>
