@@ -107,9 +107,10 @@ namespace Solis.Circuit.Components
             if (!HasAuthority)
                 return;
 
-            if (!isOnValue.AttachedTo)
+            if (!isOnValue.AttachedTo || !speedValue.AttachedTo)
             {
                 isOnValue.AttachedTo = this;
+                speedValue.AttachedTo = this;
             }
 
             isOnValue.Value = input.ReadOutput().power > 0.5f;
