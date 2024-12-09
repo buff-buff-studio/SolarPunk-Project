@@ -69,8 +69,9 @@ namespace Solis.Circuit.Components
         private void _OnValueChanged(bool old, bool @new)
         {
             animator.SetBool(IsOn, @new);
-            //if (@new) onToggleComponent.Invoke();
-            if (@new!=old) onToggleComponent.Invoke();
+            if (@new) onToggleComponent.Invoke();
+            Debug.Log("Old " + old + " New " + @new);
+           // if (@new!=old) onToggleComponent.Invoke();
         }
         #endregion
     }

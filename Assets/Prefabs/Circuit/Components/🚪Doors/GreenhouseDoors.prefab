@@ -150,6 +150,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f4b7ff3ca03fc614ab15cdb931f0ac6c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2132405315435928240}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f4b7ff3ca03fc614ab15cdb931f0ac6c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4221500842068625968}
     - targetCorrespondingSourceObject: {fileID: -2818631016347784500, guid: f4b7ff3ca03fc614ab15cdb931f0ac6c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7603412098767678815}
@@ -239,13 +242,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onToggleComponent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4221500842068625968}
+        m_TargetAssemblyTypeName: Solis.Audio.Players.PlayAudio, Assembly-CSharp
+        m_MethodName: PlayAudioName
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   input: {fileID: 7625119624677281924}
   animator: {fileID: 5566847873893385864}
   isOpen:
     value: 0
     type: 0
   canTurnOff: 1
+--- !u!114 &4221500842068625968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721475919181050079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa6028ac29aebb47b1a322b8ba03d51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioName: DoorOpen
 --- !u!1 &3321588352157543403 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6279429280952146331, guid: f4b7ff3ca03fc614ab15cdb931f0ac6c, type: 3}
