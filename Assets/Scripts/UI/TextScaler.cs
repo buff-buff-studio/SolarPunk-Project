@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Solis.Audio;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -122,7 +123,7 @@ namespace DefaultNamespace
 
                 var center = (vertices[vertexIndex + 1] + vertices[vertexIndex + 3]) / 2;
                 var charProgress = Mathf.Clamp01(progress * _currentText.Length - i);
-                
+               // AudioSystem.Instance.PlayVfx("Dialog");
                 for (var j = 0; j < 4; j++)
                 {
                     vertices[vertexIndex + j] = center + (vertices[vertexIndex + j] - center) * charProgress;
