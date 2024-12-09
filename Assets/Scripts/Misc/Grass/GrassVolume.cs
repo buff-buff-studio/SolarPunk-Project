@@ -159,7 +159,7 @@ namespace Solis.Misc.Grass
             _mesh.uv = uvs;
 
             _mesh.RecalculateNormals();
-            _mesh.RecalculateBounds();
+            _mesh.bounds = new Bounds(Vector3.zero, new Vector3(1000f, 1000f, 1000f));
         }
 
         #if UNITY_EDITOR
