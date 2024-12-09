@@ -137,7 +137,7 @@ namespace Solis.Core
 
             save.playTime += Time.deltaTime;
         }
-
+        
         private void OnDisable()
         {
             PacketListener.GetPacketListener<FadePacket>().RemoveClientListener(OnReceiveFadePacket);
@@ -204,7 +204,7 @@ namespace Solis.Core
                     manager.UnloadScene(s);
             }
 
-            await _FadeGameServer(true);
+            await _FadeGameServer();
             var waiting = true;
             
             if (!manager.IsSceneLoaded(registry.sceneLobby.Name))
@@ -214,7 +214,6 @@ namespace Solis.Core
                         _RespawnPlayerForClient(clientId);
                     
                     waiting = false;
-                    _FadeGameServer(false);
                 });
             
             while (waiting)
@@ -245,7 +244,7 @@ namespace Solis.Core
             var scene = levelInfo.scene.Name;
 
             #region Prepare
-            await _FadeGameServer(true);
+            await _FadeGameServer();
             
             //Unload other scenes
             foreach (var s in manager.LoadedScenes)
@@ -263,12 +262,12 @@ namespace Solis.Core
                 {
                     manager.UnloadScene(registry.sceneLobby.Name).Then((_) =>
                     {
-                        _LoadSceneInternal(registry.sceneCutscene.Name, (_) => _FadeGameServer(false));
+                        _LoadSceneInternal(registry.sceneCutscene.Name);
                     });
                 }
                 else
                 {
-                    _LoadSceneInternal(registry.sceneCutscene.Name, (_) => _FadeGameServer(false));
+                    _LoadSceneInternal(registry.sceneCutscene.Name);
                 }
 
                 playedCutscene = true;
@@ -288,7 +287,7 @@ namespace Solis.Core
                         foreach (var clientId in manager.GetConnectedClients())
                             _RespawnPlayerForClient(clientId);
                         
-                        _FadeGameServer(false);
+                        //_FadeGameServer(false);
                     });
                 });
             }
@@ -299,7 +298,7 @@ namespace Solis.Core
                     foreach (var clientId in manager.GetConnectedClients())
                         _RespawnPlayerForClient(clientId);
                     
-                    _FadeGameServer(false);
+                    //_FadeGameServer(false);
                 });
             }
             #endregion
@@ -464,10 +463,10 @@ namespace Solis.Core
         }
 
         [ServerOnly]
-        private async Awaitable _FadeGameServer(bool @in)
+        private async Awaitable _FadeGameServer()
         {
-            await _Fade(@in);
-            ServerBroadcastPacket(new FadePacket { IsIn = @in });
+            await _Fade(true);
+            ServerBroadcastPacket(new FadePacket { IsIn = true });
         }
         
         private async Awaitable _Fade(bool @in)
@@ -496,7 +495,9 @@ namespace Solis.Core
 
         public override void OnSceneLoaded(int sceneId)
         {
-            Debug.Log("Scene loaded: " + sceneId);
+            if(!GetSceneName(sceneId).Contains("Core"))
+                _Fade(false);
+            
             copyCode.gameObject.SetActive(IsOnLobby);
             leaveGame.gameObject.SetActive(!IsOnLobby);
             restartLevel.gameObject.SetActive(!IsOnLobby && IsServer);
