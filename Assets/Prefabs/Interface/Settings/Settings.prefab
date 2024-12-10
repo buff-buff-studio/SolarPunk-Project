@@ -407,7 +407,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Resetar Valores
+  m_text: settings.reset
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
   m_sharedMaterial: {fileID: 6976116800014725505, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
@@ -543,7 +543,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ajustes
+  m_text: settings.header
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
   m_sharedMaterial: {fileID: 6976116800014725505, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
@@ -570,7 +570,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
+  m_fontSize: 61.3
   m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -679,7 +679,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Gameplay
+  m_text: settings.gameplay
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
   m_sharedMaterial: {fileID: 6976116800014725505, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
@@ -1586,8 +1586,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1643562098560947833}
   m_HandleRect: {fileID: 3286897579179389053}
   m_Direction: 3
-  m_Value: 1
-  m_Size: 0.9964158
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1905,7 +1905,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Graficos
+  m_text: settings.graphics
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
   m_sharedMaterial: {fileID: 6976116800014725505, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
@@ -2295,7 +2295,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Audio
+  m_text: settings.audio
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
   m_sharedMaterial: {fileID: 6976116800014725505, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
@@ -2509,7 +2509,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Salvar
+  m_text: settings.save
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
   m_sharedMaterial: {fileID: 6976116800014725505, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
@@ -3811,6 +3811,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4223158595140179406, guid: a9e03efd10ffb1d409e48b6bc9d9b0b2, type: 3}
+      propertyPath: m_text
+      value: settings.graphics_fullscreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223158595140179406, guid: a9e03efd10ffb1d409e48b6bc9d9b0b2, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4278190080
       objectReference: {fileID: 0}
@@ -3937,7 +3941,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4223158595140179406, guid: a9e03efd10ffb1d409e48b6bc9d9b0b2, type: 3}
       propertyPath: m_text
-      value: Motion Blur
+      value: settings.graphics_motionblur
       objectReference: {fileID: 0}
     - target: {fileID: 4223158595140179406, guid: a9e03efd10ffb1d409e48b6bc9d9b0b2, type: 3}
       propertyPath: m_fontColor32.rgba
@@ -4062,7 +4066,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4223158595140179406, guid: a9e03efd10ffb1d409e48b6bc9d9b0b2, type: 3}
       propertyPath: m_text
-      value: Luz Volumetrica
+      value: settings.graphics_volumetriclight
       objectReference: {fileID: 0}
     - target: {fileID: 4223158595140179406, guid: a9e03efd10ffb1d409e48b6bc9d9b0b2, type: 3}
       propertyPath: m_fontColor32.rgba
@@ -4107,7 +4111,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 796518447739617783, guid: 334ac0c24d6d50f4285d3d571992c5b7, type: 3}
       propertyPath: m_text
-      value: Personagens
+      value: settings.audio_character
       objectReference: {fileID: 0}
     - target: {fileID: 2454787975920294418, guid: 334ac0c24d6d50f4285d3d571992c5b7, type: 3}
       propertyPath: m_Pivot.x
@@ -4264,7 +4268,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 796518447739617783, guid: 334ac0c24d6d50f4285d3d571992c5b7, type: 3}
       propertyPath: m_text
-      value: Musica
+      value: settings.audio_music
       objectReference: {fileID: 0}
     - target: {fileID: 2454787975920294418, guid: 334ac0c24d6d50f4285d3d571992c5b7, type: 3}
       propertyPath: m_Pivot.x
@@ -4511,6 +4515,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: resolution (Arrow)
       objectReference: {fileID: 0}
+    - target: {fileID: 7702039909157099854, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
+      propertyPath: m_text
+      value: settings.resolution
+      objectReference: {fileID: 0}
     - target: {fileID: 8132720276402137783, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
       propertyPath: m_Name
       value: resolution
@@ -4561,7 +4569,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 796518447739617783, guid: 334ac0c24d6d50f4285d3d571992c5b7, type: 3}
       propertyPath: m_text
-      value: Sensibilidade do Mouse
+      value: settings.gameplay_mousesensitivity
       objectReference: {fileID: 0}
     - target: {fileID: 2454787975920294418, guid: 334ac0c24d6d50f4285d3d571992c5b7, type: 3}
       propertyPath: m_Pivot.x
@@ -4730,7 +4738,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 796518447739617783, guid: 334ac0c24d6d50f4285d3d571992c5b7, type: 3}
       propertyPath: m_text
-      value: Efeitos
+      value: settings.audio_sfx
       objectReference: {fileID: 0}
     - target: {fileID: 2454787975920294418, guid: 334ac0c24d6d50f4285d3d571992c5b7, type: 3}
       propertyPath: m_Pivot.x
@@ -4967,7 +4975,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4223158595140179406, guid: a9e03efd10ffb1d409e48b6bc9d9b0b2, type: 3}
       propertyPath: m_text
-      value: Inverter Mouse Vertical
+      value: settings.gameplay_invertyaxis
       objectReference: {fileID: 0}
     - target: {fileID: 4223158595140179406, guid: a9e03efd10ffb1d409e48b6bc9d9b0b2, type: 3}
       propertyPath: m_fontColor32.rgba
@@ -5020,15 +5028,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1400784424945759178, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
       propertyPath: 'items.Array.data[0]'
-      value: Performance
+      value: settings.graphics_quality_performance
       objectReference: {fileID: 0}
     - target: {fileID: 1400784424945759178, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
       propertyPath: 'items.Array.data[1]'
-      value: Balanceado
+      value: settings.graphics_quality_balanced
       objectReference: {fileID: 0}
     - target: {fileID: 1400784424945759178, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
       propertyPath: 'items.Array.data[2]'
-      value: Qualidade
+      value: settings.graphics_quality_quality
       objectReference: {fileID: 0}
     - target: {fileID: 1400784424945759178, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
       propertyPath: 'items.Array.data[3]'
@@ -5124,11 +5132,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4044421839939688466, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
       propertyPath: m_text
-      value: Performance
+      value: settings.graphics_quality_performance
       objectReference: {fileID: 0}
     - target: {fileID: 4044421839939688466, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
       propertyPath: m_fontSize
-      value: 40
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 6068646200116272506, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
       propertyPath: m_Name
@@ -5136,7 +5144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7702039909157099854, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
       propertyPath: m_text
-      value: Qualidade
+      value: settings.quality
       objectReference: {fileID: 0}
     - target: {fileID: 8132720276402137783, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
       propertyPath: m_Name
@@ -5145,7 +5153,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 324803680331918056, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9037761828307659388}
   m_SourcePrefab: {fileID: 100100000, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
 --- !u!114 &5565812177634354546 stripped
 MonoBehaviour:
@@ -5158,6 +5169,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 566bd69ae7044bcebfd5b0ad40856eae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6542821604321573968 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 324803680331918056, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
+  m_PrefabInstance: {fileID: 6795134333171193528}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9037761828307659388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6542821604321573968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a63d5379020142a4ae38639e4b193eb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resize: 0
 --- !u!224 &8354482716933496041 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3295578747017415249, guid: 72294a24fe6f27e42a4ba477b7138a0a, type: 3}
@@ -5257,7 +5286,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4223158595140179406, guid: a9e03efd10ffb1d409e48b6bc9d9b0b2, type: 3}
       propertyPath: m_text
-      value: V-Sync
+      value: settings.graphics_vsync
       objectReference: {fileID: 0}
     - target: {fileID: 4223158595140179406, guid: a9e03efd10ffb1d409e48b6bc9d9b0b2, type: 3}
       propertyPath: m_fontColor32.rgba
@@ -5306,7 +5335,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 796518447739617783, guid: 334ac0c24d6d50f4285d3d571992c5b7, type: 3}
       propertyPath: m_text
-      value: Master
+      value: settings.audio_master
       objectReference: {fileID: 0}
     - target: {fileID: 2454787975920294418, guid: 334ac0c24d6d50f4285d3d571992c5b7, type: 3}
       propertyPath: m_Pivot.x
@@ -5551,7 +5580,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4223158595140179406, guid: a9e03efd10ffb1d409e48b6bc9d9b0b2, type: 3}
       propertyPath: m_text
-      value: Inverter Mouse Horizontal
+      value: settings.gameplay_invertxaxis
       objectReference: {fileID: 0}
     - target: {fileID: 4223158595140179406, guid: a9e03efd10ffb1d409e48b6bc9d9b0b2, type: 3}
       propertyPath: m_fontColor32.rgba
