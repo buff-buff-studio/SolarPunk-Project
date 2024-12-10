@@ -663,6 +663,7 @@ namespace Solis.Player
                 case PlayerGrapplingHookPacket grapplingHook:
                     if (HasAuthority)
                         return;
+                    animator.SetBool("Hooking", false);
                     state = grapplingHook.Grappled ? State.GrapplingHook : State.Normal;
                     break;
             }

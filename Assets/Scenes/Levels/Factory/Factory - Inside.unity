@@ -9425,6 +9425,7 @@ GameObject:
   - component: {fileID: 366468475}
   - component: {fileID: 366468477}
   - component: {fileID: 366468476}
+  - component: {fileID: 366468478}
   m_Layer: 9
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -9471,7 +9472,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Esperando o Inicio do Carregamento
+  m_text: conveyor.waiting
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
   m_sharedMaterial: {fileID: 6976116800014725505, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
@@ -9550,6 +9551,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 366468474}
   m_CullTransparentMesh: 1
+--- !u!114 &366468478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366468474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a63d5379020142a4ae38639e4b193eb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resize: 0
 --- !u!1001 &372606158
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13163,6 +13177,10 @@ PrefabInstance:
       value: DialogPlayerAutomatic
       objectReference: {fileID: 0}
     - target: {fileID: 4879820840921645764, guid: 5ca85332ccf4f7f438d50d1f81b99040, type: 3}
+      propertyPath: canBeReplayed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4879820840921645764, guid: 5ca85332ccf4f7f438d50d1f81b99040, type: 3}
       propertyPath: currentDialog
       value: 
       objectReference: {fileID: 11400000, guid: 43a0ca8b4e1b2ed408fefbe30114e6e4, type: 2}
@@ -14410,19 +14428,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2872130529726719578, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: field of view
-      value: 40
+      value: 60.000004
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -30720.742
+      value: 12.8569
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50215.71
+      value: -7.0989037
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -24470.406
+      value: 38.42634
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -17074,6 +17092,10 @@ PrefabInstance:
     - target: {fileID: 845529140883684085, guid: 5ca85332ccf4f7f438d50d1f81b99040, type: 3}
       propertyPath: m_Name
       value: DialogPlayerAutomatic (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4879820840921645764, guid: 5ca85332ccf4f7f438d50d1f81b99040, type: 3}
+      propertyPath: canBeReplayed
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7152248892130071251, guid: 5ca85332ccf4f7f438d50d1f81b99040, type: 3}
       propertyPath: m_Radius
@@ -26431,6 +26453,7 @@ GameObject:
   - component: {fileID: 995168243}
   - component: {fileID: 995168245}
   - component: {fileID: 995168244}
+  - component: {fileID: 995168246}
   m_Layer: 9
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -26477,10 +26500,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'A carga contem algum conteudo incorreto.
-
-    A carga foi descartada,
-    reinicie o carregamento'
+  m_text: conveyor.error
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
   m_sharedMaterial: {fileID: 6976116800014725505, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
@@ -26559,6 +26579,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 995168242}
   m_CullTransparentMesh: 1
+--- !u!114 &995168246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995168242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a63d5379020142a4ae38639e4b193eb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resize: 0
 --- !u!1001 &997891144
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40500,6 +40533,7 @@ GameObject:
   - component: {fileID: 1473031739}
   - component: {fileID: 1473031741}
   - component: {fileID: 1473031740}
+  - component: {fileID: 1473031742}
   m_Layer: 9
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -40546,7 +40580,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Carregamento Completo!
+  m_text: conveyor.loaded
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
   m_sharedMaterial: {fileID: 6976116800014725505, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
@@ -40625,6 +40659,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1473031738}
   m_CullTransparentMesh: 1
+--- !u!114 &1473031742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473031738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a63d5379020142a4ae38639e4b193eb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resize: 0
 --- !u!1001 &1473088620
 PrefabInstance:
   m_ObjectHideFlags: 0
