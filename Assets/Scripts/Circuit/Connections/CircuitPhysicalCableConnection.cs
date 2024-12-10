@@ -299,6 +299,7 @@ namespace Solis.Circuit.Connections
         #region Private Methods
         private bool _OnPlayerInteract(PlayerInteractPacket packet, int client)
         {
+            Debug.Log("Interacting");
             var player = GetNetworkObject(packet.Id).gameObject.GetComponent<PlayerControllerBase>();
             var hand = player.GetComponentInChildren<Rigidbody>();
 
@@ -351,6 +352,7 @@ namespace Solis.Circuit.Connections
                     Id = player.Id,
                     Interaction = InteractionType.Cable
                 });
+                Debug.Log("Used");
                 return true;
             }
 
@@ -368,6 +370,7 @@ namespace Solis.Circuit.Connections
                         Id = player.Id,
                         Interaction = InteractionType.Cable
                     });
+                    Debug.Log("Used");
                     return true;
                 }
             }

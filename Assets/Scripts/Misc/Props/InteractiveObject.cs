@@ -22,6 +22,7 @@ namespace Misc.Props
         protected virtual void OnEnable()
         {
             PacketListener.GetPacketListener<PlayerInteractPacket>().AddServerListener(OnPlayerInteract);
+            Debug.Log("Interactive object enabled: " + this);
 
             _originalLayer = gameObject.layer;
             _layerMask = ~(playerTypeFilter != CharacterTypeFilter.Both
@@ -32,6 +33,7 @@ namespace Misc.Props
         protected virtual void OnDisable()
         {
             PacketListener.GetPacketListener<PlayerInteractPacket>().RemoveServerListener(OnPlayerInteract);
+            Debug.Log("Interactive object disabled: " + this);
         }
 
         protected virtual bool OnPlayerInteract(PlayerInteractPacket arg1, int arg2)
@@ -41,6 +43,7 @@ namespace Misc.Props
 
         protected bool PlayerChecker(PlayerInteractPacket arg1, out PlayerControllerBase player)
         {
+            Debug.Log("Checking player");
             player = null;
 
             // Check if player is within radius

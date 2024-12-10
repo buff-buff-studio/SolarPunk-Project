@@ -60,6 +60,8 @@ namespace Solis.Circuit
 
         protected bool PlayerChecker(PlayerInteractPacket arg1, out PlayerControllerBase player)
         {
+            Debug.Log("Checking player");
+            
             player = null;
             // Check if player is within radius
             var networkObject = GetNetworkObject(arg1.Id);
