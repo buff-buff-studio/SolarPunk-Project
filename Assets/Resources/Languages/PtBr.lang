@@ -11,6 +11,12 @@ servers.host_server=Hospedar Servidor
 servers.username=Usuário
 servers.paused=Pausado
 
+#Network
+network.error.title=Erro de Network
+network.error.error=Erro Desconhecido
+network.error.error_join_room=Error while joining room. Maybe the code is incorrect?
+network.error.error_create_room=Error while creating the room
+
 #Relay Screen
 relay.title=Criar ou Entrar em Sala
 relay.username=Usuário
@@ -39,6 +45,7 @@ saves.name=Nome do Save
 game.leave=Sair do Jogo
 game.restart_level=Reiniciar Nível
 game.copy_code=Copiar Código
+game.loading=Carregando...
 
 #In Game Esc
 ingame.back=Continuar
@@ -90,6 +97,7 @@ settings.audio_sfx=Efeitos Sonoros
 settings.audio_music=Música
 settings.save=Salvar
 settings.reset=Resetar Values
+settings.language=Idioma
 
 #Cutscene Screen
 cutscene.skip=Pular

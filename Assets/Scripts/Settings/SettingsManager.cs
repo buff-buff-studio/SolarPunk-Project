@@ -5,6 +5,7 @@ using System.Linq;
 using AYellowpaper.SerializedCollections;
 using Solis.Data;
 using Solis.Data.Saves;
+using Solis.i18n;
 using Solis.UI;
 using TMPro;
 using Unity.VisualScripting;
@@ -21,7 +22,9 @@ namespace Solis.Settings
         private SettingsData settingsData;
 
         public Sprite selectedTab, unselectedTab;
-        
+
+        public Language[] languages;
+
         public SettingsTab[] settingsTabs;
 
         [Space(10)] 
@@ -189,6 +192,9 @@ namespace Solis.Settings
         {
             try
             {
+                LanguagePalette.Instance.currentLanguage = languages[settingsData.arrowItems["language"]];
+                LanguagePalette.OnLanguageChanged?.Invoke();
+
                 QualitySettings.vSyncCount = settingsData.toggleItems["vsync"] ? 1 : 0;
                 QualitySettings.SetQualityLevel(settingsData.arrowItems["graphics"]);
                 Screen.fullScreen = settingsData.toggleItems["fullscreen"];

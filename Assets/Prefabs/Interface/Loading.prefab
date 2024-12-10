@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Carregando...
+  m_text: game.loading
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
   m_sharedMaterial: {fileID: 6976116800014725505, guid: 0f32529027e66e84eb9221f10b1b6848, type: 2}
@@ -229,6 +229,7 @@ MonoBehaviour:
   speed: -150
   acceleration: 0.1
   audioSource: {fileID: 0}
+  pitchSpeedBase: 130
 --- !u!1 &8912942321532779355
 GameObject:
   m_ObjectHideFlags: 0

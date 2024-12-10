@@ -11,6 +11,12 @@ servers.host_server=Host Server
 servers.username=Username
 servers.paused=Paused
 
+#Network
+network.error.title=Network Error
+network.error.error=Unknown Error
+network.error.error_join_room=Error while joining room. Maybe the code is incorrect?
+network.error.error_create_room=Error while creating the room
+
 #Relay Screen
 relay.title=Create or Join Room
 relay.username=Username
@@ -39,6 +45,7 @@ saves.name=Save Name
 game.leave=Leave Game
 game.restart_level=Restart Level
 game.copy_code=Copy Code
+game.loading=Loading...
 
 #In Game Esc
 ingame.back=Resume
@@ -90,6 +97,7 @@ settings.audio_sfx=Sound Effects
 settings.audio_music=Music
 settings.save=Save
 settings.reset=Reset Values
+settings.language=Language
 
 #Cutscene Screen
 cutscene.skip=Skip
