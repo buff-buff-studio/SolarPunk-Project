@@ -9,6 +9,7 @@ servers.title=Server List
 servers.refresh_list=Refresh List
 servers.host_server=Host Server
 servers.username=Username
+servers.paused=Paused
 
 #Relay Screen
 relay.title=Create or Join Room
@@ -32,11 +33,63 @@ lobby.press_to_change=Change character
 saves.title=Save List
 saves.refresh_list=Refresh List
 saves.create_new=Create New Save
+saves.name=Save Name
 
 #Game Screen
 game.leave=Leave Game
 game.restart_level=Restart Level
 game.copy_code=Copy Code
+
+#In Game Esc
+ingame.back=Resume
+ingame.settings=Settings
+ingame.report=Report Issue
+ingame.restart=Restart Level
+ingame.back_to_menu=Return To Menu
+
+#Main Menu
+main.start=Start
+main.settings=Settings
+main.features=Features
+main.credits=Credits
+main.exit=Exit
+main.back=Back
+
+#Credits
+credits.devs=Developers
+credits.artist=Artists
+credits.arnilsen=Arnilsen Arthur\n<size=40>Network, Circuits & Shaders</size>
+credits.giovana=Giovana Melo\n<size=40>Dialogue & Systems</size>
+credits.helena=Helena Mansur\n<size=40>Models & Textures</size>
+credits.julia=Júlia Moraes\n<size=40>Management, Models & Textures, 2D, VFX</size>
+credits.quinino=Lucas Quinino\n<size=40>Models & Textures, Animation, Level Design, Shaders</size>
+credits.bozzi=Luiz Bozzi\n<size=40>Models & Textures, Animation</size>
+credits.renzo=Renzo Diniz\n<size=40>Game Design, Level Design, Sound Design</size>
+credits.sergio=Sérgio Macellani\n<size=40>Direction, Gameplay Programmer, Level Design & Game Design</size>
+credits.douglas=Douglas Gustavo\n<size=40>Music</size>
+
+#Settings
+settings.header=Settings
+settings.graphics=Graphics
+settings.gameplay=Gameplay
+settings.audio=Audio
+settings.resolution=Resolution
+settings.graphics_quality_performance=Performance
+settings.graphics_quality_balanced=Balanced
+settings.graphics_quality_quality=Quality
+settings.graphics_fullscreen=Fullscreen
+settings.graphics_vsync=VSync
+settings.graphics_motionblur=Motion Blur
+settings.graphics_volumetriclight=Volumetric Light
+settings.gameplay_mousesensitivity=Mouse Sensitivity
+settings.gameplay_invertxaxis=Invert Mouse Horizontally
+settings.gameplay_invertyaxis=Invert Mouse Vertically
+settings.audio_master=Master
+settings.audio_character=Characters
+settings.audio_sfx=Sound Effects
+settings.audio_music=Music
+settings.save=Save
+settings.reset=Reset Values
 
 #Cutscene Screen
 cutscene.skip=Skip
@@ -65,10 +118,16 @@ text.factory_depot.lever=<Shake>Hmmm...</Shake> Parece que essa alavanca troca o
 text.factory_depot.pass=Essa senha parece ser útil...
 dialog.factory_depot.elevator_1=Finalmente vamos para a fábrica {{Ram}}!
 dialog.factory_depot.elevator_2=Vamos {{Nina}}!
-dialog.factory_depot.elevator_3=Bão demais! *webit*
-dialog.factory.fan_1=Nossa {{RAM}} preciso da sua ajuda para chegar ao outro lado. 
+dialog.factory_depot.elevator_3=<Shake><Rainbow>Bão demais! </Rainbow></Shake>*webit*
+dialog.factory.fan_1=Nossa {{Ram}}, preciso da sua ajuda para atravessar {{Fan}}. 
 dialog.factory.fan_2=Uai, sô, *webit*, tem um gancho fixador ali. 
 dialog.factory.fan_3=Certo, vou dar um jeito.
-dialog.factory.labrint=Ali está as bateria, precisamos chegar até lá!
-dialog.megaLevel.estufa_1={{Nina}}, acho que você consegue passar por ali, e eu vou por cima.
+dialog.factory.labrint=Ali está a bateria, precisamos chegar até à àrea azu!
+dialog.megaLevel.estufa_1={{Nina}}, acho que você consegue passar por aquele buraco ali, e eu vou por cima.
 dialog.megaLevel.estua_2=Hmm, vc ta certo {{Ram}}, acho que assim funciona!
+dialog.fabric.val={{Ram}}, não consigo rotacionar as válvulas, você pode tentar?
+dialog.fabric.scanner=<Shake>Oh não!</Shake> O scanner de palma está <Glitch>quebrado</Glitch>! Talvez alguma das estações de carregamento conserte!
+dialog.fabric.tonel=Podemos usar essa alvanca para misturar os líquidos no tonel...
+dialog.fabric.esteira_1=<Big>Eita nois</Big>, essa deve ser a <Rainbow> estação de carregamento.</Rainbow>
+dialog.fabric.esteira_2=Parece que precisamos serguir uma sequêcia de entregas para a porta abrir.
+dialog.fabric.esteira_3=Acho que esse {{Button}} parece resetar as coisas, vamos ter que testar!
