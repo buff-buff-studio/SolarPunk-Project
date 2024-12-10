@@ -30,6 +30,9 @@ namespace Solis.i18n
                     language.entries.Add(Language.Hash(parts[0]), parts[1].Replace("\r",""));
                 }
             }
+            
+            if(!language.entries.ContainsKey(Language.Hash("")))
+                language.entries.Add(Language.Hash(""), "");
 
             language.internalName = Path.GetFileNameWithoutExtension(ctx.assetPath);
             language.displayName = language.Localize("name");
