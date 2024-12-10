@@ -192,7 +192,7 @@ namespace Solis.Settings
         {
             try
             {
-                //LanguagePalette.Instance.currentLanguage = languages[settingsData.arrowItems["language"]];
+                LanguagePalette.Instance.currentLanguage = languages[settingsData.arrowItems["language"]];
                 LanguagePalette.OnLanguageChanged?.Invoke();
 
                 QualitySettings.vSyncCount = settingsData.toggleItems["vsync"] ? 1 : 0;

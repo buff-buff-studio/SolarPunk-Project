@@ -16,7 +16,8 @@ namespace Solis.i18n
             var text = File.ReadAllText(ctx.assetPath);
             var language = ScriptableObject.CreateInstance<Language>();
             
-            var lines = text.Split('\n');
+            //split new lines with carriage return or not
+            var lines = text.Split(new[] { "\r\n", "\r", "\n" }, System.StringSplitOptions.RemoveEmptyEntries);    
             foreach (var line in lines)
             {
                 if (line.StartsWith("#"))
@@ -25,7 +26,9 @@ namespace Solis.i18n
                 var parts = line.Split('=', 2);
 
                 if (parts.Length == 2)
+                {
                     language.entries.Add(Language.Hash(parts[0]), parts[1].Replace("\r",""));
+                }
             }
 
             language.internalName = Path.GetFileNameWithoutExtension(ctx.assetPath);
