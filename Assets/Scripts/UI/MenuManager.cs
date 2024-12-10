@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Solis.Audio;
+using Solis.i18n;
 using Solis.Misc.Integrations;
 using TMPro;
 using UnityEngine;
@@ -10,10 +11,15 @@ namespace Solis.UI
 {
     public class MenuManager : WindowManager
     {
+        public static bool ShowError { get; set; }
+        public static string ErrorMessage { get; set; }
+        
         public Transform camTarget;
         public Transform camMainMenu, camOtherMenu;
         
         public TextMeshProUGUI versionText;
+
+        public TMP_Text networkErrorDescription;
 
         private void Awake()
         {
@@ -25,6 +31,13 @@ namespace Solis.UI
 
         protected override void Start()
         {
+            if (ShowError)
+            {
+                startIndex = 6;
+                networkErrorDescription.text = LanguagePalette.Localize(ErrorMessage);
+                ShowError = false; 
+            }
+                
             base.Start();
             DiscordController.Instance!.SetMenuActivity();
         }

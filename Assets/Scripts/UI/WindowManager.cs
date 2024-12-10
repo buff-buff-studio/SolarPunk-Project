@@ -10,7 +10,7 @@ namespace Solis.UI
     public class WindowManager : MonoBehaviour
     {
         [Header("WINDOW MANAGER SETTINGS")] [SerializeField]
-        private int startIndex;
+        public int startIndex;
 
         [SerializeField] private protected int currentIndex;
         [SerializeField] private bool resetOnCanvasGroupChange = false;
