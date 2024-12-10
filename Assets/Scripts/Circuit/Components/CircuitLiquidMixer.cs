@@ -314,7 +314,7 @@ namespace Solis.Circuit.Components
 
                 case Mode.Complete:
                     statusTitle.text = "Complete";
-                    statusDescription.text = "Liquid is released";
+                    statusDescription.text = "Liquid released";
                     statusInfo.text = "";
                     break;
 
