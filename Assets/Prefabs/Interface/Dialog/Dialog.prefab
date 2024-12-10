@@ -480,6 +480,7 @@ MonoBehaviour:
   textWriterSingle: {fileID: 3986931654498484636}
   orderTextGameObject: {fileID: 2421610344974415661}
   characterImage: {fileID: 5663426293175818710}
+  characterInfo: {fileID: 0}
   characterName: {fileID: 7563053415593129749}
   characterTypesAndEmotions:
   - characterType: 0
@@ -782,6 +783,7 @@ GameObject:
   - component: {fileID: 8346245096944431799}
   - component: {fileID: 848501300562938271}
   - component: {fileID: 6353167919594816943}
+  - component: {fileID: 1863897370570843825}
   m_Layer: 5
   m_Name: DialogText
   m_TagString: Untagged
@@ -840,6 +842,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1863897370570843825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5799229353074112391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3fdd522c34f4ee5b8aa9e488e6dab6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anchorMin: {x: 0.5, y: 0.5}
+  anchorMax: {x: 0.5, y: 0.5}
+  offsetMin: {x: -600, y: -138}
+  offsetMax: {x: 600, y: 138}
 --- !u!1 &6176534498394066725
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,6 +869,7 @@ GameObject:
   - component: {fileID: 2594949721439038001}
   - component: {fileID: 769323445785233806}
   - component: {fileID: 3692765136838110439}
+  - component: {fileID: 737988482888918835}
   m_Layer: 5
   m_Name: Back
   m_TagString: Untagged
@@ -916,6 +935,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &737988482888918835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6176534498394066725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3fdd522c34f4ee5b8aa9e488e6dab6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 1, y: 1}
+  offsetMin: {x: -12.5, y: -42}
+  offsetMax: {x: 12.5, y: 42}
 --- !u!1 &6911222419222077232
 GameObject:
   m_ObjectHideFlags: 0
@@ -1003,6 +1038,7 @@ GameObject:
   - component: {fileID: 7056491483735654493}
   - component: {fileID: 5092960847455586904}
   - component: {fileID: 1979327267406540885}
+  - component: {fileID: 2900803228132383649}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1147,6 +1183,22 @@ MonoBehaviour:
   prefabId:
     high: 0
     low: 0
+--- !u!114 &2900803228132383649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8052597906637140965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3fdd522c34f4ee5b8aa9e488e6dab6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 1, y: 1}
+  offsetMin: {x: 62.5, y: 34.693665}
+  offsetMax: {x: -132.5, y: -49.306335}
 --- !u!1 &8496426284347253352
 GameObject:
   m_ObjectHideFlags: 0

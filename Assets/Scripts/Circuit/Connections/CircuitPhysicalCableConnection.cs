@@ -311,7 +311,7 @@ namespace Solis.Circuit.Connections
                 var sockets = FindObjectsByType<CircuitSocket>(FindObjectsSortMode.None);
             
                 var closestSocket = default(CircuitSocket);
-                var closestDistance = 2.5f;
+                var closestDistance = radius + 0.25f;
                 
                 foreach (var socket in sockets)
                 {
