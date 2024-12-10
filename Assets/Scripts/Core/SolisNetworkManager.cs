@@ -6,6 +6,7 @@ using NetBuff.Session;
 using NetBuff.UDP;
 using Solis.Data;
 using Solis.Packets;
+using Solis.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -53,7 +54,7 @@ namespace Solis.Core
                         {
                             if(!callback)
                             {
-                                OnClearEnvironment(NetworkTransport.ConnectionEndMode.Shutdown, "error");
+                                OnClearEnvironment(NetworkTransport.ConnectionEndMode.Shutdown, "error_join_room");
                                 return;
                             }
 
@@ -66,7 +67,7 @@ namespace Solis.Core
                         {
                             if (!callback)
                             {
-                                OnClearEnvironment(NetworkTransport.ConnectionEndMode.Shutdown, "error");
+                                OnClearEnvironment(NetworkTransport.ConnectionEndMode.Shutdown, "error_create_room");
                                 return;
                             }
                             
@@ -84,7 +85,7 @@ namespace Solis.Core
                                 if (!cb)
                                 {
                                     Close();
-                                    OnClearEnvironment(NetworkTransport.ConnectionEndMode.Shutdown, "error");
+                                    OnClearEnvironment(NetworkTransport.ConnectionEndMode.Shutdown, "error_join_room");
                                     return;
                                 }
                             });
@@ -132,7 +133,7 @@ namespace Solis.Core
                         {
                             if(!callback)
                             {
-                                OnClearEnvironment(NetworkTransport.ConnectionEndMode.Shutdown, "error");
+                                OnClearEnvironment(NetworkTransport.ConnectionEndMode.Shutdown, "error_join_room");
                                 return;
                             }
 
@@ -145,7 +146,7 @@ namespace Solis.Core
                         {
                             if (!callback)
                             {
-                                OnClearEnvironment(NetworkTransport.ConnectionEndMode.Shutdown, "error");
+                                OnClearEnvironment(NetworkTransport.ConnectionEndMode.Shutdown, "error_create_room");
                                 return;
                             }
                             
@@ -162,7 +163,7 @@ namespace Solis.Core
                                 if (!cb)
                                 {
                                     Close();
-                                    OnClearEnvironment(NetworkTransport.ConnectionEndMode.Shutdown, "error");
+                                    OnClearEnvironment(NetworkTransport.ConnectionEndMode.Shutdown, "error_join_room");
                                     return;
                                 }
                             });
@@ -212,6 +213,12 @@ namespace Solis.Core
             
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+
+            if (cause != "shutdown")
+            {
+                MenuManager.ShowError = true;
+                MenuManager.ErrorMessage = "network.error." + cause;
+            }
             
             SceneManager.LoadScene("Menu");
         }
