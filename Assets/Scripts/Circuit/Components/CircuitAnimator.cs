@@ -32,6 +32,11 @@ namespace Solis.Circuit.Components
             isOpen.OnValueChanged += _OnValueChanged;
         }
 
+        public override void OnSpawned(bool isRetroactive)
+        {
+            _OnValueChanged(isOpen.Value, isOpen.Value);    
+        }
+
         protected override void OnDisable()
         {
             base.OnDisable();

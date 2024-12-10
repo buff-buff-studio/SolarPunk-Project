@@ -30,24 +30,22 @@ namespace Solis.Circuit.Gates
         public bool invisibleOnPlay = false;
         #endregion
 
-        private FloatNetworkValue power = new(0);
+        public FloatNetworkValue valuePower = new(0);
+        public ColorNetworkValue valueColor = new(Color.black);
 
         #region Unity Callbacks
         protected override void OnEnable()
         {
+            WithValues(valuePower, valueColor);
             base.OnEnable();
-            WithValues(power);
-
-            if(!power.AttachedTo)
-                power.AttachedTo = this;
-
-            UpdateMaterial();
+            
             if(invisibleOnPlay)
             {
                 transform.GetChild(0).gameObject.SetActive(false);
             }
-
-            power.OnValueChanged += (_, __) => UpdateMaterial();
+            valuePower.OnValueChanged += (_, __) => _UpdateMaterial();
+            valueColor.OnValueChanged += (_, __) => _UpdateMaterial();
+            _UpdateMaterial();
         }
         
         private void OnValidate()
@@ -64,24 +62,42 @@ namespace Solis.Circuit.Gates
             for(var i = 0; i < count; i++)
                 pow += input.ReadOutput(i).power;
 
-            if(!power.AttachedTo)
-                power.AttachedTo = this;
+            if(!valuePower.AttachedTo)
+                valuePower.AttachedTo = this;
 
-            power.Value = pow;
+            valuePower.Value = pow;
 
-            if (power.Value <= 0)
+            if (valuePower.Value <= 0)
                 return new CircuitData(false);
-            else if (power.Value >= powerToBreak)
-                return new CircuitData(power.Value,
+            else if (valuePower.Value >= powerToBreak)
+                return new CircuitData(valuePower.Value,
                     new Vector3(-1, -1, -1));
             else
-                return new CircuitData(power.Value,
+                return new CircuitData(valuePower.Value,
                     new Vector3(rData.ReadOutput().power, gData.ReadOutput().power, bData.ReadOutput().power));
         }
         
         protected override void OnRefresh()
         {
-            UpdateMaterial();
+            if(enabled)
+                UpdateColor();
+        }
+
+        private void UpdateColor()
+        {
+            if (!HasAuthority)
+                return;
+            
+            var color = Color.black;
+            if (valuePower.Value > 0)
+            {
+                color.r = rData.ReadOutput().IsPowered ? 1 : 0;
+                color.g = gData.ReadOutput().IsPowered ? 1 : 0;
+                color.b = bData.ReadOutput().IsPowered ? 1 : 0;
+                color *= Mathf.Pow(2, colorIntensity);
+            }
+            
+            valueColor.Value = color;
         }
 
         public override IEnumerable<CircuitPlug> GetPlugs()
@@ -96,7 +112,7 @@ namespace Solis.Circuit.Gates
         #endregion
 
         #region Private Methods
-        public void UpdateMaterial()
+        public void _UpdateMaterial()
         {
 #if UNITY_EDITOR
             if(PrefabStageUtility.GetCurrentPrefabStage() != null)
@@ -104,17 +120,7 @@ namespace Solis.Circuit.Gates
 #endif
 
             if(meshRenderer == null) return;
-
-            var color = Color.black;
-            if (power.Value > 0)
-            {
-                color.r = rData.ReadOutput().IsPowered ? 1 : 0;
-                color.g = gData.ReadOutput().IsPowered ? 1 : 0;
-                color.b = bData.ReadOutput().IsPowered ? 1 : 0;
-                color *= Mathf.Pow(2, colorIntensity);
-            }
-
-            meshRenderer.materials[materialIndex].SetColor(EmissionColor, color*1.5f);
+            meshRenderer.materials[materialIndex].SetColor(EmissionColor, valueColor.Value * 1.5f);
         }
         #endregion
     }
