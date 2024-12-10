@@ -258,7 +258,6 @@ namespace Solis.Player
             InvokeRepeating(nameof(_Tick), 0, 1f / tickRate);
 
             CheatsManager.Instance?.ChangeScene(this);
-            Crosshair.Instance.characterType = CharacterType;
         }
 
         private void OnDisable()
@@ -615,6 +614,7 @@ namespace Solis.Player
             if (!HasAuthority)
                 return;
 
+            Crosshair.Instance.characterType = CharacterType;
             _camera = MulticamCamera.Instance.SetPlayerTarget(transform, lookAt, focusBody, focusLookAt);
             username.Value = NetworkManager.Instance.Name;
 
