@@ -14428,19 +14428,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2872130529726719578, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: field of view
-      value: 40
+      value: 60.000004
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -13566.774
+      value: 12.8569
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -22189.86
+      value: -7.0989037
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10790.807
+      value: 38.42634
       objectReference: {fileID: 0}
     - target: {fileID: 3749777454502581597, guid: 98f9ac76a654c9a438a29650d81ab9e7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -17097,6 +17097,10 @@ PrefabInstance:
       propertyPath: canBeReplayed
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4879820840921645764, guid: 5ca85332ccf4f7f438d50d1f81b99040, type: 3}
+      propertyPath: currentDialog
+      value: 
+      objectReference: {fileID: 11400000, guid: f6112277d7b8b4b4aabc9878e8ec3345, type: 2}
     - target: {fileID: 7152248892130071251, guid: 5ca85332ccf4f7f438d50d1f81b99040, type: 3}
       propertyPath: m_Radius
       value: 4.21
@@ -20494,7 +20498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82744323e3c74244afd38412bdf8671e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultType: 0
+  defaultType: 1
 --- !u!4 &821814868
 Transform:
   m_ObjectHideFlags: 0
@@ -47086,7 +47090,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8070020558393622804, guid: 2a8246c400e14da4fa00477f12a00e7f, type: 3}
       propertyPath: m_Layer
-      value: 9
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -60187,7 +60191,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3616372507515625164, guid: 2a8070aca88fe534084726db994f3289, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.962002
+      value: -5.868
       objectReference: {fileID: 0}
     - target: {fileID: 4425070643170852916, guid: 2a8070aca88fe534084726db994f3289, type: 3}
       propertyPath: m_LocalRotation.w

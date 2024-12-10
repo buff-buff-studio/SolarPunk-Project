@@ -25,7 +25,7 @@ namespace Solis.i18n
                 var parts = line.Split('=', 2);
 
                 if (parts.Length == 2)
-                    language.entries.Add(Language.Hash(parts[0]), parts[1]);
+                    language.entries.Add(Language.Hash(parts[0]), parts[1].Replace("\r",""));
             }
 
             language.internalName = Path.GetFileNameWithoutExtension(ctx.assetPath);

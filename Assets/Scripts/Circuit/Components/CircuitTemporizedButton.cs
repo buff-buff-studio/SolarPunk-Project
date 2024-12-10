@@ -65,7 +65,6 @@ namespace Solis.Circuit.Components
         #region Private Methods
         protected override bool OnPlayerInteract(PlayerInteractPacket arg1, int arg2)
         {
-            Debug.Log("Interacting");
             if (!PlayerChecker(arg1, out var player))
                 return false;
 
@@ -78,7 +77,6 @@ namespace Solis.Circuit.Components
                 Id = arg1.Id,
                 Interaction = InteractionType.Lever
             });
-            Debug.Log("Used");
             return true;
         }
 

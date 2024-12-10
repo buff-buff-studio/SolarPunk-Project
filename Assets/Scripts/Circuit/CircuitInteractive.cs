@@ -60,15 +60,12 @@ namespace Solis.Circuit
 
         protected bool PlayerChecker(PlayerInteractPacket arg1, out PlayerControllerBase player)
         {
-            Debug.Log("Checking player");
-            
             player = null;
             // Check if player is within radius
             var networkObject = GetNetworkObject(arg1.Id);
             var dist = Vector3.Distance(networkObject.transform.position, _objectCenter);
             if (dist > radius) return false;
 
-            Debug.Log("Player is within radius: " + dist);
             // Check if game object has a player controller
             if(!networkObject.TryGetComponent(out player))
                 return false;
@@ -84,7 +81,6 @@ namespace Solis.Circuit
             var dot = Vector3.Dot(player.body.forward, directionToTarget.normalized);
             if (dot < (dist <= minDistance ? dotThreshold/2 : dotThreshold))
             {
-                Debug.Log("Player is not facing the object, dot: " + dot);
                 return false;
             }
 
@@ -97,7 +93,6 @@ namespace Solis.Circuit
                 if (hit.collider.transform == gameObject.transform.parent) return true;
                 if (ignoreColliders.Contains(hit.collider)) return true;
 
-                Debug.Log($"{hit.transform.name} is between the {player.CharacterType} and {this.name}", hit.collider.gameObject);
                 return false;
             }
 

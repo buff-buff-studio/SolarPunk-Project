@@ -28,19 +28,16 @@ namespace UI
         
         private bool OnClickDialog(PlayerInteractPacket arg1, int arg2)
         {
-            Debug.Log("Click");
             if (IsDialogPlaying) return false;
-            /*if (!PlayerChecker(arg1))
-        {
-            Debug.Log("Click");
-            return false;
-        }*/
+            if (!PlayerChecker(arg1))
+            {
+                return false;
+            }
             
             Debug.Log("Used");
         
             
-            PlayDialog();
-            return true;
+            return PlayDialog();
         }
 
         private bool PlayerChecker(PlayerInteractPacket arg1)

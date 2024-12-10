@@ -70,8 +70,7 @@ namespace Solis.Circuit.Components
         {
             animator.SetBool(IsOn, @new);
             if (@new) onToggleComponent.Invoke();
-            Debug.Log("Old " + old + " New " + @new);
-           // if (@new!=old) onToggleComponent.Invoke();
+            // if (@new!=old) onToggleComponent.Invoke();
         }
         #endregion
     }

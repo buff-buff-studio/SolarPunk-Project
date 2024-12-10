@@ -724,21 +724,10 @@ namespace Solis.Player
                 _waitingForInteract = true;
                 _interactTimer = InteractCooldown;
 
-                Debug.Log("Interacting");
                 SendPacket(new PlayerInteractPacket
                 {
                     Id = Id
                 }, true);
-                // Task.Run(async () =>
-                // {
-                //     await Task.Delay(500);
-                //
-                //     Debug.Log("Interact Timer Ended");
-                //     if (_waitingForInteract)
-                //     {
-                //         PlayInteraction(InteractionType.None);
-                //     }
-                // });
             }
             if(DialogPanel.IsDialogPlaying)
                 if(SolisInput.GetKeyDown("Skip"))

@@ -49,7 +49,6 @@ namespace Audio.Players
 
         private void StopAudio()
         {
-            Debug.Log("DIE");
             if(_routine != null) StopCoroutine(_routine);
             if(_audioPlayer != null) AudioSystem.Instance?.Kill(_audioPlayer);
         }

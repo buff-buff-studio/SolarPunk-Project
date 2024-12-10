@@ -22,8 +22,6 @@ namespace Misc.Props
         protected virtual void OnEnable()
         {
             PacketListener.GetPacketListener<PlayerInteractPacket>().AddServerListener(OnPlayerInteract);
-            Debug.Log("Interactive object enabled: " + this);
-
             _originalLayer = gameObject.layer;
             _layerMask = ~(playerTypeFilter != CharacterTypeFilter.Both
                 ? LayerMask.GetMask("Ignore Raycast", "Trigger", "CubeTrigger", "PressurePlate", playerTypeFilter == CharacterTypeFilter.Human ? "Human" : "Robot")
@@ -33,7 +31,6 @@ namespace Misc.Props
         protected virtual void OnDisable()
         {
             PacketListener.GetPacketListener<PlayerInteractPacket>().RemoveServerListener(OnPlayerInteract);
-            Debug.Log("Interactive object disabled: " + this);
         }
 
         protected virtual bool OnPlayerInteract(PlayerInteractPacket arg1, int arg2)

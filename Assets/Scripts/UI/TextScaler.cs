@@ -57,7 +57,6 @@ namespace DefaultNamespace
         public void SkipText()
         {
             text.text = _currentText;
-            actualCharCount = _currentText.Length;
             progress = 1;
         }
 
@@ -83,62 +82,40 @@ namespace DefaultNamespace
             }
         }
 
-        private int actualCharCount;
         private void WriteText()
         {
             if (text == null || text.textInfo == null) return;
             if(_currentText == null) return;
            
-            int charactersToShow = Mathf.FloorToInt(progress * _currentText.Length);
-            string displayedText = ""; 
-            actualCharCount = 0; 
-
-            for (int i = 0; i < _currentText.Length && actualCharCount < charactersToShow; i++)
-            {
-                if (_currentText[i] == '<')
-                {
-                    int closingTagIndex = _currentText.IndexOf('>', i);
-                    if (closingTagIndex != -1)
-                    {
-                        displayedText += _currentText.Substring(i, closingTagIndex - i + 1);
-                        i = closingTagIndex;
-                    }
-                }
-                else
-                {
-                    displayedText += _currentText[i];
-                    actualCharCount++;
-                }
-            }
-            
-            text.text = displayedText;
+            text.text = _currentText;
             text.ForceMeshUpdate();
             
             for (var i = 0; i < text.textInfo.characterCount; i++)
             {
                 var charInfo = text.textInfo.characterInfo[i];
 
-                if (!charInfo.isVisible) continue;
+                if (!charInfo.isVisible)
+                    continue;
 
                 var meshInfo = text.textInfo.meshInfo[charInfo.materialReferenceIndex];
                 var vertexIndex = charInfo.vertexIndex;
                 var vertices = meshInfo.vertices;
 
                 var center = (vertices[vertexIndex + 1] + vertices[vertexIndex + 3]) / 2;
-                var charProgress = Mathf.Clamp01(progress * _currentText.Length - i);
+                var charProgress = Mathf.Clamp01(progress * text.textInfo.characterInfo.Length - i);
            
                 for (var j = 0; j < 4; j++)
                 {
                     vertices[vertexIndex + j] = center + (vertices[vertexIndex + j] - center) * charProgress;
                 }
+                
+                meshInfo.vertices = vertices;
 
                 ApplyEffectsToCharacter(i);
             }
             
             text.UpdateVertexData(TMP_VertexDataUpdateFlags.All);
         }
-
-
 
         private void ApplyEffectsToCharacter(int charIndex)
         {
