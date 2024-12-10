@@ -21,12 +21,14 @@ namespace Solis.Circuit.Components
 
         [Header("STATE")]
         public BoolNetworkValue isOn = new(false);
+        public float timer = 0f;
 
         [Header("SETTINGS")]
         public int tickRate = 10;
         public float windSpeed = 2f;
         public float windRadius = 1f;
         public float windHeight = 5f;
+        public float activeAfter = 1.25f;
         #endregion
 
         #region Unity Callbacks
@@ -69,12 +71,21 @@ namespace Solis.Circuit.Components
             if(isOn.AttachedTo != null && HasAuthority)
                 isOn.Value = input.ReadOutput().power > 0;
         }
+
+        private void Update()
+        {
+            if (isOn.Value)
+                timer = activeAfter;
+            else
+                timer = Mathf.Max(0, timer - Time.deltaTime);    
+        }
+
         #endregion
 
         #region Private Methods
         private void WindArea()
         {
-            if(isOn.Value == false) return;
+            if(timer <= 0) return;
 
             Collider[] results = new Collider[16];
             var count = Physics.OverlapCapsuleNonAlloc(transform.position, transform.position + Vector3.up * windHeight, windRadius, results);
