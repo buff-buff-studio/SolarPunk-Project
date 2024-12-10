@@ -35,6 +35,12 @@ namespace Interface
             _text.text = _buffer;
             LanguagePalette.OnLanguageChanged -= _Localize;
         }
+
+        public void Localize(string buffer)
+        {
+            _buffer = buffer;
+            _Localize();
+        }
         #endregion
 
         #region Private Methods

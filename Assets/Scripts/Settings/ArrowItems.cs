@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Interface;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,6 +22,7 @@ namespace Solis.Settings
         public Button previousButton;
         public Button nextButton;
         public TextMeshProUGUI display;
+        private Label label;
         
         [Space]
         public UnityEvent<int> onChangeItem;
@@ -40,6 +42,7 @@ namespace Solis.Settings
         {
             previousButton.onClick.AddListener(!invert ? PreviousItem : NextItem);
             nextButton.onClick.AddListener(invert ? PreviousItem : NextItem);
+            display.TryGetComponent(out label);
         }
 
         private void Start()
@@ -75,7 +78,10 @@ namespace Solis.Settings
         {
             if(currentIndex < 0 || currentIndex >= items.Count) 
                 return;
-            display.text = items[currentIndex];
+            if(!label)
+                display.text = items[currentIndex];
+            else
+                label.Localize(items[currentIndex]);
         }
 
         private void OnValidate()

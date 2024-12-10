@@ -74,6 +74,9 @@ namespace Solis.Circuit.Components
         public TextMeshProUGUI statusTitle;
         public TextMeshProUGUI statusDescription;
         public TextMeshProUGUI statusInfo;
+        public AudioSource audioSource;
+        public AudioClip heatingSound;
+        public AudioClip coolingSound;
 
         [Header("LIQUID")]
         public LiquidData liquidA;
