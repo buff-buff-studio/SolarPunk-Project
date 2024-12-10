@@ -10,6 +10,7 @@ namespace UI
   
         private void OnTriggerEnter(Collider col)
         {
+            Debug.Log("Triggered");
             if (!col.CompareTag("Player")) return;
             if (!col.TryGetComponent(out PlayerControllerBase p)) return;
             if(characterTypeFilter.Filter(p.CharacterType))
