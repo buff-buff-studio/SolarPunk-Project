@@ -11,12 +11,6 @@ servers.host_server=Hospedar Servidor
 servers.username=Usuário
 servers.paused=Pausado
 
-#Network
-network.error.title=Erro de Network
-network.error.error=Erro Desconhecido
-network.error.error_join_room=Error while joining room. Maybe the code is incorrect?
-network.error.error_create_room=Error while creating the room
-
 #Relay Screen
 relay.title=Criar ou Entrar em Sala
 relay.username=Usuário
@@ -45,7 +39,6 @@ saves.name=Nome do Save
 game.leave=Sair do Jogo
 game.restart_level=Reiniciar Nível
 game.copy_code=Copiar Código
-game.loading=Carregando...
 
 #In Game Esc
 ingame.back=Continuar
@@ -53,6 +46,29 @@ ingame.settings=Opções
 ingame.report=Reportar Erro
 ingame.restart=Reiniciar Nível
 ingame.back_to_menu=Voltar Ao Menu
+
+#Level Translations
+mixer.flushing=Esvaziando
+mixer.idle=Esperando
+mixer.filling=Enchendo
+mixer.heating=Esquentando
+mixer.mixing=Misturando
+mixer.complete=Finalizado
+mixer.desc_start=Aperte o botão Start para iniciar
+mixer.desc_quantity=O líquido deve estar nas quantidades certas
+mixer.desc_dontStopMixing=Não pare de misturar por
+mixer.desc_waitToStart=Espere para começar a misturar
+mixer.desc_liquidRelease=Líquido liberado
+mixer.error_A_overflow=Líquido A transbordou, feche as válvulas A e B e esvazie o sistema
+mixer.error_B_overflow=Líquido B transbordou, feche as válvulas A e B e esvazie o sistema
+mixer.error_flush=O processo de esvaziar foi interrompido, feche as válvulas A e B e tente novamente
+mixer.error_overheating=O sistema superaqueceu, esvazie e tente novamente
+mixer.error_cooling=O sistema está muito frio, esvazie e tente novamente
+mixer.error_mixing=O processo de mistura foi interrompido ou demorou demais, esvazie e tente novamente
+mixer.error_startMixing=O sistema não está pronto para começar o processo, feche as válvulas e tente novamente
+conveyor.waiting=Esperando o início do carregamento
+conveyor.loaded=Carregamento finalizado
+conveyor.error=Carga com conteúdo incorreto.\nCarga descartada, recomece o carregamento
 
 #Main Menu
 main.start=Start
@@ -97,7 +113,6 @@ settings.audio_sfx=Efeitos Sonoros
 settings.audio_music=Música
 settings.save=Salvar
 settings.reset=Resetar Values
-settings.language=Idioma
 
 #Cutscene Screen
 cutscene.skip=Pular
@@ -120,18 +135,18 @@ dialog.garage.capsule_2.1=Desliga a {{Socket2}} alí em cima que energiza ela...
 dialog.garage.capsule_3=Ah, certo! Esqueci dessa parte, segura aí!
 text.factory_depot.lever=<Shake>Hmmm...</Shake> Parece que essa alavanca troca o fluxo de energia.
 text.factory_depot.pass=Essa senha parece ser útil...
-dialog.factory_depot.elevator_1=Finalmente vamos para a fábrica {{Ram}}!
+dialog.factory_depot.elevator_1=Finalmente vamos para a Fábrica {{Ram}}!
 dialog.factory_depot.elevator_2=Vamos {{Nina}}!
 dialog.factory_depot.elevator_3=<Shake><Rainbow>Bão demais! </Rainbow></Shake>*webit*
-dialog.factory.fan_1=Nossa {{Ram}}, preciso da sua ajuda para atravessar {{Fan}}. 
+dialog.factory.fan_1=Nossa {{Ram}}, preciso da sua ajuda para atravessar o {{Fan}}. 
 dialog.factory.fan_2=Uai, sô, *webit*, tem um gancho fixador ali. 
 dialog.factory.fan_3=Certo, vou dar um jeito.
-dialog.factory.labrint=Ali está a bateria, precisamos chegar até à àrea azu!
+dialog.factory.labrint=Ali está a bateria, precisamos chegar até a área azul!
 dialog.megaLevel.estufa_1={{Nina}}, acho que você consegue passar por aquele buraco ali, e eu vou por cima.
-dialog.megaLevel.estua_2=Hmm, vc ta certo {{Ram}}, acho que assim funciona!
+dialog.megaLevel.estua_2=Hmm, você tá certo {{Ram}}, acho que assim funciona!
 dialog.fabric.val={{Ram}}, não consigo rotacionar as válvulas, você pode tentar?
-dialog.fabric.scanner=<Shake>Oh não!</Shake> O scanner de palma está <Glitch>quebrado</Glitch>! Talvez alguma das estações de carregamento conserte!
-dialog.fabric.tonel=Podemos usar essa alvanca para misturar os líquidos no tonel...
-dialog.fabric.esteira_1=<Big>Eita nois</Big>, essa deve ser a <Rainbow> estação de carregamento.</Rainbow>
-dialog.fabric.esteira_2=Parece que precisamos serguir uma sequêcia de entregas para a porta abrir.
+dialog.fabric.scanner=<Shake>Oh não!</Shake> O scanner de palma está <Glitch>quebrado</Glitch>! Talvez alguma das estações de carregamento energizem ele.
+dialog.fabric.tonel=Podemos usar essa alavanca para misturar os líquidos do tonel...
+dialog.fabric.esteira_1=<Big>Eita nois!</Big> Essa deve ser a <Rainbow> estação de carregamento.</Rainbow>
+dialog.fabric.esteira_2=Parece que precisamos seguir uma sequêcia de entregas para a porta abrir.
 dialog.fabric.esteira_3=Acho que esse {{Button}} parece resetar as coisas, vamos ter que testar!

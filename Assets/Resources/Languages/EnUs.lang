@@ -11,12 +11,6 @@ servers.host_server=Host Server
 servers.username=Username
 servers.paused=Paused
 
-#Network
-network.error.title=Network Error
-network.error.error=Unknown Error
-network.error.error_join_room=Error while joining room. Maybe the code is incorrect?
-network.error.error_create_room=Error while creating the room
-
 #Relay Screen
 relay.title=Create or Join Room
 relay.username=Username
@@ -45,7 +39,6 @@ saves.name=Save Name
 game.leave=Leave Game
 game.restart_level=Restart Level
 game.copy_code=Copy Code
-game.loading=Loading...
 
 #In Game Esc
 ingame.back=Resume
@@ -53,6 +46,29 @@ ingame.settings=Settings
 ingame.report=Report Issue
 ingame.restart=Restart Level
 ingame.back_to_menu=Return To Menu
+
+#Level Translations
+mixer.flushing=Flushing
+mixer.idle=Idle
+mixer.filling=Filling
+mixer.heating=Heating
+mixer.mixing=Mixing
+mixer.complete=Complete
+mixer.desc_start=Press the Start button to begin
+mixer.desc_quantity=The liquid must be in the ideal quantity
+mixer.desc_dontStopMixing=Don't stop mixing for
+mixer.desc_waitToStart=Wait to start mixing
+mixer.desc_liquidRelease=Liquid released
+mixer.error_A_overflow=Liquid A overflowed, close the valve A and B and flush the system
+mixer.error_B_overflow=Liquid B overflowed, close the valve A and B and flush the system
+mixer.error_flush=Flush process has been interrupted, close the valve A and B and flush the system again
+mixer.error_overheating=The system overheated, flush the system and try again
+mixer.error_cooling=The system is too cold, flush the system and try again
+mixer.error_mixing=The mixing process has been interrupted or took too long, flush the system and try again
+mixer.error_startMixing=The system is not ready to start the process, close the valves and try again
+conveyor.waiting=Waiting to load
+conveyor.loaded=Loading complete!
+conveyor.error=Loaded wrong cargo.\nCargo discarted, restart the loading process
 
 #Main Menu
 main.start=Start
@@ -97,7 +113,6 @@ settings.audio_sfx=Sound Effects
 settings.audio_music=Music
 settings.save=Save
 settings.reset=Reset Values
-settings.language=Language
 
 #Cutscene Screen
 cutscene.skip=Skip
@@ -115,27 +130,27 @@ signs.lake.title=Servers Lake
 signs.lake.desc=Swimming and drinking the water from the server cooling lake are prohibited.\n\nCaution: Hot water.
 
 #Dialogs
-dialog.garage.door_2=Ok capitão {{Frog}}!
-dialog.garage.capsule_1=Nenhuma das suas baterias estão funcionando mais... {{Ram}}, temos que ir até a Fábrica e achar uma nova, e rápido!
-dialog.garage.capsule_1.1=Essa última tempestade parou todas as entregas, e parece que a fazenda também sofreu bastante dano.
-dialog.garage.capsule_1.2=Vamos ter que consertar as coisas quebradas que acharmos no caminho, e verificar se os animais estão bem.
-dialog.garage.capsule_2=<Glitch>C-certo</Glitch> {{Nina}}... fico <Glitch>fe-feliz</Glitch> que você ainda está tentando me arrumar... mas você <Glitch>a-ainda</Glitch> não me tirou dessa cápsula
-dialog.garage.capsule_2.1=Desliga a {{Socket2}} alí em cima que energiza ela... ou também sabe, pode <Glitch>u-usar</Glitch> a {{Lever}} aqui que a gente montou só pra isso.
-dialog.garage.capsule_3=Ah, certo! Esqueci dessa parte, segura aí!
-text.factory_depot.lever=<Shake>Hmmm...</Shake> Parece que essa alavanca troca o fluxo de energia.
-text.factory_depot.pass=Essa senha parece ser útil...
-dialog.factory_depot.elevator_1=Finalmente vamos para a fábrica {{Ram}}!
-dialog.factory_depot.elevator_2=Vamos {{Nina}}!
-dialog.factory_depot.elevator_3=<Shake><Rainbow>Bão demais! </Rainbow></Shake>*webit*
-dialog.factory.fan_1=Nossa {{Ram}}, preciso da sua ajuda para atravessar {{Fan}}. 
-dialog.factory.fan_2=Uai, sô, *webit*, tem um gancho fixador ali. 
-dialog.factory.fan_3=Certo, vou dar um jeito.
-dialog.factory.labrint=Ali está a bateria, precisamos chegar até à àrea azu!
-dialog.megaLevel.estufa_1={{Nina}}, acho que você consegue passar por aquele buraco ali, e eu vou por cima.
-dialog.megaLevel.estua_2=Hmm, vc ta certo {{Ram}}, acho que assim funciona!
-dialog.fabric.val={{Ram}}, não consigo rotacionar as válvulas, você pode tentar?
-dialog.fabric.scanner=<Shake>Oh não!</Shake> O scanner de palma está <Glitch>quebrado</Glitch>! Talvez alguma das estações de carregamento conserte!
-dialog.fabric.tonel=Podemos usar essa alvanca para misturar os líquidos no tonel...
-dialog.fabric.esteira_1=<Big>Eita nois</Big>, essa deve ser a <Rainbow> estação de carregamento.</Rainbow>
-dialog.fabric.esteira_2=Parece que precisamos serguir uma sequêcia de entregas para a porta abrir.
-dialog.fabric.esteira_3=Acho que esse {{Button}} parece resetar as coisas, vamos ter que testar!
+dialog.garage.door_2=Ok captain {{Frog}}!
+dialog.garage.capsule_1=None of your batteries are working anymore... {{Ram}}, we have to go to the Factory and find a new one, and fast!
+dialog.garage.capsule_1.1=The last storm stopped all deliveries, and it looks like the Farm also took a lot of damage.
+dialog.garage.capsule_1.2=We're going to have to fix the broken things we find on the way, and check if the animals are okay.
+dialog.garage.capsule_2=<Glitch>O-okay</Glitch> {{Nina}}... I'm <Glitch>gl-glad</Glitch> that you're still trying to fix me... but you <Glitch>st-still</Glitch> haven't let me out of the capsule.
+dialog.garage.capsule_2.1=Unplug the {{Socket2}} up there that powers it... or y'know, you can <Glitch>u-use</Glitch> the {{Lever}} here that we built just for that.
+dialog.garage.capsule_3=Oh, right! I forgot about that part, hold on!
+text.factory_depot.lever=<Shake>Hmmm...</Shake> Looks like this lever switches the energy flow.
+text.factory_depot.pass=This password looks important...
+dialog.factory_depot.elevator_1=Finally we're going to the Factory {{Ram}}!
+dialog.factory_depot.elevator_2=Let's go {{Nina}}!
+dialog.factory_depot.elevator_3=<Shake><Rainbow>Yeehaw! </Rainbow></Shake>*webit*
+dialog.factory.fan_1=Hey {{Ram}}, I'm gonna need your help to go through the {{Fan}}. 
+dialog.factory.fan_2=Well, partner, *webit*, there's a handy dandy hook right there!
+dialog.factory.fan_3=Right, I'll find a way.
+dialog.factory.labrint=There's the battery, we need to get to the blue area!
+dialog.megaLevel.estufa_1={{Nina}}, I think you can <Glitch>fit through</Glitch> that hole there, and I'll go above.
+dialog.megaLevel.estua_2=Hmm, you're right {{Ram}}, that might work!
+dialog.fabric.val={{Ram}}, I can't rotate these valves, could you help out?
+dialog.fabric.scanner=<Shake>Oh no!</Shake> The Palm Scanner is <Glitch>broken</Glitch>! Maybe one of the charging stations will power it.
+dialog.fabric.tonel=We can use this lever to mix the liquids inside the tank...
+dialog.fabric.esteira_1=<Big>Hawt damn!</Big>, this must be the <Rainbow> charging station.</Rainbow>
+dialog.fabric.esteira_2=Looks like we have to follow a sequence of load orders to open the door.
+dialog.fabric.esteira_3=I think this {{Button}} resets things, we're gonna have to test it!
