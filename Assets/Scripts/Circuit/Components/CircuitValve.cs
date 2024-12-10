@@ -51,8 +51,11 @@ public class CircuitValve : CircuitInteractive
 
      protected override bool OnPlayerInteract(PlayerInteractPacket arg1, int arg2)
      {
+         Debug.Log("Interacting");
+         
          if (!PlayerChecker(arg1, out var player))
              return false;
+             
          isOn.Value = !isOn.Value;
 
          player.PlayInteraction(InteractionType.Lever);
@@ -61,6 +64,8 @@ public class CircuitValve : CircuitInteractive
              Id = arg1.Id,
              Interaction = InteractionType.Lever
          });
+         
+         Debug.Log("Used");
 
          return true;
      }

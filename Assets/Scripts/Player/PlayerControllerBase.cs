@@ -724,6 +724,7 @@ namespace Solis.Player
                 _waitingForInteract = true;
                 _interactTimer = InteractCooldown;
 
+                Debug.Log("Interacting");
                 SendPacket(new PlayerInteractPacket
                 {
                     Id = Id

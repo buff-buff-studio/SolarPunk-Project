@@ -28,9 +28,9 @@ namespace UI
         
         private bool OnClickDialog(PlayerInteractPacket arg1, int arg2)
         {
-            Debug.Log("Click");
+            Debug.Log("Interacting");
             if (IsDialogPlaying) return false;
-            Debug.Log("Clickss");
+            Debug.Log("Used");
         //    if (!PlayerChecker(arg1)) return false;
             
             PlayDialog();

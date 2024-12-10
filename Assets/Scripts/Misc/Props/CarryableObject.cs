@@ -229,6 +229,7 @@ namespace Solis.Misc.Props
 
         protected override bool OnPlayerInteract(PlayerInteractPacket arg1, int arg2)
         {
+            Debug.Log("Interacting");
             PlayerControllerBase player;
 
             if (isOn.Value)
@@ -272,6 +273,7 @@ namespace Solis.Misc.Props
                 HandId = player.Id.ToString(),
                 IsCarrying = true
             });
+            Debug.Log("Used");
 
             return true;
         }
