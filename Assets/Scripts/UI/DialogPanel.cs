@@ -200,6 +200,7 @@ namespace _Scripts.UI
         
         private void ClosePanel()
         {
+            IsDialogPlaying = false;
             playersText.text = "0/2";
             if (IsServer)
             {
@@ -207,7 +208,6 @@ namespace _Scripts.UI
                 hasSkipped.Clear();
             }
             textWriterSingle.ClearText();
-            IsDialogPlaying = false;
             orderTextGameObject.SetActive(false);
             nextImage.SetActive(false);
             if(!CinematicController.IsPlaying)
