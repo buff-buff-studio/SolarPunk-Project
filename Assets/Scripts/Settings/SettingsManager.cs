@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
+using Interface;
 using Solis.Data;
 using Solis.Data.Saves;
 using Solis.i18n;
@@ -10,13 +11,16 @@ using Solis.UI;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
+using Screen = UnityEngine.Screen;
 
 namespace Solis.Settings
 {
     public class SettingsManager : WindowManager
     {
         private static string Path => Application.persistentDataPath;
+        private static UniversalRenderPipelineAsset _renderPipeline;
         
         [SerializeField]
         private SettingsData settingsData;
@@ -24,6 +28,7 @@ namespace Solis.Settings
         public Sprite selectedTab, unselectedTab;
 
         public Language[] languages;
+        public Label renderScaleLabel;
 
         public SettingsTab[] settingsTabs;
 
@@ -192,13 +197,25 @@ namespace Solis.Settings
         {
             try
             {
+                PFXUpdate();
+
                 LanguagePalette.Instance.currentLanguage = languages[settingsData.arrowItems["language"]];
                 LanguagePalette.OnLanguageChanged?.Invoke();
 
                 QualitySettings.vSyncCount = settingsData.toggleItems["vsync"] ? 1 : 0;
                 QualitySettings.SetQualityLevel(settingsData.arrowItems["graphics"]);
                 Screen.fullScreen = settingsData.toggleItems["fullscreen"];
+
+                _renderPipeline = QualitySettings.GetRenderPipelineAssetAt(settingsData.arrowItems["graphics"]) as UniversalRenderPipelineAsset;
+                if (_renderPipeline != null)
+                {
+                    _renderPipeline.renderScale = settingsData.sliderItems["renderScale"]/10;
+                    renderScaleLabel.Localize("settings.renderScale", "", $" ({_renderPipeline.upscalingFilter.ToString()})");
+                    Debug.Log($"Render Scale: {_renderPipeline.renderScale}");
+                }
+#if !UNITY_EDITOR
                 if (!Screen.fullScreen) return;
+#endif
                 if (settingsData.arrowItems["resolution"] < 0 || settingsData.arrowItems["resolution"] >= _supportedResolutions.Count)
                 {
                     settingsData.arrowItems["resolution"] = GetScreenResolution();
@@ -209,7 +226,51 @@ namespace Solis.Settings
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                if(e is KeyNotFoundException keyException)
+                {
+                    Debug.LogWarning($"Key {keyException.Message} not found in settings data, adding to settings data", this);
+                    var key = keyException.Message.Split('\'');
+                    if(intItems.ContainsKey(key[1]))
+                    {
+                        settingsData.arrowItems.Add(key[1], intItems[key[1]].currentIndex);
+                        Debug.LogWarning($"Key {key[1]} added to settings data", this);
+                        Save();
+                    }
+                    else if(floatItems.ContainsKey(key[1]))
+                    {
+                        settingsData.sliderItems.Add(key[1], floatItems[key[1]].value);
+                        Debug.LogWarning($"Key {key[1]} added to settings data", this);
+                        Save();
+                    }
+                    else if(boolItems.ContainsKey(key[1]))
+                    {
+                        settingsData.toggleItems.Add(key[1], boolItems[key[1]].isOn);
+                        Debug.LogWarning($"Key {key[1]} added to settings data", this);
+                        Save();
+                    }
+                    else
+                    {
+                        Debug.LogError($"Key {key[1]} not found in settings items, maybe the key is wrong", this);
+                    }
+                }
+            }
+        }
+
+        private void PFXUpdate()
+        {
+            if (!settingsData.toggleItems["pfx"])
+            {
+                boolItems["motionBlur"].isOn = false;
+                boolItems["motionBlur"].interactable = false;
+                boolItems["volumetricLight"].isOn = false;
+                boolItems["volumetricLight"].interactable = false;
+                settingsData.toggleItems["motionBlur"] = false;
+                settingsData.toggleItems["volumetricLight"] = false;
+            }
+            else
+            {
+                boolItems["motionBlur"].interactable = true;
+                boolItems["volumetricLight"].interactable = true;
             }
         }
 
@@ -282,12 +343,16 @@ namespace Solis.Settings
 
             //Video
             settingsData.arrowItems["resolution"] = GetScreenResolution();
+            settingsData.sliderItems["renderScale"] = 10;
             settingsData.arrowItems["graphics"] = 1;
             settingsData.toggleItems["fullscreen"] = true;
             settingsData.toggleItems["vsync"] = true;
+            settingsData.toggleItems["pfx"] = true;
             settingsData.toggleItems["motionBlur"] = true;
+            settingsData.toggleItems["volumetricLight"] = false;
             
             //Gameplay
+            settingsData.arrowItems["language"] = 0;
             settingsData.sliderItems["cameraSensitivity"] = 1;
             settingsData.toggleItems["invertXAxis"] = false;
             settingsData.toggleItems["invertYAxis"] = true;

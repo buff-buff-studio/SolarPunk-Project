@@ -41,6 +41,13 @@ namespace Interface
             _buffer = buffer;
             _Localize();
         }
+
+        public void Localize(string buffer, string prefix = "", string suffix = "")
+        {
+            _buffer = buffer;
+            _Localize();
+            _text.text = $"{prefix}{_text.text}{suffix}";
+        }
         #endregion
 
         #region Private Methods

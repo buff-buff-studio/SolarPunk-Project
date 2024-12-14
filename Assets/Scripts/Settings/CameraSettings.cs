@@ -22,6 +22,7 @@ public class CameraSettings : MonoBehaviour
     
     private bool isPaused;
     private float _senseX, _senseY;
+    private bool pfxActive = true;
 
     private void Awake()
     {
@@ -74,6 +75,16 @@ public class CameraSettings : MonoBehaviour
 
         pfxVolumes.ForEach(pfx =>
         {
+            if (settingsData.TryGet<bool>("pfx") != pfxActive)
+            {
+                var value = settingsData.TryGet<bool>("pfx");
+                foreach (var volumeComponent in pfx.components)
+                {
+                    volumeComponent.active = value;
+                }
+                pfxActive = value;
+            }
+
             if(pfx.TryGet(out MotionBlur motionBlur))
                 motionBlur.active = settingsData.TryGet<bool>("motionBlur");
             if(pfx.TryGet(out VolumetricFogVolumeComponent volumetricFog))
