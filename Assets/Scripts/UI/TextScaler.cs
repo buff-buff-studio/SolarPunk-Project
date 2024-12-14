@@ -35,6 +35,7 @@ namespace DefaultNamespace
         private AudioPlayer _audioPlayer;
         public void SetText(string dialog, Action callback)
         {
+            ClearText();
             _currentText = dialog;
             text.text = "";
             progress = 0;
@@ -62,6 +63,8 @@ namespace DefaultNamespace
 
         public void ClearText()
         {
+            isWriting = false;
+            progress = 0;
             text.text = "";
         }
 
