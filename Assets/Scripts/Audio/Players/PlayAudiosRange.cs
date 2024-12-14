@@ -16,6 +16,8 @@ namespace Audio.Players
         [SerializeField]private string[] _audios;
         private AudioPlayer _audioPlayer;
         private Coroutine _routine;
+        private float _currentTime;
+        private float _maxTimeInRoutine = 5f;
 
         private void OnEnable()
         {
@@ -29,6 +31,17 @@ namespace Audio.Players
             StopAudio();
         }
 
+
+        private void Update()
+        {
+            if (_routine != null)
+            {
+                _currentTime += Time.deltaTime;
+                if(_currentTime >= _maxTimeInRoutine)
+                    StopAudio();
+            }
+        }
+
         public void Play(string audio)
         {
             Debug.Log("PlayAudio");
@@ -38,6 +51,7 @@ namespace Audio.Players
         private void OnTriggerEnter(Collider other)
         {
             if (!other.CompareTag("Player")) return;
+            _currentTime = 0;
             _routine = StartCoroutine(PlayAudioName());
         }
 
@@ -51,12 +65,12 @@ namespace Audio.Players
         {
             if(_routine != null) StopCoroutine(_routine);
             if(_audioPlayer != null) AudioSystem.Instance?.Kill(_audioPlayer);
+            _routine = null;
         }
 
 
         public IEnumerator PlayAudioName()
         {
-           
             _audioPlayer = AudioSystem.Instance.PlayVfx(_audios[Random.Range(0, _audios.Length)]);
             if(_audioPlayer != null) _audioPlayer.At(transform.position);
             yield return new WaitForSeconds(Random.Range(2, 4));
