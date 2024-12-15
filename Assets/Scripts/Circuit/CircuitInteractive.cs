@@ -26,6 +26,7 @@ namespace Solis.Circuit
         private List<Collider> _colliders = new List<Collider>();
         private LayerMask _layerMask;
         private int _originalLayer, _ignoreRaycastLayer = 2;
+        private Collider _collider;
         private Vector3 _objectCenter;
         [SerializeField] [Tooltip("The parent object that will be ignored by the raycast, don't add the parent object to the list")]
         private List<Collider> ignoreColliders = new List<Collider>();
@@ -39,7 +40,8 @@ namespace Solis.Circuit
             WithValues(isOn);
             isOn.OnValueChanged += _OnValueChanged;
 
-            _objectCenter = GetComponentInChildren<Collider>().bounds.center;
+            _collider = GetComponentInChildren<Collider>();
+            _objectCenter = _collider.bounds.center;
             _originalLayer = gameObject.layer;
             PacketListener.GetPacketListener<PlayerInteractPacket>().AddServerListener(OnPlayerInteract);
             _layerMask = ~(playerTypeFilter != CharacterTypeFilter.Both
@@ -64,7 +66,13 @@ namespace Solis.Circuit
             // Check if player is within radius
             var networkObject = GetNetworkObject(arg1.Id);
             var dist = Vector3.Distance(networkObject.transform.position, _objectCenter);
-            if (dist > radius) return false;
+            if (dist > radius)
+            {
+                _objectCenter = _collider.bounds.center;
+                dist = Vector3.Distance(networkObject.transform.position, _objectCenter);
+                if (dist > radius)
+                    return false;
+            }
 
             // Check if game object has a player controller
             if(!networkObject.TryGetComponent(out player))
@@ -81,6 +89,7 @@ namespace Solis.Circuit
             var dot = Vector3.Dot(player.body.forward, directionToTarget.normalized);
             if (dot < (dist <= minDistance ? dotThreshold/2 : dotThreshold))
             {
+                Debug.Log("Not facing object");
                 return false;
             }
 
@@ -93,6 +102,7 @@ namespace Solis.Circuit
                 if (hit.collider.transform == gameObject.transform.parent) return true;
                 if (ignoreColliders.Contains(hit.collider)) return true;
 
+                Debug.Log("Wall between player and object");
                 return false;
             }
 
