@@ -14,7 +14,8 @@ namespace Solis.Audio.Players
 
         public void PlayAudioName()
         {
-            AudioSystem.PlayVfxStatic(audioName);
+          var audio =  AudioSystem.PlayVfxStatic(audioName);
+          audio.At(transform.position);
         }
     }
 }

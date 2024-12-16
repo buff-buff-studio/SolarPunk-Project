@@ -68,6 +68,11 @@ namespace DefaultNamespace
             text.text = "";
         }
 
+        public void KillAudio()
+        {
+            if(_audioPlayer!=null) AudioSystem.Instance.Kill(_audioPlayer);
+        }
+
         private void SetProgress()
         {
             if (!isWriting) return;
@@ -78,7 +83,8 @@ namespace DefaultNamespace
             {
                 progress = 1;
                 onFinishWriting?.Invoke();
-                AudioSystem.Instance.Kill(_audioPlayer);
+                KillAudio();
+
                 _audioPlayer.SetVolume(1);
                 isWriting = false;
                 _canApplyEffects = true;
