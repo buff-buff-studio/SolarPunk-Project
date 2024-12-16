@@ -134,6 +134,7 @@ namespace Solis.Audio
             var transform = AudioSource.transform;
             transform.parent = AudioSystem.transform;
             transform.position = position;
+            AudioSource.spatialBlend = 1;
             return this;
         }
         
