@@ -193,11 +193,15 @@ namespace _Scripts.UI
                 {
                     if (nextImage.activeSelf) nextImageAnimator.Play("NextDialogOpen");
                     else nextImage.SetActive(true);
-                    if(_audioPlayer != null) AudioSystem.Instance.Kill(_audioPlayer);
+                   KillAudio();
                 });
             }
         }
-        
+
+        public void KillAudio()
+        {
+            if(_audioPlayer != null) AudioSystem.Instance.Kill(_audioPlayer);
+        }
         private void ClosePanel()
         {
             IsDialogPlaying = false;
@@ -213,6 +217,9 @@ namespace _Scripts.UI
             if(!CinematicController.IsPlaying)
                 MulticamCamera.Instance!.ChangeCameraState(MulticamCamera.CameraState.Gameplay,
                 CinemachineBlendDefinition.Style.EaseInOut, 1);
+            
+            KillAudio();
+            textWriterSingle.KillAudio();
         }
 
         private void TypeWriteText(DialogStruct dialogData, Action callback)
