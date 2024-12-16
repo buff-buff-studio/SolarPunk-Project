@@ -259,7 +259,8 @@ namespace Solis.Audio
         /// Represents a music track
         /// </summary>
         Music,
-        Character
+        Character,
+        Dialog
     }
     
     /// <summary>

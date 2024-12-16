@@ -187,7 +187,7 @@ namespace _Scripts.UI
                     var stringAudio = character == CharacterTypeEmote.Diluvio
                         ? character.ToString()
                         : character.ToString() + Random.Range(0, 3);
-                    _audioPlayer = AudioSystem.PlayVfxStatic(stringAudio, true);
+                    _audioPlayer = AudioSystem.PlayDialogStatic(stringAudio, true);
                 }
                 TypeWriteText(currentDialog.Value.currentDialog.dialogs[index.Value], () =>
                 {

@@ -161,11 +161,13 @@ namespace Solis.Misc.Conveyor
             {
                 Id = this.Id,
                 ShuffleValue = shuffle
-            });
+            }, true);
         }
 
         private bool RandomizeFilter(ShuffleConveyorPacket arg)
         {
+            if(HasAuthority) return false;
+
             RandomizeFilter(arg.ShuffleValue);
             return true;
         }

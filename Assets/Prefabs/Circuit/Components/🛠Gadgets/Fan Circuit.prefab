@@ -434,10 +434,12 @@ MonoBehaviour:
   isOn:
     value: 0
     type: 0
+  timer: 0
   tickRate: 32
   windSpeed: 100
   windRadius: 2.5
   windHeight: 5
+  activeAfter: 1.25
 --- !u!114 &369312491023796040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,8 +453,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id:
-    high: -859103444
-    low: 1314296029
+    high: 965113400
+    low: -1884225145
   ownerId: -1
   prefabId:
     high: 0
