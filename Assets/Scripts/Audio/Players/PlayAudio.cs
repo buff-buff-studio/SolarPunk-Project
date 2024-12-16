@@ -9,7 +9,8 @@ namespace Solis.Audio.Players
         public void Play(string audio)
         {
             Debug.Log("PlayAudio");
-            AudioSystem.Instance.PlayVfx(audio);
+            var a =  AudioSystem.PlayVfxStatic(audio);
+            a.At(transform.position);
         }
 
         public void PlayAudioName()
