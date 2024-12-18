@@ -135,8 +135,9 @@ namespace Solis.Circuit.Components
             {
                 mode.Value = (int)Mode.Idle;
             }
-            statusTitle.Localize("mixer.idle");
-            statusDescription.Localize("mixer.desc_start");
+
+            statusTitle.Buffer = "mixer.idle";
+            statusDescription.Buffer = "mixer.desc_start";
             statusInfo.SetText("");
 
             liquidA.bar.fillAmount = 0;
@@ -283,7 +284,7 @@ namespace Solis.Circuit.Components
 
                 case Mode.Filling:
                     statusTitle.Localize("mixer.filling");
-                    statusDescription.Localize("mixer.desc_filling");
+                    statusDescription.Localize("mixer.desc_quantity");
                     statusInfo.SetText($"{liquidA.Amount:F1}% - {liquidB.Amount:F1}%");
                     liquidA.bar.fillAmount = liquidA.Amount / 100;
                     liquidB.bar.fillAmount = liquidB.Amount / 100;
@@ -316,7 +317,7 @@ namespace Solis.Circuit.Components
 
                 case Mode.Complete:
                     statusTitle.Localize("mixer.complete");
-                    statusDescription.Localize("mixer.desc_complete");
+                    statusDescription.Localize("mixer.desc_liquidRelease");
                     statusInfo.SetText("");
                     break;
 

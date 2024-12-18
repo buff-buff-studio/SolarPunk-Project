@@ -1,4 +1,5 @@
-﻿using Solis.i18n;
+﻿using System;
+using Solis.i18n;
 using TMPro;
 using UnityEngine;
 
@@ -25,7 +26,8 @@ namespace Interface
         #endregion
 
         #region Unity Callbacks
-        private void OnEnable()
+
+        private void Awake()
         {
             if (TryGetComponent(out _text))
             {
@@ -33,9 +35,17 @@ namespace Interface
                 _prefix = "";
                 _suffix = "";
 
+                _translated = true;
                 LanguagePalette.OnLanguageChanged += _Localize;
-                _Localize();
             }else Debug.LogError("Label component requires a TextMeshPro component", this);
+        }
+
+        private void OnEnable()
+        {
+            if (_text)
+                _Localize();
+            else
+                Debug.LogError("Label component requires a TextMeshPro component", this);
         }
 
         private void OnDisable()
@@ -44,11 +54,16 @@ namespace Interface
             LanguagePalette.OnLanguageChanged -= _Localize;
         }
 
+        public string Buffer
+        {
+            set => _buffer = value;
+        }
+
         public void SetText(string text)
         {
             _buffer = text;
-            _text.text = _prefix + _buffer + _suffix;
             _translated = false;
+            _Localize();
         }
 
         public void Localize(string buffer)
@@ -83,13 +98,12 @@ namespace Interface
         #region Private Methods
         private void _Localize()
         {
-            if (!_translated)
-            {
-                _text.text = _prefix + _buffer + _suffix;
-                return;
-            }
+            if (!_text)
+                if (!TryGetComponent(out _text))
+                    return;
 
-            _text.text = $"{_prefix}{LanguagePalette.Localize(_buffer)}{_suffix}";
+            var middle = _translated ? LanguagePalette.Localize(_buffer) : _buffer;
+            _text.text = $"{_prefix}{middle}{_suffix}";
 
             if (resize)
                 _Resize();
