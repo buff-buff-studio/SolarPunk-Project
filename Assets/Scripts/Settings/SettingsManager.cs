@@ -210,7 +210,8 @@ namespace Solis.Settings
                 if (_renderPipeline != null)
                 {
                     _renderPipeline.renderScale = settingsData.sliderItems["renderScale"]/10;
-                    renderScaleLabel.Localize("settings.renderScale", "", $" ({_renderPipeline.upscalingFilter.ToString()})");
+                    renderScaleLabel.Localize("settings.renderScale");
+                    renderScaleLabel.Suffix($" ({_renderPipeline.upscalingFilter.ToString()})");
                     Debug.Log($"Render Scale: {_renderPipeline.renderScale}");
                 }
 #if !UNITY_EDITOR

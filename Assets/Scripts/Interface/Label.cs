@@ -18,16 +18,24 @@ namespace Interface
         #region Private Fields
         private TMP_Text _text;
         private string _buffer;
+        private bool _translated;
+
+        private string _prefix;
+        private string _suffix;
         #endregion
 
         #region Unity Callbacks
         private void OnEnable()
         {
-            _text = GetComponent<TMP_Text>();
-            _buffer = _text.text;
-            
-            LanguagePalette.OnLanguageChanged += _Localize;
-            _Localize();
+            if (TryGetComponent(out _text))
+            {
+                _buffer = _text.text;
+                _prefix = "";
+                _suffix = "";
+
+                LanguagePalette.OnLanguageChanged += _Localize;
+                _Localize();
+            }else Debug.LogError("Label component requires a TextMeshPro component", this);
         }
 
         private void OnDisable()
@@ -36,24 +44,52 @@ namespace Interface
             LanguagePalette.OnLanguageChanged -= _Localize;
         }
 
+        public void SetText(string text)
+        {
+            _buffer = text;
+            _text.text = _prefix + _buffer + _suffix;
+            _translated = false;
+        }
+
         public void Localize(string buffer)
         {
+            if(_buffer == buffer)
+                return;
+
+            _translated = true;
             _buffer = buffer;
             _Localize();
         }
 
-        public void Localize(string buffer, string prefix = "", string suffix = "")
+        public void Prefix(string prefix)
         {
-            _buffer = buffer;
+            if (_prefix == prefix)
+                return;
+
+            _prefix = prefix;
             _Localize();
-            _text.text = $"{prefix}{_text.text}{suffix}";
+        }
+
+        public void Suffix(string suffix)
+        {
+            if (_suffix == suffix)
+                return;
+
+            _suffix = suffix;
+            _Localize();
         }
         #endregion
 
         #region Private Methods
         private void _Localize()
         {
-            _text.text = LanguagePalette.Localize(_buffer);
+            if (!_translated)
+            {
+                _text.text = _prefix + _buffer + _suffix;
+                return;
+            }
+
+            _text.text = $"{_prefix}{LanguagePalette.Localize(_buffer)}{_suffix}";
 
             if (resize)
                 _Resize();

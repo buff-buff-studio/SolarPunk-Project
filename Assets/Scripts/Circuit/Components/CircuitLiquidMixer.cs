@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Interface;
 using NetBuff.Misc;
 using TMPro;
 using UnityEngine;
@@ -71,9 +72,9 @@ namespace Solis.Circuit.Components
         public Error currentError => (Error) error.Value;
 
         public CircuitPlug startInput;
-        public TextMeshProUGUI statusTitle;
-        public TextMeshProUGUI statusDescription;
-        public TextMeshProUGUI statusInfo;
+        public Label statusTitle;
+        public Label statusDescription;
+        public Label statusInfo;
         public AudioSource audioSource;
         public AudioClip heatingSound;
         public AudioClip coolingSound;
@@ -134,9 +135,9 @@ namespace Solis.Circuit.Components
             {
                 mode.Value = (int)Mode.Idle;
             }
-            statusTitle.text = "Idle";
-            statusDescription.text = "Waiting for input";
-            statusInfo.text = "";
+            statusTitle.Localize("mixer.idle");
+            statusDescription.Localize("mixer.desc_start");
+            statusInfo.SetText("");
 
             liquidA.bar.fillAmount = 0;
             liquidB.bar.fillAmount = 0;
@@ -243,28 +244,28 @@ namespace Solis.Circuit.Components
             switch (currentMode)
             {
                 case Mode.Error:
-                    statusTitle.text = "Error";
-                    statusInfo.text = "";
-                    statusDescription.text = currentError switch
+                    statusTitle.Localize("mixer.error");
+                    statusInfo.SetText("");
+                    statusDescription.Localize(currentError switch
                     {
-                        Error.LiquidAOverflow => "Liquid A overflowed, close the valve A and B and flush the system",
-                        Error.LiquidBOverflow => "Liquid B overflowed, close the valve A and B and flush the system",
-                        Error.FlushError => "Flush process has been interrupted, close the valve A and B and flush the system again",
-                        Error.Overheating => "The system overheated, flush the system and try again",
-                        Error.CoolingError => "The system is too cold, flush the system and try again",
-                        Error.MixingError => "The mixing process has been interrupted or took too long, flush the system and try again",
-                        Error.StartMixingError => "The system is not ready to start the process, close the valves and try again",
-                        _ => "Unknown error"
-                    };
+                        Error.LiquidAOverflow => "mixer.error_A_overflow",
+                        Error.LiquidBOverflow => "mixer.error_B_overflow",
+                        Error.FlushError => "mixer.error_flush",
+                        Error.Overheating => "mixer.error_overheating",
+                        Error.CoolingError => "mixer.error_cooling",
+                        Error.MixingError => "mixer.error_mixing",
+                        Error.StartMixingError => "mixer.error_startMixing",
+                        _ => "mixer.error_unknow"
+                    });
                     break;
 
                 case Mode.Flushing:
                     if (liquidA.Amount > 0 || liquidB.Amount > 0)
                     {
-                        statusTitle.text = "Flushing";
+                        statusTitle.Localize("mixer.flushing");
                         var flushAmount = ((liquidA.Amount + liquidB.Amount) / 2);
-                        statusDescription.text = $"{(int)((flushAmount / _flushStartAmount) * 100)}%";
-                        statusInfo.text = $"{liquidA.Amount:F1}% - {liquidB.Amount:F1}%";
+                        statusDescription.SetText($"{(int)((flushAmount / _flushStartAmount) * 100)}%");
+                        statusInfo.SetText($"{liquidA.Amount:F1}% - {liquidB.Amount:F1}%");
 
                         liquidA.bar.fillAmount = liquidA.Amount / 100;
                         liquidB.bar.fillAmount = liquidB.Amount / 100;
@@ -272,18 +273,18 @@ namespace Solis.Circuit.Components
                     break;
 
                 case Mode.Idle:
-                    statusTitle.text = "Idle";
-                    statusDescription.text = "";
-                    statusInfo.text = "Press the start button to begin";
+                    statusTitle.Localize("mixer.idle");
+                    statusDescription.SetText("");
+                    statusInfo.Localize("mixer.desc_start");
 
                     liquidA.bar.fillAmount = liquidA.Amount / 100;
                     liquidB.bar.fillAmount = liquidB.Amount / 100;
                     break;
 
                 case Mode.Filling:
-                    statusTitle.text = "Filling";
-                    statusDescription.text = "The liquid must be in the ideal quantity";
-                    statusInfo.text = $"{liquidA.Amount:F1}% - {liquidB.Amount:F1}%";
+                    statusTitle.Localize("mixer.filling");
+                    statusDescription.Localize("mixer.desc_filling");
+                    statusInfo.SetText($"{liquidA.Amount:F1}% - {liquidB.Amount:F1}%");
                     liquidA.bar.fillAmount = liquidA.Amount / 100;
                     liquidB.bar.fillAmount = liquidB.Amount / 100;
 
@@ -291,31 +292,32 @@ namespace Solis.Circuit.Components
                 case Mode.Heating:
                     var color = _temperature.Value > idealTemperatureRange.y ? Color.red : _temperature.Value < idealTemperatureRange.x ? Color.blue : Color.green;
 
-                    statusTitle.text = "Heating";
-                    statusDescription.text = $"{Mathf.Floor(Mathf.Abs(_heatingTimeCounter.Value-heatingTime))}s";
-                    statusInfo.text = $"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{Mathf.Floor(_temperature.Value)}°C</color>";
+                    statusTitle.Localize("mixer.heating");
+                    statusDescription.SetText($"{Mathf.Floor(Mathf.Abs(_heatingTimeCounter.Value-heatingTime))}s");
+                    statusInfo.SetText($"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{Mathf.Floor(_temperature.Value)}°C</color>");
 
 
                     break;
 
                 case Mode.Mixing:
-                    statusTitle.text = "Mixing";
+                    statusTitle.Localize("mixer.mixing");
                     if (_startMixing.Value)
                     {
-                        statusDescription.text = $"Don't stop mixing for {mixingTime}s";
-                        statusInfo.text = $"{(int)_mixingTimeCounter.Value}s";
+                        statusDescription.Localize("mixer.desc_mixing");
+                        statusDescription.Suffix($" {mixingTime}s");
+                        statusInfo.SetText($"{(int)_mixingTimeCounter.Value}s");
                     }
                     else
                     {
-                        statusDescription.text = "Waiting for start mixing";
-                        statusInfo.text = "";
+                        statusDescription.Localize("mixer.desc_waitToStart");
+                        statusInfo.SetText("");
                     }
                     break;
 
                 case Mode.Complete:
-                    statusTitle.text = "Complete";
-                    statusDescription.text = "Liquid released";
-                    statusInfo.text = "";
+                    statusTitle.Localize("mixer.complete");
+                    statusDescription.Localize("mixer.desc_complete");
+                    statusInfo.SetText("");
                     break;
 
                 default:
@@ -369,6 +371,7 @@ namespace Solis.Circuit.Components
                     if(startInput.ReadOutput().power > 0)
                     {
                         mode.Value = (int)Mode.Filling;
+                        _temperature.Value = 0;
                     }
                     else if (flushIsOpen)
                     {
