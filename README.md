@@ -12,6 +12,10 @@
 
 ## **[Open Beta](https://github.com/buff-buff-studio/Solis/releases/tag/0.5.2)**
 
+### Open Beta Trailer
+<a href="https://www.youtube.com/watch?v=A00JG0johm0"> <img alt="License" width="400" src="https://img.youtube.com/vi/A00JG0johm0/maxresdefault.jpg"> </a>
+
+
 ### Teaser
 <a href="https://youtu.be/W_hOIR2WtTk?si=8ecKOaBlP2iMr62R"> <img alt="License" width="400" src="https://jogospuc.com.br/ti/img_thumb/jogo_64_1719842640.jpg"> </a>
 
