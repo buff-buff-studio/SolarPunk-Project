@@ -136,8 +136,8 @@ namespace Solis.Circuit.Components
                 mode.Value = (int)Mode.Idle;
             }
 
-            statusTitle.Buffer = "mixer.idle";
-            statusDescription.Buffer = "mixer.desc_start";
+            statusTitle.SetBuffer = "mixer.idle";
+            statusDescription.SetBuffer = "mixer.desc_start";
             statusInfo.SetText("");
 
             liquidA.bar.fillAmount = 0;

@@ -43,5 +43,23 @@ namespace Solis.Data
             Debug.LogWarning($"Key {key} not found in settings data", this);
             return default;
         }
+
+        public T TrySet<T>(string key, T value)
+        {
+            if (typeof(T) == typeof(bool))
+            {
+                toggleItems[key] = (bool) (object) value;
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                arrowItems[key] = (int) (object) value;
+            }
+            else if (typeof(T) == typeof(float))
+            {
+                sliderItems[key] = (float) (object) value;
+            }
+            Debug.LogWarning($"Key {key} not found in settings data", this);
+            return default;
+        }
     }
 }

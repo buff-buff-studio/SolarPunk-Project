@@ -35,6 +35,7 @@ namespace Interface
 
         #endregion
 
+
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -119,7 +120,7 @@ namespace Interface
 
         public void JoinCodeChanged()
         {
-            joinButton.interactable = inputRelayCode.text.Length > 3;
+            joinButton.interactable = inputRelayCode.text.Length > 4;
             _joinButtonText.color = joinButton.interactable ? _interactableColor : _nonInteractableColor;
         }
 

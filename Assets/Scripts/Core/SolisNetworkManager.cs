@@ -58,9 +58,9 @@ namespace Solis.Core
                                 return;
                             }
 
-                            var o = FindFirstObjectByType<RelayNetworkManagerGUI>();
+                            var o = FindFirstObjectByType<RelayCodeGUI>();
                             if (o != null)
-                                o.code = relayCode;
+                                o.Code = relayCode;
                         });
                     else
                         StartRelayServer(2, "", (callback, c) =>
@@ -75,9 +75,9 @@ namespace Solis.Core
                             relayCode = c;
                             GUIUtility.systemCopyBuffer = c;
 
-                            var o = FindFirstObjectByType<RelayNetworkManagerGUI>();
+                            var o = FindFirstObjectByType<RelayCodeGUI>();
                             if (o != null)
-                                o.code = c;
+                                o.Code = c;
                             
                             LoadScene("Lobby");
                             JoinRelayServer(relayCode, (cb) =>
@@ -137,7 +137,7 @@ namespace Solis.Core
                                 return;
                             }
 
-                            var o = FindFirstObjectByType<RelayNetworkManagerGUI>();
+                            var o = FindFirstObjectByType<RelayCodeGUI>();
                             if (o != null)
                                 o.code = relayCode;
                         });
@@ -153,7 +153,7 @@ namespace Solis.Core
                             Debug.Log("Code: " + c);
                             relayCode = c;
 
-                            var o = FindFirstObjectByType<RelayNetworkManagerGUI>();
+                            var o = FindFirstObjectByType<RelayCodeGUI>();
                             if (o != null)
                                 o.code = c;
                             

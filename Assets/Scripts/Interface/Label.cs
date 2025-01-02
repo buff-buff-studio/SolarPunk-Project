@@ -25,6 +25,30 @@ namespace Interface
         private string _suffix;
         #endregion
 
+        /// <summary>
+        /// Updates the buffer of the label without localizing it.
+        /// </summary>
+        public string SetBuffer
+        {
+            set => _buffer = value;
+        }
+
+        /// <summary>
+        /// Updates the prefix of the label without localizing it.
+        /// </summary>
+        public string SetPrefix
+        {
+            set => _prefix = value;
+        }
+
+        /// <summary>
+        /// Updates the suffix of the label without localizing it.
+        /// </summary>
+        public string SetSuffix
+        {
+            set => _suffix = value;
+        }
+
         #region Unity Callbacks
 
         private void Awake()
@@ -54,11 +78,10 @@ namespace Interface
             LanguagePalette.OnLanguageChanged -= _Localize;
         }
 
-        public string Buffer
-        {
-            set => _buffer = value;
-        }
-
+        /// <summary>
+        /// Updates the buffer and disable the localization.
+        /// </summary>
+        /// <param name="text"></param>
         public void SetText(string text)
         {
             _buffer = text;
@@ -66,6 +89,10 @@ namespace Interface
             _Localize();
         }
 
+        /// <summary>
+        /// Updates the buffer of the label and localizes it.
+        /// </summary>
+        /// <param name="buffer"></param>
         public void Localize(string buffer)
         {
             if(_buffer == buffer)
@@ -76,6 +103,10 @@ namespace Interface
             _Localize();
         }
 
+        /// <summary>
+        /// Updates the prefix of the label and localizes it.
+        /// </summary>
+        /// <param name="prefix"></param>
         public void Prefix(string prefix)
         {
             if (_prefix == prefix)
@@ -85,12 +116,21 @@ namespace Interface
             _Localize();
         }
 
+        /// <summary>
+        /// Updates the suffix of the label and localizes it.
+        /// </summary>
+        /// <param name="suffix"></param>
         public void Suffix(string suffix)
         {
             if (_suffix == suffix)
                 return;
 
             _suffix = suffix;
+            _Localize();
+        }
+
+        public void UpdateLabel()
+        {
             _Localize();
         }
         #endregion
@@ -102,7 +142,7 @@ namespace Interface
                 if (!TryGetComponent(out _text))
                     return;
 
-            var middle = _translated ? LanguagePalette.Localize(_buffer) : _buffer;
+            var middle = _translated ? (!string.IsNullOrWhiteSpace(_buffer) ? LanguagePalette.Localize(_buffer) : _buffer) : _buffer;
             _text.text = $"{_prefix}{middle}{_suffix}";
 
             if (resize)

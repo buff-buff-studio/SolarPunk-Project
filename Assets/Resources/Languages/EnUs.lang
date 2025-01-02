@@ -3,6 +3,8 @@
 #Base List Screen
 list.empty=No Entries Found7
 game.loading=Loading...
+code.title=Code:
+code.norelay=Room without code
 
 #Server List Screen
 servers.Local=Local Servers
@@ -83,7 +85,9 @@ main.back=Back
 
 #Credits
 credits.devs=Developers
-credits.artist=Artists
+credits.direction=<sprite name="20"> Direction <sprite name="20">
+credits.programmer=<sprite name="22"> Programmer <sprite name="22">
+credits.artist=<sprite name="21"> Artists <sprite name="21">
 credits.arnilsen=Arnilsen Arthur\n<size=40>Network, Circuits & Shaders</size>
 credits.giovana=Giovana Melo\n<size=40>Dialogue & Systems</size>
 credits.helena=Helena Mansur\n<size=40>Models & Textures</size>
@@ -93,6 +97,16 @@ credits.bozzi=Luiz Bozzi\n<size=40>Models & Textures, Animation</size>
 credits.renzo=Renzo Diniz\n<size=40>Game Design, Level Design, Sound Design</size>
 credits.sergio=Sérgio Macellani\n<size=40>Direction, Gameplay Programmer, Level Design & Game Design</size>
 credits.douglas=Douglas Gustavo\n<size=40>Music</size>
+
+#Cheats
+cheats.title=Cheats
+cheats.godmode=God Mode
+cheats.flymode=Fly Mode
+cheats.noclip=NoClip Mode
+cheats.respawn=Respawn
+cheats.spawnbox=Spawn Box
+cheats.nextphase=Next Phase [Host]
+cheats.prevphase=Previous Phase [Host]
 
 #Settings
 settings.header=Settings
@@ -120,6 +134,7 @@ settings.save=Save
 settings.reset=Reset Values
 settings.language=Language
 settings.renderScale=Render Scale
+settings.discord=Discord Integration
 
 #Cutscene Screen
 cutscene.skip=Skip
@@ -127,16 +142,18 @@ cutscene.skip=Skip
 #Player Stats
 stats.pause=|| PAUSED ||
 
-#Signs in the game
+#Signs
+#FACTORY DEPOT
 signs.welcome=Welcome to
 signs.garage=Garage
 signs.depot=Depot
 
-#Signs Factory Inside
+#FACTORY INDOOR
 signs.lake.title=Servers Lake
 signs.lake.desc=Swimming and drinking the water from the server cooling lake are prohibited.\n\nCaution: Hot water.
 
 #Dialogs
+#FARM
 dialog.garage.door_2=Ok captain {{Frog}}!
 dialog.garage.capsule_1=None of your batteries are working anymore... {{Ram}}, we have to go to the Factory and find a new one, and fast!
 dialog.garage.capsule_1.1=The last storm stopped all deliveries, and it looks like the Farm also took a lot of damage.
@@ -144,17 +161,21 @@ dialog.garage.capsule_1.2=We're going to have to fix the broken things we find o
 dialog.garage.capsule_2=<Glitch>O-okay</Glitch> {{Nina}}... I'm <Glitch>gl-glad</Glitch> that you're still trying to fix me... but you <Glitch>st-still</Glitch> haven't let me out of the capsule.
 dialog.garage.capsule_2.1=Unplug the {{Socket2}} up there that powers it... or y'know, you can <Glitch>u-use</Glitch> the {{Lever}} here that we built just for that.
 dialog.garage.capsule_3=Oh, right! I forgot about that part, hold on!
+dialog.megaLevel.estufa_1={{Nina}}, I think you can <Glitch>fit through</Glitch> that hole there, and I'll go above.
+dialog.megaLevel.estufa_2=Hmm, you're right {{Ram}}, that might work!
+
+#FACTORY DEPOT
 text.factory_depot.lever=<Shake>Hmmm...</Shake> Looks like this lever switches the energy flow.
 text.factory_depot.pass=This password looks important...
 dialog.factory_depot.elevator_1=Finally we're going to the Factory {{Ram}}!
 dialog.factory_depot.elevator_2=Let's go {{Nina}}!
 dialog.factory_depot.elevator_3=<Shake><Rainbow>Yeehaw! </Rainbow></Shake>*webit*
+
+#FACTORY INDOOR
 dialog.factory.fan_1=Hey {{Ram}}, I'm gonna need your help to go through the {{Fan}}. 
 dialog.factory.fan_2=Well, partner, *webit*, there's a handy dandy hook right there!
 dialog.factory.fan_3=Right, I'll find a way.
 dialog.factory.labrint=There's the battery, we need to get to the blue area!
-dialog.megaLevel.estufa_1={{Nina}}, I think you can <Glitch>fit through</Glitch> that hole there, and I'll go above.
-dialog.megaLevel.estufa_2=Hmm, you're right {{Ram}}, that might work!
 dialog.fabric.val={{Ram}}, I can't rotate these valves, could you help out?
 dialog.fabric.scanner=<Shake>Oh no!</Shake> The Palm Scanner is <Glitch>broken</Glitch>! Maybe one of the charging stations will power it.
 dialog.fabric.tonel=We can use this lever to mix the liquids inside the tank...

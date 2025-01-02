@@ -11,6 +11,8 @@ namespace Solis.Misc.Integrations
     /// </summary>
     public class DiscordController : MonoBehaviour
     {
+        public SettingsData settingsData;
+
         private static readonly long CLIENT_ID = 1287743540322897920;
 
         public static DiscordController Instance;
@@ -20,6 +22,7 @@ namespace Solis.Misc.Integrations
         public static int PlayerCount;
 
         public Discord.Discord Discord;
+        private bool _isInitialized = false;
 
         private static long USER_ID;
         private Activity _activity;
@@ -39,6 +42,42 @@ namespace Solis.Misc.Integrations
         {
 #if PLATFORM_STANDALONE_WIN
             Debug.Log("Starting Discord Rich Presence");
+
+            if(settingsData.TryGet<bool>("discord") == false)
+            {
+                Debug.LogWarning("Discord Rich Presence is disabled in settings");
+                IsConnected = false;
+                this.enabled = false;
+                return;
+            }
+            InitializeDiscord();
+#else
+            Debug.LogWarning("Discord Rich Presence is not supported on this platform");
+            IsConnected = false;
+            this.enabled = false;
+#endif
+        }
+
+        public static void EnableDiscord(bool enable)
+        {
+            if (enable)
+            {
+                if (IsConnected) return;
+                Debug.Log("Discord Rich Presence is now enabled");
+                Instance.enabled = true;
+                Instance.InitializeDiscord();
+            }
+            else
+            {
+                if (!IsConnected) return;
+                Debug.Log("Discord Rich Presence is now disabled");
+                Instance.ShutdownDiscord();
+            }
+        }
+
+        private void InitializeDiscord()
+        {
+            if(IsConnected) return;
 
             try
             {
@@ -85,7 +124,7 @@ namespace Solis.Misc.Integrations
                     }
                     else
                     {
-                        Debug.LogError("Failed to update Discord Rich Presence");
+                        Debug.LogError("Failed to update Discord Rich Presence, result: " + result);
                         IsConnected = false;
                         this.enabled = false;
                     }
@@ -124,6 +163,7 @@ namespace Solis.Misc.Integrations
                             Debug.LogError("Failed to accept join request");
                     });
                 };
+                _isInitialized = true;
             }
             catch (Exception e)
             {
@@ -132,16 +172,39 @@ namespace Solis.Misc.Integrations
                 this.enabled = false;
                 throw;
             }
-#else
-            Debug.LogWarning("Discord Rich Presence is not supported on this platform");
+        }
+
+        private void ShutdownDiscord()
+        {
+            if(!IsConnected) return;
+
+            ActivityManager activityManager = Discord.GetActivityManager();
+            activityManager.ClearActivity(result =>
+            {
+                if (result == Result.Ok)
+                {
+                    Debug.Log("Discord Rich Presence cleared successfully");
+                    IsConnected = false;
+                }
+                else
+                    Debug.LogError("Failed to clear Discord Rich Presence");
+            });
+
             IsConnected = false;
-            this.enabled = false;
-#endif
         }
 
         private void Update()
         {
             Discord.RunCallbacks();
+        }
+
+        private void LateUpdate()
+        {
+            if (!IsConnected && _isInitialized)
+            {
+                Discord.Dispose();
+                Debug.Log("Discord Rich Presence disposed");
+            }
         }
 
         private void OnApplicationQuit()

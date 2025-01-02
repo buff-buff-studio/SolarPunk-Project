@@ -37,14 +37,6 @@ namespace Solis.Interface.Lobby
         public Button buttonLeaveRoom;
 
         public GameObject changeCharacter;
-
-        [Header("SAVE")]
-        public GameObject saveDisplay;
-
-        public TMP_Text textSaveName;
-        public RawImage imageSaveIcon;
-        public Texture2D newSaveIcon;
-        public SaveListScreen saveListScreen;
         #endregion
 
         private bool canStartGame = true;
@@ -62,8 +54,6 @@ namespace Solis.Interface.Lobby
                 textPlayerCount.text = $"{newValue}";
                 DiscordController.PlayerCount = newValue;
             };
-
-            RefreshSave();
         }
 
         public void OnDisable()
@@ -139,29 +129,6 @@ namespace Solis.Interface.Lobby
         public void InviteFriends()
         {
             DiscordController.Instance.SendInvite();
-        }
-
-        /// <summary>
-        /// Refreshes the save display.
-        /// </summary>
-        public void RefreshSave()
-        {
-            var auth = HasAuthority;
-            saveDisplay.SetActive(auth);
-            if (!auth)
-                return;
-
-            var save = GameManager.Instance.Save;
-            textSaveName.text = string.IsNullOrEmpty(save.name) ? "New Save" : save.name;
-            imageSaveIcon.texture = save.preview == null ? newSaveIcon : save.preview;
-        }
-
-        /// <summary>
-        /// Opens the save list screen.
-        /// </summary>
-        public void OpenSaveListScreen()
-        {
-            saveListScreen.gameObject.SetActive(true);
         }
         
         /// <summary>

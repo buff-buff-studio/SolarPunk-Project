@@ -3,6 +3,8 @@
 #Base List Screen
 list.empty=No Entries Found
 game.loading=Carregando...
+code.title=Código:
+code.norelay=Sala sem código
 
 #Server List Screen
 servers.Local=Servidor Local
@@ -83,7 +85,9 @@ main.back=Voltar
 
 #Credits
 credits.devs=Desenvolvedores
-credits.artist=Artistas
+credits.direction=<sprite name="20"> Direção <sprite name="20">
+credits.programmer=<sprite name="22"> Programação <sprite name="22">
+credits.artist=<sprite name="21"> Arte <sprite name="21">
 credits.arnilsen=Arnilsen Arthur\n<size=40>Rede, Circuitos & Shaders</size>
 credits.giovana=Giovana Melo\n<size=40>Dialogo & Sistemas</size>
 credits.helena=Helena Mansur\n<size=40>Modelagem & Texturas</size>
@@ -93,6 +97,16 @@ credits.bozzi=Luiz Bozzi\n<size=40>Modelagem & Texturas, Animação</size>
 credits.renzo=Renzo Diniz\n<size=40>Game Design, Level Design, Sound Design</size>
 credits.sergio=Sérgio Macellani\n<size=40>Direcão, Programação de Gameplay, Level Design & Game Design</size>
 credits.douglas=Douglas Gustavo\n<size=40>Música</size>
+
+#Cheats
+cheats.title=Cheats
+cheats.godmode=Modo Invencível
+cheats.flymode=Modo Voo
+cheats.noclip=Modo Intangível
+cheats.respawn=Reviver
+cheats.spawnbox=Criar Caixa
+cheats.nextphase=Próxima Fase [Host]
+cheats.prevphase=Fase Anterior [Host]
 
 #Settings
 settings.header=Opções
@@ -120,6 +134,7 @@ settings.save=Salvar
 settings.reset=Resetar Values
 settings.language=Idioma
 settings.renderScale=Escala de Renderização
+settings.discord=Integração com o Discord
 
 #Cutscene Screen
 cutscene.skip=Pular
@@ -127,16 +142,18 @@ cutscene.skip=Pular
 #Player Stats
 stats.pause=|| PAUSADO ||
 
-#Signs in the game
+#Signs
+#FACTORY DEPOT
 signs.welcome=Bem-vindo a
 signs.garage=Garagem
 signs.depot=Depósito
 
-#Signs Factory Inside
+#FACTORY INDOOR
 signs.lake.title=Lago dos Servidores
 signs.lake.desc=Nadar e beber dá agua do lago de resfriamento do servidor são proibidos.\n\nCuidado: Água quente.
 
 #Dialogs
+#FARN
 dialog.garage.door_2=Ok capitão {{Frog}}!
 dialog.garage.capsule_1=Nenhuma das suas baterias estão funcionando mais... {{Ram}}, temos que ir até a Fábrica e achar uma nova, e rápido!
 dialog.garage.capsule_1.1=Essa última tempestade parou todas as entregas, e parece que a fazenda também sofreu bastante dano.
@@ -144,17 +161,21 @@ dialog.garage.capsule_1.2=Vamos ter que consertar as coisas quebradas que acharm
 dialog.garage.capsule_2=<Glitch>C-certo</Glitch> {{Nina}}... fico <Glitch>fe-feliz</Glitch> que você ainda está tentando me arrumar... mas você <Glitch>a-ainda</Glitch> não me tirou dessa cápsula
 dialog.garage.capsule_2.1=Desliga a {{Socket2}} alí em cima que energiza ela... ou também sabe, pode <Glitch>u-usar</Glitch> a {{Lever}} aqui que a gente montou só pra isso.
 dialog.garage.capsule_3=Ah, certo! Esqueci dessa parte, segura aí!
+dialog.megaLevel.estufa_1={{Nina}}, acho que você consegue passar por aquele buraco ali, e eu vou por cima.
+dialog.megaLevel.estufa_2=Hmm, você tá certo {{Ram}}, acho que assim funciona!
+
+#FACTORY DEPOT
 text.factory_depot.lever=<Shake>Hmmm...</Shake> Parece que essa alavanca troca o fluxo de energia.
 text.factory_depot.pass=Essa senha parece ser útil...
 dialog.factory_depot.elevator_1=Finalmente vamos para a Fábrica {{Ram}}!
 dialog.factory_depot.elevator_2=Vamos {{Nina}}!
 dialog.factory_depot.elevator_3=<Shake><Rainbow>Bao demais! </Rainbow></Shake>*webit*
+
+#FACTORY INDOOR
 dialog.factory.fan_1=Nossa {{Ram}}, preciso da sua ajuda para atravessar o {{Fan}}. 
 dialog.factory.fan_2=Uai, sô, *webit*, tem um gancho fixador ali. 
 dialog.factory.fan_3=Certo, vou dar um jeito.
 dialog.factory.labrint=Ali está a bateria, precisamos chegar até a área azul!
-dialog.megaLevel.estufa_1={{Nina}}, acho que você consegue passar por aquele buraco ali, e eu vou por cima.
-dialog.megaLevel.estufa_2=Hmm, você tá certo {{Ram}}, acho que assim funciona!
 dialog.fabric.val={{Ram}}, não consigo rotacionar as válvulas, você pode tentar?
 dialog.fabric.scanner=<Shake>Oh não!</Shake> O scanner de palma está <Glitch>quebrado</Glitch>! Talvez alguma das estações de carregamento energizem ele.
 dialog.fabric.tonel=Podemos usar essa alavanca para misturar os líquidos do tonel...

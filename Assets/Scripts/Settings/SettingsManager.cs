@@ -7,6 +7,7 @@ using Interface;
 using Solis.Data;
 using Solis.Data.Saves;
 using Solis.i18n;
+using Solis.Misc.Integrations;
 using Solis.UI;
 using TMPro;
 using Unity.VisualScripting;
@@ -21,18 +22,20 @@ namespace Solis.Settings
     {
         private static string Path => Application.persistentDataPath;
         private static UniversalRenderPipelineAsset _renderPipeline;
-        
+
+        public SettingsTab[] settingsTabs;
+        public Sprite selectedTab, unselectedTab;
+
+        [Header("REFERENCES")]
         [SerializeField]
         private SettingsData settingsData;
 
-        public Sprite selectedTab, unselectedTab;
-
-        public Language[] languages;
         public Label renderScaleLabel;
+        public GameObject discordToggle;
+        public Language[] languages;
 
-        public SettingsTab[] settingsTabs;
-
-        [Space(10)] 
+        [Space(10)]
+        [Header("ITEMS")]
         [SerializeField] private SerializedDictionary<string, Toggle> boolItems;
         [SerializeField] private SerializedDictionary<string, ArrowItems> intItems;
         [SerializeField] private SerializedDictionary<string, Slider> floatItems;
@@ -74,6 +77,13 @@ namespace Solis.Settings
         private void Awake()
         {
             DetectDisplay();
+#if !PLATFORM_STANDALONE_WIN
+            discordToggle.SetActive(false);
+            boolItems["discord"].isOn = false;
+            settingsData.TrySet("discord", false);
+#else
+            boolItems["discord"].onValueChanged.AddListener(DiscordController.EnableDiscord);
+#endif
             Load();
             
             foreach (var i in intItems)
@@ -82,8 +92,8 @@ namespace Solis.Settings
                 f.Value.onValueChanged.AddListener(value => { settingsData.sliderItems[f.Key] = value; OnSettingsChanged?.Invoke(); });
             foreach (var b in boolItems)
                 b.Value.onValueChanged.AddListener(value => { settingsData.toggleItems[b.Key] = value; OnSettingsChanged?.Invoke(); });
-            
-            
+
+
             intItems["resolution"].SetItems(_supportedResolutions.Select(r => $"{r.width}x{r.height}").ToList());
         }
 
@@ -212,7 +222,7 @@ namespace Solis.Settings
                     _renderPipeline.renderScale = settingsData.sliderItems["renderScale"]/10;
                     renderScaleLabel.Localize("settings.renderScale");
                     renderScaleLabel.Suffix($" ({_renderPipeline.upscalingFilter.ToString()})");
-                    Debug.Log($"Render Scale: {_renderPipeline.renderScale}");
+                    //Debug.Log($"Render Scale: {_renderPipeline.renderScale}");
                 }
 #if !UNITY_EDITOR
                 if (!Screen.fullScreen) return;
@@ -357,6 +367,12 @@ namespace Solis.Settings
             settingsData.sliderItems["cameraSensitivity"] = 1;
             settingsData.toggleItems["invertXAxis"] = false;
             settingsData.toggleItems["invertYAxis"] = true;
+
+#if !PLATFORM_STANDALONE_WIN
+            settingsData.toggleItems["discord"] = false;
+#else
+            settingsData.toggleItems["discord"] = true;
+#endif
             
             //Sound
             settingsData.sliderItems["masterVolume"] = 100;

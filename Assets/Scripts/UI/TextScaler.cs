@@ -42,7 +42,7 @@ namespace DefaultNamespace
             isWriting = true;
             onFinishWriting = callback;
             _canApplyEffects = false;
-            _audioPlayer = AudioSystem.Instance.PlayVfx("Dialog",true);
+            _audioPlayer = AudioSystem.Instance.PlayDialog("Dialog",true);
             _audioPlayer.SetVolume(0.1f);
             text.ForceMeshUpdate();
             if (text.textInfo != null && text.textInfo.characterCount > 0)

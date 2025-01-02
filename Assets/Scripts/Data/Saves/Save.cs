@@ -60,8 +60,7 @@ namespace Solis.Data.Saves
             preview = null;
             playTime = 0;
 
-            if (LobbyScreen.Instance != null)
-                LobbyScreen.Instance.RefreshSave();
+            // if (LobbyScreen.Instance != null) LobbyScreen.Instance.RefreshSave();
         }
 
         /// <summary>
@@ -87,8 +86,7 @@ namespace Solis.Data.Saves
             var json = JsonValue.Parse(System.IO.File.ReadAllText(folder + "data.json"));
             data.ReadFromJson(json as JsonObject);
 
-            if (LobbyScreen.Instance != null)
-                LobbyScreen.Instance.RefreshSave();
+            // if (LobbyScreen.Instance != null) LobbyScreen.Instance.RefreshSave();
         }
 
         /// <summary>
@@ -130,8 +128,7 @@ namespace Solis.Data.Saves
 
             callback?.Invoke();
 
-            if (LobbyScreen.Instance != null)
-                LobbyScreen.Instance.RefreshSave();
+            //if (LobbyScreen.Instance != null) LobbyScreen.Instance.RefreshSave();
 
             Debug.Log($"Saved to {folder}!");
         }
