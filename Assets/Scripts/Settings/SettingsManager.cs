@@ -8,7 +8,7 @@ using Solis.Data;
 using Solis.Data.Saves;
 using Solis.i18n;
 using Solis.Misc.Integrations;
-using Solis.UI;
+using Solis.Interface;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;

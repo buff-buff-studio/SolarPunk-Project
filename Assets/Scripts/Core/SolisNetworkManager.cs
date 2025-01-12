@@ -6,7 +6,7 @@ using NetBuff.Session;
 using NetBuff.UDP;
 using Solis.Data;
 using Solis.Packets;
-using Solis.UI;
+using Solis.Interface;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
