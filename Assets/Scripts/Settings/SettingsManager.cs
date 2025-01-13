@@ -7,11 +7,13 @@ using Interface;
 using Solis.Data;
 using Solis.Data.Saves;
 using Solis.i18n;
+using Solis.Interface.Input;
 using Solis.Misc.Integrations;
 using Solis.Interface;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using Screen = UnityEngine.Screen;
@@ -29,16 +31,22 @@ namespace Solis.Settings
         [Header("REFERENCES")]
         [SerializeField]
         private SettingsData settingsData;
+        [SerializeField]
+        private CanvasGroup canvasGroup;
 
         public Label renderScaleLabel;
         public GameObject discordToggle;
         public Language[] languages;
+        public Button saveButton;
+        public Button resetButton;
 
         [Space(10)]
         [Header("ITEMS")]
         [SerializeField] private SerializedDictionary<string, Toggle> boolItems;
         [SerializeField] private SerializedDictionary<string, ArrowItems> intItems;
         [SerializeField] private SerializedDictionary<string, Slider> floatItems;
+
+        private bool IsSettingsOpen => canvasGroup.interactable;
 
         public string Username
         {
@@ -55,6 +63,7 @@ namespace Solis.Settings
         public bool resetItems;        
         public bool renameItems;   
         public bool resetSO;
+        public bool updateNavigation;
 #endif
         
         public static Action OnSettingsChanged;
@@ -106,13 +115,35 @@ namespace Solis.Settings
         private void OnEnable()
         {
             OnSettingsChanged += ApplySettings;
+            SelectableBackground.OnSelected += ScrollRectUpdate;
         }
 
         private void OnDisable()
         {
             OnSettingsChanged -= ApplySettings;
+            SelectableBackground.OnSelected -= ScrollRectUpdate;
         }
-        
+
+        private void Update()
+        {
+            if(!IsSettingsOpen) return;
+
+            if (SolisInput.GetKeyDown("NavigateRight"))
+            {
+                var i = currentIndex + 1;
+                if (i >= settingsTabs.Length)
+                    i = 0;
+                Debug.Log($"Navigate Right: {i}");
+                ChangeWindow(i);
+            }else if (SolisInput.GetKeyDown("NavigateLeft"))
+            {
+                var i = currentIndex - 1;
+                if (i < 0)
+                    i = settingsTabs.Length - 1;
+                ChangeWindow(i);
+            }
+        }
+
 #if UNITY_EDITOR
         protected override void OnValidate()
         {
@@ -192,6 +223,28 @@ namespace Solis.Settings
                 resetSO = false;
             }
 
+            if (updateNavigation)
+            {
+                for(int i = 0; i < settingsTabs.Length; i++)
+                {
+                    var content = windows[i].transform.GetChild(0).GetChild(0);
+                    for (int j = 1; j < content.childCount; j++)
+                    {
+                        var selectable = content.GetChild(j).GetComponentInChildren<Selectable>();
+                        var sUp = content.GetChild(j - 1).GetComponentInChildren<Selectable>();
+                        var sDown = j + 1 < content.childCount ? content.GetChild(j + 1).GetComponentInChildren<Selectable>() : saveButton;
+                        Debug.Log($"New navigation for {content.GetChild(j).name} is: Up: {sUp.name} Down: {sDown.name}", selectable);
+                        selectable.navigation = new Navigation
+                        {
+                            mode = Navigation.Mode.Explicit,
+                            selectOnUp = sUp,
+                            selectOnDown = sDown
+                        };
+                    }
+                }
+                updateNavigation = false;
+            }
+
             if(!Application.isPlaying)
             {
                 OnTabSelected(currentIndex);
@@ -202,7 +255,14 @@ namespace Solis.Settings
 #endif
 
         #endregion
-        
+
+        private void ScrollRectUpdate(RectTransform lookAt)
+        {
+            windows[currentIndex].TryGetComponent(out ScrollRect scrollRect);
+            if (scrollRect.verticalScrollbar.gameObject.activeSelf)
+                scrollRect.SnapToSelected(lookAt.parent as RectTransform);
+        }
+
         private void ApplySettings()
         {
             try
@@ -339,7 +399,17 @@ namespace Solis.Settings
                 {
                     settingsTabs[i].DeselectTab(unselectedTab);
                 }
+
+                var navigation = settingsTabs[i].button.navigation;
+                navigation.selectOnDown = settingsTabs[index].firstObject.GetComponent<Selectable>();
+                settingsTabs[i].button.navigation = navigation;
             }
+            var saveNavigation = saveButton.navigation;
+            var resetNavigation = resetButton.navigation;
+            saveNavigation.selectOnUp = settingsTabs[index].lastObject;
+            resetNavigation.selectOnUp = settingsTabs[index].lastObject;
+            saveButton.navigation = saveNavigation;
+            resetButton.navigation = resetNavigation;
         }
         
         public override void ChangeWindow(int index)
@@ -419,6 +489,8 @@ namespace Solis.Settings
             public Button button;
             public Image image;
             public TextMeshProUGUI text;
+            public GameObject firstObject;
+            public Selectable lastObject;
             
             public void SelectTab(Sprite spr)
             {
@@ -426,6 +498,8 @@ namespace Solis.Settings
                 text.color = Color.black;
                 text.fontSize = 45;
                 button.interactable = false;
+                if(Application.isPlaying)
+                    EventSystem.current!.SetSelectedGameObject(firstObject);
             }
             
             public void DeselectTab(Sprite spr)

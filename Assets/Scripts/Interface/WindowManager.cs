@@ -16,7 +16,7 @@ namespace Solis.Interface
         [SerializeField] private bool resetOnCanvasGroupChange = false;
 
         [Space] [Header("WINDOWS")] [SerializeField]
-        private List<CanvasGroup> windows;
+        private protected List<CanvasGroup> windows;
         
         public Action<int> onChangeWindow;
 

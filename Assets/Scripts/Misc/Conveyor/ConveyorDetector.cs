@@ -37,6 +37,7 @@ namespace Solis.Misc.Conveyor
 
         [Header("SETTINGS")]
         public List<ObjectData> filterList;
+        public int[] filterOrder;
         public IntNetworkValue filterIndex = new IntNetworkValue(0);
         public BoolNetworkValue started = new BoolNetworkValue(false);
         public BoolNetworkValue finished = new BoolNetworkValue(false);
@@ -61,7 +62,6 @@ namespace Solis.Misc.Conveyor
             finishPage.SetActive(false);
             errorPage.SetActive(false);
 
-            PacketListener.GetPacketListener<ShuffleConveyorPacket>().AddClientListener(RandomizeFilter);
             ShuffleFilter();
             if(HasAuthority)
                 _loadCount.Value = 0;
@@ -121,13 +121,13 @@ namespace Solis.Misc.Conveyor
 
         private void OnTriggerEnter(Collider col)
         {
-            if(!HasAuthority || finished.Value) return;
+            if(!HasAuthority || finished.Value || error.Value) return;
 
             if(col.TryGetComponent(out ConveyorObject conveyorObject))
             {
                 if (filterList[filterIndex.Value].type.Equals(conveyorObject.objectType))
                 {
-                    if(filterIndex.Value < 2)
+                    if(_loadCount.Value < 2)
                     {
                         filterIndex.Value++;
                         _loadCount.Value++;
@@ -155,35 +155,20 @@ namespace Solis.Misc.Conveyor
         {
             if(!HasAuthority) return;
 
-            var shuffle = Random.Range(12345, 543210).ToString("000000");
-            RandomizeFilter(shuffle);
-            SendPacket(new ShuffleConveyorPacket()
+            filterOrder = new int[3];
+            for (int i = 0; i < filterOrder.Length; i++)
             {
-                Id = this.Id,
-                ShuffleValue = shuffle
-            }, true);
-        }
-
-        private bool RandomizeFilter(ShuffleConveyorPacket arg)
-        {
-            if(HasAuthority) return false;
-
-            RandomizeFilter(arg.ShuffleValue);
-            return true;
-        }
-
-        public void RandomizeFilter(string shuffle)
-        {
-            var sChar = shuffle.ToCharArray().Select(c => (int)c).ToArray();
-            for (int i = 0; i < filterList.Count; i++)
-            {
-                var newIndex = Mathf.Clamp(sChar[i], 0, filterList.Count - 1);
-                (filterList[i], filterList[newIndex]) = (filterList[newIndex], filterList[i]);
+                var randomIndex = 0;
+                do
+                { randomIndex = Random.Range(0, filterList.Count);
+                } while (filterOrder.Contains(randomIndex));
+                filterOrder[i] = randomIndex;
             }
-            filterIndex.Value = 0;
+
+            filterIndex.Value = filterOrder[0];
             if(_mode.Value != 1) return;
             if(filterImage.sprite != null)
-                filterImage.sprite = filterList[0].sprite;
+                filterImage.sprite = filterList[filterIndex.Value].sprite;
         }
 
         #endregion

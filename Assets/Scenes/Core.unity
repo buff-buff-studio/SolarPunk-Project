@@ -4302,6 +4302,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2544720026455511222, guid: be9614fcfe69bac46a008049ff3f3564, type: 3}
+      propertyPath: m_text
+      value: Performance
+      objectReference: {fileID: 0}
     - target: {fileID: 2597510696942563911, guid: be9614fcfe69bac46a008049ff3f3564, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -4843,6 +4847,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6645399309922711436, guid: be9614fcfe69bac46a008049ff3f3564, type: 3}
+      propertyPath: eventSystem
+      value: 
+      objectReference: {fileID: 1855921028}
+    - target: {fileID: 6645399309922711436, guid: be9614fcfe69bac46a008049ff3f3564, type: 3}
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 725582238}
@@ -4850,6 +4858,10 @@ PrefabInstance:
       propertyPath: pauseVolume
       value: 
       objectReference: {fileID: 1689614007}
+    - target: {fileID: 6645399309922711436, guid: be9614fcfe69bac46a008049ff3f3564, type: 3}
+      propertyPath: firstSelected
+      value: 
+      objectReference: {fileID: 1952325659765725396}
     - target: {fileID: 6645399309922711436, guid: be9614fcfe69bac46a008049ff3f3564, type: 3}
       propertyPath: networkManager
       value: 
@@ -5467,6 +5479,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a63d5379020142a4ae38639e4b193eb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1952325659765725396 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8389568898505645759, guid: be9614fcfe69bac46a008049ff3f3564, type: 3}
+  m_PrefabInstance: {fileID: 1952325659765725391}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2756414570633026325
 PrefabInstance:
   m_ObjectHideFlags: 0

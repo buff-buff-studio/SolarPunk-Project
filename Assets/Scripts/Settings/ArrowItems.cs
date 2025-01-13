@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 using Interface;
+using Solis.Interface.Input;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Solis.Settings
 {
-    public class ArrowItems : MonoBehaviour
+    public class ArrowItems : Selectable
     {
         [SerializeField]
         private bool interactable;
@@ -43,6 +45,39 @@ namespace Solis.Settings
             previousButton.onClick.AddListener(!invert ? PreviousItem : NextItem);
             nextButton.onClick.AddListener(invert ? PreviousItem : NextItem);
             display.TryGetComponent(out label);
+        }
+
+        private void Update()
+        {
+            if (IsHighlighted())
+            {
+            }
+        }
+
+        public override void OnMove(AxisEventData eventData)
+        {
+            if (!IsActive() || !IsInteractable())
+            {
+                base.OnMove(eventData);
+                return;
+            }
+
+            switch (eventData.moveDir)
+            {
+                case MoveDirection.Left:
+                    if (FindSelectableOnLeft() == null)
+                        PreviousItem();
+                    else base.OnMove(eventData);
+                    break;
+                case MoveDirection.Right:
+                    if (FindSelectableOnRight() == null)
+                        NextItem();
+                    else base.OnMove(eventData);
+                    break;
+                default:
+                    base.OnMove(eventData);
+                    break;
+            }
         }
 
         private void Start()
