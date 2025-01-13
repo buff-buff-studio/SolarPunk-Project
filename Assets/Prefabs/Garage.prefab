@@ -14739,95 +14739,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2511560079214332883}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6960633816316595908
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6577688945163817228}
-  - component: {fileID: 8263248058898120107}
-  - component: {fileID: 2842280376387527586}
-  - component: {fileID: 8052215089514872079}
-  m_Layer: 0
-  m_Name: DialogCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &6577688945163817228
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6960633816316595908}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6373436070553047294}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8263248058898120107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6960633816316595908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9078c0bdfc4423ebfcf3a05ad72d048, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id:
-    high: -253213285
-    low: 1655084892
-  ownerId: -1
-  prefabId:
-    high: 0
-    low: 0
---- !u!114 &2842280376387527586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6960633816316595908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b51b2ef89c38805439302c9db5b8d7b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentDialog: {fileID: 11400000, guid: f156741a7afc0be4cb714330edd2f875, type: 2}
-  characterTypeFilter: 1
-  canRepeat: 0
---- !u!135 &8052215089514872079
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6960633816316595908}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 4.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6963993956302864760
 GameObject:
   m_ObjectHideFlags: 0
@@ -30311,9 +30222,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1201378487072495584, guid: e3260268f34c11440a30583549c70466, type: 3}
       insertIndex: -1
       addedObject: {fileID: 75285721327642226}
-    - targetCorrespondingSourceObject: {fileID: 1201378487072495584, guid: e3260268f34c11440a30583549c70466, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6577688945163817228}
     - targetCorrespondingSourceObject: {fileID: 765271154871255372, guid: e3260268f34c11440a30583549c70466, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1221410630036810713}
