@@ -151,6 +151,7 @@ namespace Solis.Audio
             var transform = AudioSource.transform;
             transform.SetParent(target);
             transform.localPosition = offset;
+            AudioSource.spatialBlend = 1;
             return this;
         }
         

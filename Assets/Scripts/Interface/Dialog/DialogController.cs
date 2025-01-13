@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using AYellowpaper.SerializedCollections;
 using Cinemachine;
 using NetBuff;
 using NetBuff.Components;
 using NetBuff.Interface;
 using NetBuff.Misc;
+using Solis.Audio;
 using Solis.i18n;
 using Solis.Misc.Multicam;
 using Solis.Packets;
@@ -43,7 +45,10 @@ namespace Interface.Dialog
         public bool playTyping = true;
         
         private Coroutine _currentCoroutine;
+        private AudioPlayer _currentAudioPlayer;
         
+        public SerializedDictionary<DialogCharacter, string[]> dialogVoices = new();
+
         public void OnEnable()
         {
             WithValues(isDialogActive, currentOwnershipId, clientCount, skipFlag, canSkip);
@@ -266,13 +271,26 @@ namespace Interface.Dialog
                 yield return null;
             }
             
-            //Set text
             textSpeaker.text = LanguagePalette.Localize("dialog.character." + character.ToString().ToLowerInvariant());
             textText.Text.text = LanguagePalette.Localize("dialog." + textKey);
             textText.typingTime = 0;
             playTyping = true;
+
+            if (_currentAudioPlayer != null)
+            {
+                _currentAudioPlayer.Stop();
+                _currentAudioPlayer = null;
+            }
             
-            MulticamCamera.Instance.SetDialogueFocus(character);
+            var target = MulticamCamera.Instance.SetDialogueFocus(character);
+
+            if (dialogVoices.TryGetValue(character, out var voices))
+            {
+                _currentAudioPlayer = AudioSystem.Instance.PlayDialog(voices[UnityEngine.Random.Range(0, voices.Length)], true);
+                if (target != null)
+                    _currentAudioPlayer.Following(target.transform);
+            }
+
             
             ClientSendPacket(new DialogTypingPacket
             {
@@ -297,6 +315,11 @@ namespace Interface.Dialog
             }
             
             textText.typingTime = textText.MaxTime;
+            if (_currentAudioPlayer != null)
+            {
+                _currentAudioPlayer.Stop();
+                _currentAudioPlayer = null;
+            }
             
             if (playTyping)
                 ClientSendPacket(new DialogTypingPacket

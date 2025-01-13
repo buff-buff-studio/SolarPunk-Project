@@ -13,6 +13,7 @@ namespace Interface.Dialog.Activators
         public DialogData dialogData;
         public float radius = 3f;
         public BoolNetworkValue dialogOpened = new(false, NetworkValue.ModifierType.Everybody);
+        public bool isReusable = false;
         
         private void OnDrawGizmos()
         {
@@ -39,7 +40,8 @@ namespace Interface.Dialog.Activators
             var player = GetNetworkObject(arg1.Id).GetComponent<PlayerControllerBase>();
             if (player != null && player.HasAuthority && filter.Filter(player.CharacterType) && Vector3.Distance(player.transform.position, transform.position) < radius)
             {
-                dialogOpened.Value = true;
+                if(!isReusable)
+                    dialogOpened.Value = true;
                 DialogController.Instance.OpenDialog(dialogData);
                 return true;
             }

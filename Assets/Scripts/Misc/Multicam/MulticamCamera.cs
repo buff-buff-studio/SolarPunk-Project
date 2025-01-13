@@ -181,15 +181,21 @@ namespace Solis.Misc.Multicam
             }
         }
 
-        public void SetDialogueFocus(DialogCharacter type)
+        public Transform SetDialogueFocus(DialogCharacter type)
         {
+            Transform target = null;
+            
             switch (type)
             {
                 case DialogCharacter.Nina:
                     if(!nina)
                     {
                         var player = FindFirstObjectByType<PlayerControllerHuman>();
-                        if (player) nina = player.dialogueLookAt;
+                        if (player)
+                        {
+                            target = player.dialogueLookAt;
+                            nina = player.dialogueLookAt;
+                        }
                         else
                         {
                             Debug.LogError("Nina is not found to focus on dialogue");
@@ -205,7 +211,11 @@ namespace Solis.Misc.Multicam
                     if(!ram)
                     {
                         var player = FindFirstObjectByType<PlayerControllerRobot>();
-                        if (player) ram = player.dialogueLookAt;
+                        if (player)
+                        {
+                            target = player.dialogueLookAt;
+                            ram = player.dialogueLookAt;
+                        }
                         else
                         {
                             Debug.LogError("RAM is not found to focus on dialogue");
@@ -221,7 +231,11 @@ namespace Solis.Misc.Multicam
                     if(!diluvio)
                     {
                         var player = FindFirstObjectByType<PlayerControllerRobot>();
-                        if (player) diluvio = player.diluvioPosition;
+                        if (player)
+                        {
+                            target = player.diluvioPosition;
+                            diluvio = player.diluvioPosition;
+                        }
                         else
                         {
                             Debug.LogError("Diluvio is not found to focus on dialogue");
@@ -241,6 +255,7 @@ namespace Solis.Misc.Multicam
             }
 
             ChangeCameraState(CameraState.Dialogue, CinemachineBlendDefinition.Style.EaseInOut, 1);
+            return target;
         }
 
         public bool OnChangeScene()
