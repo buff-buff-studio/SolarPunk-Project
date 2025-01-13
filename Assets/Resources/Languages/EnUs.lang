@@ -157,76 +157,55 @@ signs.depot=Depot
 signs.lake.title=Servers Lake
 signs.lake.desc=Swimming and drinking the water from the server cooling lake are prohibited.\n\nCaution: Hot water.
 
-#Dialogs
-dialog.skip=<sprite=17> Skip {0}
-dialog.character.nina=<sprite=21> Nina
-dialog.character.ram=<sprite=22> RAM
-dialog.character.diluvio=<sprite=20> Dilúvio
-dialog.label.lever=Lever
+#Dialog - Core
+dialog.skip=<sprite=18> Skip {0}
+dialog.character.nina=<sprite=23> Nina
+dialog.character.ram=<sprite=24> RAM
+dialog.character.diluvio=<sprite=22> Dilúvio
+
+#Dialog - Labels
+dialog.label.plate=Plate
 dialog.label.button=Button
+dialog.label.lever=Lever
+dialog.label.palm_scanner=Palm Scanner
+dialog.label.robot_scanner=Robot Scanner
+dialog.label.zipline=Zipline
+dialog.label.wind_turbine=Wind Turbine
+dialog.label.plug_red=Red Plug
+dialog.label.plug_blue=Blue Plug
+dialog.label.socket_red=Red Socket
+dialog.label.socket_blue=Blue Socket
+dialog.label.box=Box
+dialog.label.box_heavy=Heavy Box
+dialog.label.box_white=White Box
+dialog.label.barrel=Barrel
+dialog.label.container=Container
+dialog.label.drum=Plastic Drum
+dialog.label.cardboard_box=Cardboard Box
+dialog.label.crate=Wooden Crate
+dialog.label.power=Power
+dialog.label.warning=Warning
+dialog.label.stop=Stop
+dialog.label.diluvio=Dilúvio
+dialog.label.nina=Nina
+dialog.label.ram=RAM
+dialog.label.w=W
+dialog.label.a=A
+dialog.label.s=S
+dialog.label.d=D
+dialog.label.e=E
+dialog.label.g=G
+dialog.label.space=Space
+dialog.label.enter=Enter
+dialog.label.shift=Shift
+dialog.label.lmb=Left Mouse Button
+dialog.label.rmb=Right Mouse Button
+dialog.label.joy_a=A
+dialog.label.joy_b=B
+dialog.label.joy_x=X
+dialog.label.joy_y=Y
+dialog.label.joy_l=Left Stick
+dialog.label.joy_r=Right Stick
+
+#Dialog
 dialog.test=Hey<pause>, wait a little my friend! Pull this <label=lever> for us <erase>friend</erase>please!
-#FARM
-dialog.garage.door_2=Ok captain {{Frog}}!
-dialog.garage.capsule_1=None of your batteries are working anymore... {{Ram}}, we have to go to the Factory and find a new one, and fast!
-dialog.garage.capsule_1.1=The last storm stopped all deliveries, and it looks like the Farm also took a lot of damage.
-dialog.garage.capsule_1.2=We're going to have to fix the broken things we find on the way, and check if the animals are okay.
-dialog.garage.capsule_2=<Glitch>O-okay</Glitch> {{Nina}}... I'm <Glitch>gl-glad</Glitch> that you're still trying to fix me... but you <Glitch>st-still</Glitch> haven't let me out of the capsule.
-dialog.garage.capsule_2.1=Unplug the {{Socket2}} up there that powers it... or y'know, you can <Glitch>u-use</Glitch> the {{Lever}} here that we built just for that.
-dialog.garage.capsule_3=Oh, right! I forgot about that part, hold on!
-dialog.megaLevel.estufa_1={{Nina}}, I think you can <Glitch>fit through</Glitch> that hole there, and I'll go above.
-dialog.megaLevel.estufa_2=Hmm, you're right {{Ram}}, that might work!
-
-#FACTORY DEPOT
-text.factory_depot.lever=<Shake>Hmmm...</Shake> Looks like this lever switches the energy flow.
-text.factory_depot.pass=This password looks important...
-dialog.factory_depot.elevator_1=Finally we're going to the Factory {{Ram}}!
-dialog.factory_depot.elevator_2=Let's go {{Nina}}!
-dialog.factory_depot.elevator_3=<Shake><Rainbow>Yeehaw! </Rainbow></Shake>*webit*
-
-#FACTORY INDOOR
-dialog.factory.fan_1=Hey {{Ram}}, I'm gonna need your help to go through the {{Fan}}. 
-dialog.factory.fan_2=Well, partner, *webit*, there's a handy dandy hook right there!
-dialog.factory.fan_3=Right, I'll find a way.
-dialog.factory.labrint=There's the battery, we need to get to the blue area!
-dialog.fabric.val={{Ram}}, I can't rotate these valves, could you help out?
-dialog.fabric.scanner=<Shake>Oh no!</Shake> The Palm Scanner is <Glitch>broken</Glitch>! Maybe one of the charging stations will power it.
-dialog.fabric.tonel=We can use this lever to mix the liquids inside the tank...
-dialog.fabric.esteira_1=<Big>Hawt damn!</Big>, this must be the <Rainbow> charging station.</Rainbow>
-dialog.fabric.esteira_2=Looks like we have to follow a sequence of load orders to open the door.
-dialog.fabric.esteira_3=I think this {{Button}} resets things, we're gonna have to test it!
-
-#Dialog emojis
-dialog.emoji.lever=Lever
-dialog.emoji.button=Button
-dialog.emoji.pressure_plate=Pressure Plate
-dialog.emoji.zip_line=Zip Line
-dialog.emoji.right_mouse_btn=RMB
-dialog.emoji.stop=Stop
-dialog.emoji.palm_scanner=Palm Scanner
-dialog.emoji.robot_scanner=Robot Scanner
-dialog.emoji.plug_1=Plug
-dialog.emoji.plug_2=Plug
-dialog.emoji.wind_turbine=Wind Turbine
-dialog.emoji.left_mouse_btn=LMB
-dialog.emoji.w=W
-dialog.emoji.a=A
-dialog.emoji.s=S
-dialog.emoji.d=D
-dialog.emoji.alert=Alert
-dialog.emoji.socket_1=Socket
-dialog.emoji.socket_2=Socket
-dialog.emoji.container=Container
-dialog.emoji.box=Box
-dialog.emoji.enter=Enter
-dialog.emoji.frog=Frog
-dialog.emoji.nina=Nina
-dialog.emoji.ram=RAM
-dialog.emoji.fan=Fan
-dialog.emoji.space=Space
-dialog.emoji.shift=Shift
-dialog.emoji.e=E
-dialog.emoji.y=Y
-dialog.emoji.b=B
-dialog.emoji.x=X
-dialog.emoji.left_joystick=Left Joystick
-dialog.emoji.right_joystick=Right Joystick

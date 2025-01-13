@@ -229,7 +229,7 @@ namespace Interface.Dialog
             public void AddTypingTimer(char c)
             {
                 var start = currentTypingTime;
-                var end = start + 0.05f * currentTypingSpeed;
+                var end = start + 0.05f / currentTypingSpeed;
                 _timings.Add(new CharTypingTimings { start = start, end = end});
                 _animations.Add(currentTypingAnimation);
                 currentTypingTime = end;
@@ -291,6 +291,9 @@ namespace Interface.Dialog
             {"pause", new PauseTag()},
             {"erase", new EraseTag()},
             {"rainbow", new RainbowTag()},
+            {"glitch", new GlitchTag()},
+            {"scream", new ScreamTag()},
+            {"shake", new ShakeTag()}
         };
         
         public ParseResult Result { get; private set; }

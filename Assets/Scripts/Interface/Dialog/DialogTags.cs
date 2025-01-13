@@ -116,13 +116,104 @@ namespace Interface.Dialog
     {
         public override bool Closable => true;
         
-        public float speed = 1f;
-        public float scale = 0.1f;
+        public float speed = 0.25f;
+        public float scale = 0.002f;
         
         public override void Apply(DialogText text, TMPCharData data, int index, int rawIndex)
         {
-            var color = Color.HSVToRGB((Time.time * speed + index * scale) % 1, 1, 1);
-            data.SetColor(color);
+            for (var i = 0; i < data.VertexCount; i++)
+            {
+                var pos = data.GetVertexPosition(i);
+                var color = Color.HSVToRGB( Mathf.Repeat(Time.time * speed + (pos.x + pos.y) * scale, 1f), 1, 1);
+                data.SetVertexColor(i, color);
+            }
+        }
+    }
+
+    public class GlitchTag : DialogTextPreprocessor.Tag
+    {
+        public override bool Closable => true;
+
+        public float speed = 5f;
+        public float scale = 0.1f;
+        public float strength = 3f;
+
+        public float alphaSpeed = 2f;
+        public float alphaScale = 3.33f;
+
+        public override void Apply(DialogText text, TMPCharData data, int index, int rawIndex)
+        {
+            //glitch text, effect, randomly scaling on x and y, and disappearing randomly
+            for (var i = 0; i < data.VertexCount; i++)
+            {
+                var pos = data.GetVertexPosition(i);
+                var offset = new Vector3(Mathf.PerlinNoise(pos.x * scale + Time.time * speed, pos.y * scale + Time.time * speed),
+                    Mathf.PerlinNoise(pos.y * scale + Time.time * speed, pos.x * scale + Time.time * speed), 0);
+                data.SetVertexPosition(i, pos + offset * strength);
+            }
+            
+            if(Mathf.Repeat(Time.time * alphaSpeed + index * alphaScale, 1f) < 0.2f)
+                data.SetAlpha(0);
+        }
+    }
+
+    public class ScreamTag : DialogTextPreprocessor.Tag
+    {
+        public override bool Closable => true;
+        
+        public float speed = 10f;
+        public float scale = 0.23f;
+        public float strength = 10f;
+
+        private DialogTextPreprocessor.TypingAnimation _before;
+
+        public override void OnOpen(DialogText text, DialogTextPreprocessor.ParseState state, int index, int rawIndex)
+        {
+            _before = state.currentTypingAnimation;
+            state.currentTypingAnimation = new ScreamTypingAnimation();
+            state.currentTypingSpeed *= 0.5f;
+        }
+
+        public override void OnClose(DialogText text, DialogTextPreprocessor.ParseState state, int start, int rawStart, int end, int rawEnd)
+        {
+            state.currentTypingAnimation = _before;
+            state.currentTypingSpeed *= 2f;
+        }
+
+        public override void Apply(DialogText text, TMPCharData data, int index, int rawIndex)
+        {
+            var offset = new Vector3(Mathf.PerlinNoise(index * scale + Time.time * speed, 0),
+                Mathf.PerlinNoise(0, index * scale + Time.time * speed), 0);
+            
+            data.Translate(offset * strength);
+        }
+    }
+
+    public class ScreamTypingAnimation : DialogTextPreprocessor.TypingAnimation
+    {
+        public override void Apply(DialogText text, TMPCharData data, int index, float progress)
+        {
+            var clamped = Mathf.Clamp(progress, 0, 1);
+            data.Scale(Vector3.one * Mathf.Lerp(2f, 1f, clamped));
+            var color = data.GetColor();
+            data.SetColor(new Color(color.r, color.g, color.b,  clamped));
+        }
+    }
+
+    public class ShakeTag : DialogTextPreprocessor.Tag
+    {
+        public override bool Closable => true;
+
+        public float speed = 5f;
+        public float scale = 0.1f;
+        public float strength = 6f;
+        
+        public override void Apply(DialogText text, TMPCharData data, int index, int rawIndex)
+        {
+            var offset = new Vector3(Mathf.PerlinNoise(index * scale + Time.time * speed, 0),
+                Mathf.PerlinNoise(0, index * scale + Time.time * speed), 0);
+
+            data.Translate(offset * strength);
         }
     }
 }
