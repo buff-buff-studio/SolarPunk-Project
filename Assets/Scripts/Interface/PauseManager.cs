@@ -11,6 +11,7 @@ using Solis.Settings;
 using Solis.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class PauseManager : WindowManager
@@ -22,6 +23,7 @@ public class PauseManager : WindowManager
     public SolisNetworkManager networkManager;
     public GameManager gameManager;
     public GameObject pauseVolume;
+    public GameObject firstSelected;
 
     [Header("Players List")]
     public TextMeshProUGUI ninaUsername;
@@ -124,6 +126,9 @@ public class PauseManager : WindowManager
             if (isPaused) ResumeGame();
             else PauseGame();
         }
+        if (isPaused)
+            if (SolisInput.GetKeyDown("Cancel"))
+                ChangeWindow(0);
     }
     
     public void ResumeGame()
@@ -162,6 +167,7 @@ public class PauseManager : WindowManager
         SetVisible(true);
         ChangeWindow(0);
         OnPause?.Invoke(true);
+        EventSystem.current.SetSelectedGameObject(firstSelected);
     }
     
     public void BugReport()

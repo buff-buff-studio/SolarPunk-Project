@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Solis.Audio;
 using Solis.i18n;
+using Solis.Interface.Input;
 using Solis.Misc.Integrations;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Solis.UI
 {
@@ -13,7 +16,9 @@ namespace Solis.UI
     {
         public static bool ShowError { get; set; }
         public static string ErrorMessage { get; set; }
-        
+
+        public Selectable[] windowsFirstSelectable;
+
         public Transform camTarget;
         public Transform camMainMenu, camOtherMenu;
         
@@ -40,6 +45,18 @@ namespace Solis.UI
                 
             base.Start();
             DiscordController.Instance!.SetMenuActivity();
+        }
+
+        private void Update()
+        {
+            if(SolisInput.GetKeyDown("Cancel"))
+                ChangeWindow(0);
+        }
+
+        public override void ChangeWindow(int index)
+        {
+            base.ChangeWindow(index);
+            EventSystem.current.SetSelectedGameObject(windowsFirstSelectable[index].gameObject);
         }
 
         private void ChangeCameraTarget(int index)
