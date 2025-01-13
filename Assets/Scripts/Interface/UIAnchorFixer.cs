@@ -43,11 +43,20 @@ namespace Interface
             if (GUILayout.Button("Bake"))
             {
                 var rect = fixer.GetComponent<RectTransform>();
-                fixer.anchorMin = rect.anchorMin;
-                fixer.anchorMax = rect.anchorMax;
-                fixer.offsetMin = rect.offsetMin;
-                fixer.offsetMax = rect.offsetMax;
+                var propAnchorMin = serializedObject.FindProperty("anchorMin");
+                var propAnchorMax = serializedObject.FindProperty("anchorMax");
+                var propOffsetMin = serializedObject.FindProperty("offsetMin");
+                var propOffsetMax = serializedObject.FindProperty("offsetMax");
+                
+                propAnchorMin.vector2Value = rect.anchorMin;
+                propAnchorMax.vector2Value = rect.anchorMax;
+                propOffsetMin.vector2Value = rect.offsetMin;
+                propOffsetMax.vector2Value = rect.offsetMax;
+                
+                serializedObject.ApplyModifiedProperties();
             }
+            
+            
         }
     }
     #endif

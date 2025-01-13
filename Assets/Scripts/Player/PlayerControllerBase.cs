@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using _Scripts.UI;
 using Cinemachine;
+using Interface.Dialog;
 using NetBuff;
 using NetBuff.Components;
 using NetBuff.Interface;
@@ -18,7 +18,6 @@ using Solis.Misc.Integrations;
 using Solis.Misc.Multicam;
 using Solis.Misc.Props;
 using Solis.Packets;
-using UI;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -221,7 +220,7 @@ namespace Solis.Player
         private Vector2 MoveInput => SolisInput.GetVector2("Move");
         private bool InputJump => SolisInput.GetKeyDown("Jump");
         private bool InputJumpUp => SolisInput.GetKeyUp("Jump");
-        private bool CanJump => !IsJumping && (IsGrounded || _coyoteTimer > 0) && _jumpTimer <= 0 && !isPaused.Value && !DialogPanel.IsDialogPlaying && !_isFocused;
+        private bool CanJump => !IsJumping && (IsGrounded || _coyoteTimer > 0) && _jumpTimer <= 0 && !isPaused.Value && !DialogController.Instance.IsDialogActive && !_isFocused;
 
         private protected bool CanJumpCut =>
             IsJumping && (transform.position.y - _startJumpPos) >= JumpCutMinHeight;
@@ -307,9 +306,9 @@ namespace Solis.Player
                     _Focus();
                 }
 
-                if(DialogPanel.IsDialogPlaying || _isCinematicRunning)
+                if(DialogController.Instance.IsDialogActive || _isCinematicRunning)
                     if(SolisInput.GetKeyDown("Skip"))
-                        SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
+                        SendPacket(new PlayerInputPacket { Key = KeyCode.Return, Id = Id, CharacterType = CharacterType}, true);
                 return;
             }
 
@@ -729,13 +728,10 @@ namespace Solis.Player
                     Id = Id
                 }, true);
             }
-            if(DialogPanel.IsDialogPlaying)
-                if(SolisInput.GetKeyDown("Skip"))
-                    SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
             
-            if(InteractablePanel.IsDialogPlaying)
+            if(DialogController.Instance.IsDialogActive)
                 if(SolisInput.GetKeyDown("Skip"))
-                    SendPacket(new PlayerInputPackage { Key = KeyCode.Return, Id = Id, CharacterType = this.CharacterType}, true);
+                    SendPacket(new PlayerInputPacket { Key = KeyCode.Return, Id = Id, CharacterType = CharacterType}, true);
         }
 
         private void _Focus()
@@ -804,7 +800,7 @@ namespace Solis.Player
 
         private void _Move()
         {
-            var moveInput = (!isPaused.Value && !DialogPanel.IsDialogPlaying) ? MoveInput.normalized : Vector2.zero;
+            var moveInput = (!isPaused.Value && !DialogController.Instance.IsDialogActive) ? MoveInput.normalized : Vector2.zero;
             var maxSpeedTarget = _inJumpState ? MaxSpeed * AccelInJumpMultiplier : MaxSpeed;
 
             if (_flyMode)

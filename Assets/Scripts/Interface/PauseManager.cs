@@ -8,7 +8,7 @@ using Solis.Interface.Input;
 using Solis.Misc;
 using Solis.Player;
 using Solis.Settings;
-using Solis.UI;
+using Solis.Interface;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

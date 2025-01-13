@@ -43,6 +43,11 @@ game.leave=Leave Game
 game.restart_level=Restart Level
 game.copy_code=Copy Code
 
+#Errors
+network.error.title=Network Error
+network.error.error_join_room=Error while joining room
+network.error.error_create_room=Error while creating room
+
 #In Game Esc
 ingame.back=Resume
 ingame.settings=Settings
@@ -153,6 +158,13 @@ signs.lake.title=Servers Lake
 signs.lake.desc=Swimming and drinking the water from the server cooling lake are prohibited.\n\nCaution: Hot water.
 
 #Dialogs
+dialog.skip=<sprite=17> Skip {0}
+dialog.character.nina=<sprite=21> Nina
+dialog.character.ram=<sprite=22> RAM
+dialog.character.diluvio=<sprite=20> Dilúvio
+dialog.label.lever=Lever
+dialog.label.button=Button
+dialog.test=Hey<pause>, wait a little my friend! Pull this <label=lever> for us <erase>friend</erase>please!
 #FARM
 dialog.garage.door_2=Ok captain {{Frog}}!
 dialog.garage.capsule_1=None of your batteries are working anymore... {{Ram}}, we have to go to the Factory and find a new one, and fast!

@@ -17,7 +17,10 @@ namespace Solis.i18n
         
         public string Localize(string key, params object[] args)
         {
-            return Localize(Hash(key), args);
+            if (!entries.TryGetValue(Hash(key), out var entry)) 
+                return $"[missing_{key}]";
+            
+            return string.Format(entry, args);
         }
         
         /// <summary>
@@ -30,7 +33,7 @@ namespace Solis.i18n
         public string Localize(int key, params object[] args)
         {
             if (!entries.TryGetValue(key, out var entry)) 
-                return "[missing]";
+                return $"[missing]";
             
             return string.Format(entry, args);
         }

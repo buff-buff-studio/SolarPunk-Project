@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cinemachine;
+using Interface.Dialog;
 using UnityEngine;
 using NetBuff.Components;
 using NetBuff.Misc;
@@ -65,19 +66,19 @@ namespace Solis.Misc.Multicam
 
         private void OnEnable()
         {
-            PacketListener.GetPacketListener<PlayerInputPackage>().AddServerListener(OnInput);
+            PacketListener.GetPacketListener<PlayerInputPacket>().AddServerListener(OnInput);
             PacketListener.GetPacketListener<NetworkUnloadScenePacket>().AddClientListener(_ => OnChangeScene());
         }
 
         private void OnDisable()
         {
-            PacketListener.GetPacketListener<PlayerInputPackage>().RemoveServerListener(OnInput);
+            PacketListener.GetPacketListener<PlayerInputPacket>().RemoveServerListener(OnInput);
             PacketListener.GetPacketListener<NetworkUnloadScenePacket>().RemoveClientListener(_ => OnChangeScene());
         }
 
         #endregion
 
-        private bool OnInput(PlayerInputPackage arg1, int arg2)
+        private bool OnInput(PlayerInputPacket arg1, int arg2)
         {
             Debug.Log($"MulticamCamera: OnInput {arg1.Key}");
             if (state == CameraState.Cinematic)
@@ -180,11 +181,11 @@ namespace Solis.Misc.Multicam
             }
         }
 
-        public void SetDialogueFocus(CharacterTypeEmote type)
+        public void SetDialogueFocus(DialogCharacter type)
         {
             switch (type)
             {
-                case CharacterTypeEmote.Nina:
+                case DialogCharacter.Nina:
                     if(!nina)
                     {
                         var player = FindFirstObjectByType<PlayerControllerHuman>();
@@ -200,7 +201,7 @@ namespace Solis.Misc.Multicam
                     dialogueCamera.LookAt = nina;
                     dialogueCamera.Follow = nina;
                     break;
-                case CharacterTypeEmote.RAM:
+                case DialogCharacter.RAM:
                     if(!ram)
                     {
                         var player = FindFirstObjectByType<PlayerControllerRobot>();
@@ -216,7 +217,7 @@ namespace Solis.Misc.Multicam
                     dialogueCamera.LookAt = ram;
                     dialogueCamera.Follow = ram;
                     break;
-                case CharacterTypeEmote.Diluvio:
+                case DialogCharacter.Diluvio:
                     if(!diluvio)
                     {
                         var player = FindFirstObjectByType<PlayerControllerRobot>();
@@ -264,7 +265,6 @@ namespace Solis.Misc.Multicam
             {
                 SetCameraBlend(CinemachineBlendDefinition.Style.EaseInOut, .4f);
                 focusCamera.gameObject.SetActive(active);
-                
             }
         }
 
