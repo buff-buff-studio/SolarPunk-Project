@@ -27,7 +27,9 @@ namespace Solis.i18n
 
                 if (parts.Length == 2)
                 {
-                    language.entries.Add(Language.Hash(parts[0]), parts[1].Replace("\r",""));
+                    var hash = Language.Hash(parts[0]);
+                    if(!language.entries.TryAdd(hash, parts[1].Replace("\r","")))
+                        Debug.LogWarning($"Duplicate key '{parts[0]}' in language file '{ctx.assetPath}'");
                 }
             }
             
