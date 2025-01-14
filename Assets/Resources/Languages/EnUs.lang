@@ -1,4 +1,4 @@
-﻿name=English (United States)
+name=English (United States)
 
 #Base List Screen
 list.empty=No Entries Found7
@@ -210,54 +210,55 @@ dialog.label.joy_r=Right Stick
 #Dialog - Megalevel
 dialog.garage.intro_0=What's that noise I keep hearing downstairs?
 dialog.garage.intro_1=<scream><label=nina>!!! Let us out!!!</scream>
-dialog.garage.intro_2=I'm coming down!!
+dialog.garage.intro_2=<scream>I'm coming down!!</scream>
 
 dialog.garage.intro_3=Hey <label=nina>! What took you so long?
-dialog.garage.intro_1=Sorry, I got distracted thinking about your Battery issue
+dialog.garage.intro_1=Sorry, I got distracted thinking about your <b>battery</b> issue
 dialog.garage.intro_2=None of them are working, <label=ram>... we have to get a new one at the Factory, and fast!
 dialog.garage.intro_3=This last storm stopped all deliveries, and it looks like our Farm took a lot of damage too.
 dialog.garage.intro_4=We'll have to fix what we can on the way there!
 dialog.garage.intro_5=<glitch>R-right</glitch> <label=nina>... I'm <Glitch>gl-glad</Glitch> you have a plan... but you <Glitch>st-still</Glitch> have to let us out of this pod...
-dialog.garage.intro_6.1=Pull out the <label=plug_1> by pressing <label=e> on it... or y'know, <glitch>u-use</glitch> the <label=lever> we built just for that.
+dialog.garage.intro_6=Pull out the <label=plug_1> by pressing <label=e> on it... or y'know, <glitch>u-use</glitch> the <label=lever> we built just for that.
 dialog.garage.intro_7=Oh, you're right! Hold on just a minute!
 
-dialog.garage.outside_0=The farm is wrecked... Some of the windmills stopped...
+dialog.garage.outside_0=The <b>Farm</b> is wrecked... Some of the windmills stopped...
 dialog.garage.outside_1=And we'll have to turn on the power in the Greenhouse too.
-dialog.garage.outside_2=Y'all can <rainbow>hop across</rainbow> those rocks over there using <label=space>!
+dialog.garage.outside_2=Y'all can <rainbow>hop across</rainbow> those rocks over there using <label=space> and get to fixin'!
 
-dialog.powerplant.outside_0=Hey <label=nina>, now would be a good time to try that <rainbow>upgrade</rainbow> you got on your arm!
-dialog.powerplant.outside_1=Press <label=space> while you're jumping to form a cloud, and use it as a platform to reach higher places
+dialog.powerplant.outside_0=Hey <label=nina>, now would be a good time to try that <rainbow>upgrade</rainbow> you got on your <b>robot arm</b>!
+dialog.powerplant.outside_1=Press <label=space> while you're jumping to form a <shake>cloud</shake>, and use it as a platform to reach higher places.
 dialog.powerplant.outside_2=Good idea <label=ram>! Hey, see if you can reach that <rainbow>hook</rainbow> at the other side of the river.
-dialog.powerplant.outside_3=Aim at it and press <label=G>, and make sure you're close enough to reach it! 
+dialog.powerplant.outside_3=Aim at it with <label=rmb> and press <label=G>, and make sure you're close enough to reach it! 
 
-dialog.greenhouse.outside_0=<label=nina>, acho que <glitch>vo-você</glitch> consegue passar por aquele buraco ali.
+dialog.greenhouse.outside_0=<label=nina>, I think <glitch>y-yo-u</glitch> can fit through that hole.
 dialog.greenhouse.outside_1=Hmm, you're right <label=ram>! And you can go from above using the <label=zip_line>!
 dialog.greenhouse.outside_2=Okay! I'll see you inside then!
 
 #Dialog - Factory:Depot
 dialog.factory.depot_lever=<Shake>Hmmm...</Shake> Looks like this <label=lever> redirects the flow of <label=power>.
 
-dialog.factory_depot_password=This password seems useful... I should try to remember it.
+dialog.factory_depot_password=This <b>password</b> seems useful... I should try to remember it.
 
 dialog.factory_depot.elevator_1=Finally, we're at the Factory <label=ram>!
 dialog.factory_depot.elevator_2=Let's go <label=nina>!
-dialog.factory_depot.elevator_3=<shake><rainbow>Yeehaw! </rainbow></shake>*webit*
+dialog.factory_depot.elevator_3=<shake><rainbow>Yeehaw! </rainbow></shake>*ribbit*
 
 #Dialog - Factory:Inside
 dialog.factory.fan_0=<scream><label=ram>!</scream> I'm gonna need your help to get to the other side! 
-dialog.factory.fan_1=Hey partner, *ribbit*, there's a hook right there! 
-dialog.factory.fan_2=<glitch>Ri-right!</glitch> And it looks like each <label=lever> controls a <label=fan>
-dialog.factory.fan_3=I'm on it! Just <glitch>give me a minute!</glitch>
-
-dialog.factory.maze_0=There's the <scream>battery</scream>! We need to get to that blue area!
-dialog.factory.maze_1=One of y'all should stay here and give directions with the map 
+dialog.factory.fan_1=<shake>Hey pardner</shake>, *ribbit*, there's a <label=hook> right there! 
+dialog.factory.fan_2=<glitch>Ri-right!</glitch> And it looks like each <label=lever> <glitch>c-con-trol-ls a </glitch><label=fan>
+dialog.factory.fan_3=I'll get on it! Just <glitch>give me a minute!</glitch>
+dialog.factory.fan_4=Your <glitch>glitches</glitch> are getting worse <label=ram>, we have to be fast but please be careful!
 
 dialog.factory.valve=<label=ram>, I can't rotate the <label=valve>, could you try?
 
-dialog.factory.scanner=<Shake>Oh no!</Shake> The <label=palm_scanner> <Glitch>w-was t-turned off!</Glitch> Maybe one of the charging stations still work.
+dialog.factory.maze_0=There's the <scream>battery</scream>! We need to get to that <b>blue area</b>!
+dialog.factory.maze_1=One of y'all <shake>*ribbit*</shake> should stay here and give directions with the map!
 
-dialog.factory.tank=We can pull this <label=lever> to mix the liquids in the tank...
+dialog.factory.scanner=<shake>Oh no!</shake> The <label=palm_scanner> <glitch>w-was t-turned off!</glitch> Maybe one of the charging stations still work.
 
-dialog.factory.treadmill_1=<scream><size=40>Woowee!</size></scream> That must be the <rainbow>charging station!</rainbow>
-dialog.factory.treadmill_2=Looks like we need to complete this loading order to open the door. 
+dialog.factory.tank=We can pull this <label=lever> to <b>mix the liquids</b> in the tank...
+
+dialog.factory.treadmill_1=<scream>Woowee!</scream> That must be the <rainbow>charging station!</rainbow>
+dialog.factory.treadmill_2=Looks like we need to <glitch>c-com-pplet-te</glitch> this <glitch>ll-loa-dding-g ord-der</glitch> to open the door. 
 dialog.factory.treadmill_3=I think this <label=button> resets the conveyor belts in case we mess up the order.
