@@ -67,6 +67,12 @@ namespace Solis.i18n
         public static string Localize(string key, params object[] args)
         {
             var currentLanguage = Instance.currentLanguage;
+           
+            #if UNITY_EDITOR
+            if (currentLanguage == null)
+                currentLanguage = Instance.currentLanguage = Resources.Load<Language>("Languages/EnUs");
+            #endif
+            
             if (!currentLanguage.entries.TryGetValue(Hash(key), out var entry)) 
                 return $"[missing_{key}]";
             
