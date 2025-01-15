@@ -61,7 +61,14 @@ namespace Solis.Misc.Cutscenes
         private void Update()
         {
             if(SolisInput.GetKeyDown("Skip"))
-                SendPacket(new PlayerInputPacket { Key = KeyCode.Return, Id = Id, CharacterType = CharacterType.Human}, true);
+            {
+                var packet = new PlayerInputPacket
+                    { Key = KeyCode.Return, Id = Id, CharacterType = CharacterType.Human };
+                if(!HasAuthority)
+                    SendPacket(packet, true);
+                else
+                    OnSkip(packet, 0);
+            }
         }
 
         #endregion
