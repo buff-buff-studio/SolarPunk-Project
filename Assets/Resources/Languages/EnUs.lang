@@ -217,7 +217,7 @@ dialog.garage.intro_4=Sorry, I got distracted thinking about your <b>battery</b>
 dialog.garage.intro_5=None of them are working, <label=ram>... we have to get a new one at the Factory, and fast!
 dialog.garage.intro_6=This last storm stopped all deliveries, and it looks like our Farm took a lot of damage too.
 dialog.garage.intro_7=We'll have to fix what we can on the way there!
-dialog.garage.intro_8=<glitch>R-right</glitch> <label=nina>... I'm <Glitch>gl-glad</Glitch> you have a plan... but you <Glitch>st-still</Glitch> have to let us out of this pod...
+dialog.garage.intro_8=<glitch>R-right</glitch> <label=nina>... I'm <glitch>gl-glad</glitch> you have a plan... but you <glitch>st-still</glitch> have to let us out of this pod...
 dialog.garage.intro_9=Pull out the <label=plug_1> by pressing <label=e> on it... or y'know, <glitch>u-use</glitch> the <label=lever> we built just for that.
 dialog.garage.intro_10=Oh, you're right! Hold on just a minute!
 
@@ -237,28 +237,41 @@ dialog.greenhouse.outside_2=Okay! I'll see you inside then!
 #Dialog - Factory:Depot
 dialog.factory.depot_lever=<Shake>Hmmm...</Shake> Looks like this <label=lever> redirects the flow of <label=power>.
 
-dialog.factory_depot_password=This <b>password</b> seems useful... I should try to remember it.
+dialog.factory.depot_password=This <b>password</b> seems useful... I should try to remember it.
 
-dialog.factory_depot.elevator_1=Finally, we're at the Factory <label=ram>!
-dialog.factory_depot.elevator_2=Let's go <label=nina>!
-dialog.factory_depot.elevator_3=<shake><rainbow>Yeehaw! </rainbow></shake>*ribbit*
+dialog.factory.depot.elevator_0=Finally, we're at the Factory <label=ram>!
+dialog.factory.depot.elevator_1=Let's go <label=nina>!
+dialog.factory.depot.elevator_2=<shake><rainbow>Yeehaw! </rainbow></shake>*ribbit*
 
 #Dialog - Factory:Inside
 dialog.factory.fan_0=<scream><label=ram>!</scream> I'm gonna need your help to get to the other side! 
-dialog.factory.fan_1=<shake>Hey pardner</shake>, *ribbit*, there's a <label=hook> right there! 
-dialog.factory.fan_2=<glitch>Ri-right!</glitch> And it looks like each <label=lever> <glitch>c-con-trol-ls a </glitch><label=fan>
+dialog.factory.fan_1=<shake>Hey pardner</shake>, *ribbit*, there's a hook right there on the roof! 
+dialog.factory.fan_2=<glitch>Ri-right!</glitch> And it looks like each <label=lever> <glitch>c-con-trol-ls a </glitch>fan.
 dialog.factory.fan_3=I'll get on it! Just <glitch>give me a minute!</glitch>
 dialog.factory.fan_4=Your <glitch>glitches</glitch> are getting worse <label=ram>, we have to be fast but please be careful!
 
 dialog.factory.valve=<label=ram>, I can't rotate the <label=valve>, could you try?
 
-dialog.factory.maze_0=There's the <scream>battery</scream>! We need to get to that <b>blue area</b>!
-dialog.factory.maze_1=One of y'all <shake>*ribbit*</shake> should stay here and give directions with the map!
-
 dialog.factory.scanner=<shake>Oh no!</shake> The <label=palm_scanner> <glitch>w-was t-turned off!</glitch> Maybe one of the charging stations still work.
 
 dialog.factory.tank=We can pull this <label=lever> to <b>mix the liquids</b> in the tank...
 
-dialog.factory.treadmill_1=<scream>Woowee!</scream> That must be the <rainbow>charging station!</rainbow>
-dialog.factory.treadmill_2=Looks like we need to <glitch>c-com-pplet-te</glitch> this <glitch>ll-loa-dding-g ord-der</glitch> to open the door. 
-dialog.factory.treadmill_3=I think this <label=button> resets the conveyor belts in case we mess up the order.
+dialog.factory.conveyor_0=<scream>Woowee!</scream> That must be the <rainbow>charging station!</rainbow>
+dialog.factory.conveyor_1=Looks like we need to <glitch>c-com-pplet-te</glitch> this <glitch>ll-loa-dding-g ord-der</glitch> to open the door. 
+dialog.factory.conveyor_2=I think this <label=button> resets the conveyor belts in case we mess up the order.
+
+#Dialog - Factory:Storage
+dialog.factory.maze_0=There's the <scream>battery</scream>! We need to get to that <b>blue area</b>!
+dialog.factory.maze_1=One of y'all <shake>*ribbit*</shake> should stay here and give directions with the map!
+
+#Dialog - Intro Cutscene
+dialog.intro.cutscene_0=
+dialog.intro.cutscene_1=
+dialog.intro.cutscene_2=
+dialog.intro.cutscene_3=
+
+#Dialog - Outro Cutscene
+dialog.outro.cutscene_0=After a long adventure...
+dialog.outro.cutscene_1=Nina and RAM managed to get a new battery...
+dialog.outro.cutscene_2=And can now live happily at their farm!
+dialog.outro.cutscene_3=Thank you for playing Solis!

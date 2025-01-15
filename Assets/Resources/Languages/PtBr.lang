@@ -217,7 +217,7 @@ dialog.garage.intro_4=Desculpa, fiquei distraída pensando no problema da sua <b
 dialog.garage.intro_5=Nenhuma delas funciona, <label=ram>... temos que ir pra <b>Fábrica</b> e pegar uma nova, e rápido!
 dialog.garage.intro_6=Essa última tempestade cancelou todas as entregas, e nossa <b>Fazenda</b> também sofreu bastante.
 dialog.garage.intro_7=Vamos ter que consertar o que acharmos no caminho!
-dialog.garage.intro_8=<glitch>Ce-certo</glitch> <label=nina>... Eu <Glitch>fi-fico f-feliz</Glitch> que você tem um plano... mas você <Glitch>a-aind-da</Glitch> não tirou a gente daqui...
+dialog.garage.intro_8=<glitch>Ce-certo</glitch> <label=nina>... Eu <glitch>fi-fico f-feliz</glitch> que você tem um plano... mas você <glitch>a-aind-da</glitch> não tirou a gente daqui...
 dialog.garage.intro_9=Tire a <label=plug_1> apertando <label=e> nela... ou sabe, <glitch>u-usa</glitch> a <label=lever> que nós montamos só pra isso.
 dialog.garage.intro_10=Ah, certo! Segura aí um minutinho!
 
@@ -237,28 +237,41 @@ dialog.greenhouse.outside_2=Certo! Então te vejo lá dentro!
 #Dialog - Factory:Depot
 dialog.factory.depot_lever=<Shake>Hmmm...</Shake> Parece que essa <label=lever> redireciona a <label=power>.
 
-dialog.factory_depot_password=Essa <b>senha</b> deve ser útil... Vou tentar lembrar dela.
+dialog.factory.depot_password=Essa <b>senha</b> deve ser útil... Vou tentar lembrar dela.
 
-dialog.factory_depot.elevator_1=Finalmente chegamos na <b>Fábrica</b> <label=ram>!
-dialog.factory_depot.elevator_2=Vamos lá<label=nina>!
-dialog.factory_depot.elevator_3=<shake><rainbow>Bão demais sô! </rainbow></shake>*webit*
+dialog.factory.depot.elevator_0=Finalmente chegamos na <b>Fábrica</b> <label=ram>!
+dialog.factory.depot.elevator_1=Vamos lá <label=nina>!
+dialog.factory.depot.elevator_2=<shake><rainbow>Bão demais sô! </rainbow></shake>*webit*
 
 #Dialog - Factory:Inside
 dialog.factory.fan_0=<scream><label=ram>!</scream> Eu vou precisar da sua ajuda pra chegar do outro lado! 
-dialog.factory.fan_1=<shake>Olha ali sô</shake>, *webit*, tem um <label=hook> ali uai! 
-dialog.factory.fan_2=<glitch>Ce-certo!</glitch> E parece que cada <label=lever> <glitch>co-c-contrrro-ola</glitch> um <label=fan>
+dialog.factory.fan_1=<shake>Olha ali sô</shake>, *webit*, tem um gancho logo ali no teto <shake>uai</shake>! 
+dialog.factory.fan_2=<glitch>Ce-certo!</glitch> E parece que cada <label=lever> <glitch>co-c-contrrro-ola u-um</glitch> ventilador.
 dialog.factory.fan_3=Lá vou eu! Só <glitch>u-um m-minnn-nutinho!</glitch>
 dialog.factory.fan_4=Seus <glitch>glitches</glitch> estão piorando <label=ram>, temos que ser rápidos, mas tome cuidado!
 
 dialog.factory.valve=<label=ram>, Eu não consigo girar aquela <label=valve>, você pode tentar?
 
-dialog.factory.maze_0=Ali está a <scream>battery</scream>! Temos que chegar naquela <b>sala azul</b>!
-dialog.factory.maze_1=Um docês <shake>*ribbit*</shake> devia ficar aqui e ajudar o outro com o mapa! 
-
-dialog.factory.scanner=<Shake>Ah não!</Shake> O <label=palm_scanner> <glitch>f-foi d-des-sligado!</glitch> Talvez alguma das estações de carregamento ainda funcionem.
+dialog.factory.scanner=<shake>Ah não!</shake> O <label=palm_scanner> <glitch>f-foi d-des-sligado!</glitch> Talvez alguma das estações de carregamento ainda funcionem.
 
 dialog.factory.tank=Parece que essa <label=lever> vai <b>misturar os líquidos</b> do tanque...
 
-dialog.factory.treadmill_1=<scream>Ih rapaz!</scream> Aquilo ali deve ser a <rainbow>estação de carregamento!</rainbow>
-dialog.factory.treadmill_2=Acho que a gente tem que <glitch>c-com-pplet-tar</glitch> essa <glitch>ent-tr-trrega p-pra</glitch> abrir a porta. 
-dialog.factory.treadmill_3=E esse <label=button> aqui reinicia o processo caso a gente cometa um erro.
+dialog.factory.conveyor_0=<scream>Ih rapaz!</scream> Aquilo ali deve ser a <rainbow>estação de carregamento!</rainbow>
+dialog.factory.conveyor_1=Acho que a gente tem que <glitch>c-com-pplet-tar</glitch> essa <glitch>ent-tr-trrega p-pra</glitch> abrir a porta. 
+dialog.factory.conveyor_2=E esse <label=button> aqui reinicia o processo caso a gente cometa um erro.
+
+#Dialog - Factory:Storage
+dialog.factory.maze_0=Ali está a <scream>battery</scream>! Temos que chegar naquela <b>sala azul</b>!
+dialog.factory.maze_1=Um docês <shake>*ribbit*</shake> devia ficar aqui e ajudar o outro com o mapa!
+
+#Dialog - Intro Cutscene
+dialog.intro.cutscene_0=
+dialog.intro.cutscene_1=
+dialog.intro.cutscene_2=
+dialog.intro.cutscene_3=
+
+#Dialog - Outro Cutscene
+dialog.outro.cutscene_0=Depois de uma longa aventura...
+dialog.outro.cutscene_1=Nina e RAM conseguiram uma bateria nova...
+dialog.outro.cutscene_2=E agora podem viver felizes em sua fazenda!
+dialog.outro.cutscene_3=Obrigado por jogar Solis!
