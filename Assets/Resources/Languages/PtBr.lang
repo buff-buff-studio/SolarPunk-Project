@@ -164,28 +164,28 @@ dialog.character.ram=<sprite=24> RAM
 dialog.character.diluvio=<sprite=22> Dilúvio
 
 #Dialog - Labels
-dialog.label.plate=Plate
-dialog.label.button=Button
-dialog.label.lever=Lever
-dialog.label.palm_scanner=Palm Scanner
-dialog.label.robot_scanner=Robot Scanner
-dialog.label.zipline=Zipline
-dialog.label.wind_turbine=Wind Turbine
-dialog.label.plug_red=Red Plug
-dialog.label.plug_blue=Blue Plug
-dialog.label.socket_red=Red Socket
-dialog.label.socket_blue=Blue Socket
-dialog.label.box=Box
-dialog.label.box_heavy=Heavy Box
-dialog.label.box_white=White Box
-dialog.label.barrel=Barrel
+dialog.label.plate=Placa
+dialog.label.button=Botão
+dialog.label.lever=Alavanca
+dialog.label.palm_scanner=Scanner de Palma
+dialog.label.robot_scanner=Scanner de Robô
+dialog.label.zipline=Tirolesa
+dialog.label.wind_turbine=Turbina Eólica
+dialog.label.plug_red=Cabo Vermelho
+dialog.label.plug_blue=Cabo Azul
+dialog.label.socket_red=Tomada Vermelha
+dialog.label.socket_blue=Tomada Azul
+dialog.label.box=Caixa
+dialog.label.box_heavy=Caixa Pesada
+dialog.label.box_white=Caixa Branca
+dialog.label.barrel=Barril
 dialog.label.container=Container
-dialog.label.drum=Plastic Drum
-dialog.label.cardboard_box=Cardboard Box
-dialog.label.crate=Wooden Crate
-dialog.label.power=Power
-dialog.label.warning=Warning
-dialog.label.stop=Stop
+dialog.label.drum=Tonel
+dialog.label.cardboard_box=Caixa de Papelão
+dialog.label.crate=Caixa de Madeira
+dialog.label.power=Energia
+dialog.label.warning=Aviso
+dialog.label.stop=Pare
 dialog.label.diluvio=Dilúvio
 dialog.label.nina=Nina
 dialog.label.ram=RAM
@@ -195,69 +195,70 @@ dialog.label.s=S
 dialog.label.d=D
 dialog.label.e=E
 dialog.label.g=G
-dialog.label.space=Space
+dialog.label.space=Barra de Espaço
 dialog.label.enter=Enter
 dialog.label.shift=Shift
-dialog.label.lmb=Left Mouse Button
-dialog.label.rmb=Right Mouse Button
+dialog.label.lmb=Botão Esquerdo do Mouse
+dialog.label.rmb=Botão Direito do Mouse
 dialog.label.joy_a=A
 dialog.label.joy_b=B
 dialog.label.joy_x=X
 dialog.label.joy_y=Y
-dialog.label.joy_l=Left Stick
-dialog.label.joy_r=Right Stick
+dialog.label.joy_l=Analógico Esquerdo
+dialog.label.joy_r=Analógico Direito
 
 #Dialog - Megalevel
-dialog.garage.intro_0=What's that noise I keep hearing downstairs?
-dialog.garage.intro_1=<scream><label=nina>!!! Let us out!!!</scream>
-dialog.garage.intro_2=I'm coming down!!
+dialog.garage.intro_0=Que barulho é esse vindo lá de baixo?
+dialog.garage.intro_1=<scream><label=nina>!!! Tira a gente daqui sô!!!</scream>
+dialog.garage.intro_2=<scream>Já vai!!</scream>
 
-dialog.garage.intro_3=Hey <label=nina>! What took you so long?
-dialog.garage.intro_4=Sorry, I got distracted thinking about your Battery issue
-dialog.garage.intro_5=None of them are working, <label=ram>... we have to get a new one at the Factory, and fast!
-dialog.garage.intro_6=This last storm stopped all deliveries, and it looks like our Farm took a lot of damage too.
-dialog.garage.intro_7=We'll have to fix what we can on the way there!
-dialog.garage.intro_8=<glitch>R-right</glitch> <label=nina>... I'm <glitch>gl-glad</glitch> you have a plan... but you <glitch>st-still</glitch> have to let us out of this pod...
-dialog.garage.intro_9.1=Pull out the <label=plug_1> by pressing <label=e> on it... or y'know, <glitch>u-use</glitch> the <label=lever> we built just for that.
-dialog.garage.intro_10=Oh, you're right! Hold on just a minute!
+dialog.garage.intro_3=Ei <label=nina>! Por que demorou tanto?
+dialog.garage.intro_4=Desculpa, fiquei distraída pensando no problema da sua <b>bateria</b>
+dialog.garage.intro_5=Nenhuma delas funciona, <label=ram>... temos que ir pra <b>Fábrica</b> e pegar uma nova, e rápido!
+dialog.garage.intro_6=Essa última tempestade cancelou todas as entregas, e nossa <b>Fazenda</b> também sofreu bastante.
+dialog.garage.intro_7=Vamos ter que consertar o que acharmos no caminho!
+dialog.garage.intro_8=<glitch>Ce-certo</glitch> <label=nina>... Eu <Glitch>fi-fico f-feliz</Glitch> que você tem um plano... mas você <Glitch>a-aind-da</Glitch> não tirou a gente daqui...
+dialog.garage.intro_9=Tire a <label=plug_1> apertando <label=e> nela... ou sabe, <glitch>u-usa</glitch> a <label=lever> que nós montamos só pra isso.
+dialog.garage.intro_10=Ah, certo! Segura aí um minutinho!
 
-dialog.garage.outside_0=The farm is wrecked... Some of the windmills stopped...
-dialog.garage.outside_1=And we'll have to turn on the power in the Greenhouse too.
-dialog.garage.outside_2=Y'all can <rainbow>hop across</rainbow> those rocks over there using <label=space>!
+dialog.garage.outside_0=A <b>Fazenda</b> tá detonada... Alguns dos moinhos pararam...
+dialog.garage.outside_1=E vamos ter que ligar a <label=power> na <b>Estufa</b> também.
+dialog.garage.outside_2=Cês podem <rainbow>pular</rainbow> aquelas pedras alí apertando <label=space> e começar o trabalho!
 
-dialog.powerplant.outside_0=Hey <label=nina>, now would be a good time to try that <rainbow>upgrade</rainbow> you got on your arm!
-dialog.powerplant.outside_1=Press <label=space> while you're jumping to form a cloud, and use it as a platform to reach higher places
-dialog.powerplant.outside_2=Good idea <label=ram>! Hey, see if you can reach that <rainbow>hook</rainbow> at the other side of the river.
-dialog.powerplant.outside_3=Aim at it and press <label=G>, and make sure you're close enough to reach it! 
+dialog.powerplant.outside_0=Ei <label=nina>, agora seria uma boa hora pra testar aquele <rainbow>upgrade</rainbow> que você fez pro seu <b>braço mecânico</b>!
+dialog.powerplant.outside_1=Aperte <label=space> enquanto pula pra criar uma <shake>nuvem</shake>, e use ela pra alcançar lugares mais altos.
+dialog.powerplant.outside_2=Boa ideia <label=ram>! E vê se você consegue atirar seu <rainbow>hook</rainbow> ali no outro lado do rio.
+dialog.powerplant.outside_3=Mire nele com <label=rmb> e aperte <label=G>, e lembre de estar perto o suficiente dele! 
 
 dialog.greenhouse.outside_0=<label=nina>, acho que <glitch>vo-você</glitch> consegue passar por aquele buraco ali.
-dialog.greenhouse.outside_1=Hmm, you're right <label=ram>! And you can go from above using the <label=zip_line>!
-dialog.greenhouse.outside_2=Okay! I'll see you inside then!
+dialog.greenhouse.outside_1=Verdade, <label=ram>! E você pode ir ali por cima usando a <label=zip_line>!
+dialog.greenhouse.outside_2=Certo! Então te vejo lá dentro!
 
 #Dialog - Factory:Depot
-dialog.factory.depot_lever=<shake>Hmmm...</shake> Looks like this <label=lever> redirects the flow of <label=power>.
+dialog.factory.depot_lever=<Shake>Hmmm...</Shake> Parece que essa <label=lever> redireciona a <label=power>.
 
-dialog.factory_depot_password=This password seems useful... I should try to remember it.
+dialog.factory_depot_password=Essa <b>senha</b> deve ser útil... Vou tentar lembrar dela.
 
-dialog.factory_depot.elevator_1=Finally, we're at the Factory <label=ram>!
-dialog.factory_depot.elevator_2=Let's go <label=nina>!
-dialog.factory_depot.elevator_3=<shake><rainbow>Yeehaw! </rainbow></shake>*webit*
+dialog.factory_depot.elevator_1=Finalmente chegamos na <b>Fábrica</b> <label=ram>!
+dialog.factory_depot.elevator_2=Vamos lá<label=nina>!
+dialog.factory_depot.elevator_3=<shake><rainbow>Bão demais sô! </rainbow></shake>*webit*
 
 #Dialog - Factory:Inside
-dialog.factory.fan_0=<scream><label=ram>!</scream> I'm gonna need your help to get to the other side! 
-dialog.factory.fan_1=Hey partner, *ribbit*, there's a hook right there! 
-dialog.factory.fan_2=<glitch>Ri-right!</glitch> And it looks like each <label=lever> controls a <label=fan>
-dialog.factory.fan_3=I'm on it! Just <glitch>give me a minute!</glitch>
+dialog.factory.fan_0=<scream><label=ram>!</scream> Eu vou precisar da sua ajuda pra chegar do outro lado! 
+dialog.factory.fan_1=<shake>Olha ali sô</shake>, *webit*, tem um <label=hook> ali uai! 
+dialog.factory.fan_2=<glitch>Ce-certo!</glitch> E parece que cada <label=lever> <glitch>co-c-contrrro-ola</glitch> um <label=fan>
+dialog.factory.fan_3=Lá vou eu! Só <glitch>u-um m-minnn-nutinho!</glitch>
+dialog.factory.fan_4=Seus <glitch>glitches</glitch> estão piorando <label=ram>, temos que ser rápidos, mas tome cuidado!
 
-dialog.factory.maze_0=There's the <scream>battery</scream>! We need to get to that blue area!
-dialog.factory.maze_1=One of y'all should stay here and give directions with the map 
+dialog.factory.valve=<label=ram>, Eu não consigo girar aquela <label=valve>, você pode tentar?
 
-dialog.factory.valve=<label=ram>, I can't rotate the <label=valve>, could you try?
+dialog.factory.maze_0=Ali está a <scream>battery</scream>! Temos que chegar naquela <b>sala azul</b>!
+dialog.factory.maze_1=Um docês <shake>*ribbit*</shake> devia ficar aqui e ajudar o outro com o mapa! 
 
-dialog.factory.scanner=<shake>Oh no!</shake> The <label=palm_scanner> <glitch>w-was t-turned off!</glitch> Maybe one of the charging stations still work.
+dialog.factory.scanner=<Shake>Ah não!</Shake> O <label=palm_scanner> <glitch>f-foi d-des-sligado!</glitch> Talvez alguma das estações de carregamento ainda funcionem.
 
-dialog.factory.tank=We can pull this <label=lever> to mix the liquids in the tank...
+dialog.factory.tank=Parece que essa <label=lever> vai <b>misturar os líquidos</b> do tanque...
 
-dialog.factory.treadmill_1=<scream><size=40>Woowee!</size></scream> That must be the <rainbow>charging station!</rainbow>
-dialog.factory.treadmill_2=Looks like we need to complete this loading order to open the door. 
-dialog.factory.treadmill_3=I think this <label=button> resets the conveyor belts in case we mess up the order.
+dialog.factory.treadmill_1=<scream>Ih rapaz!</scream> Aquilo ali deve ser a <rainbow>estação de carregamento!</rainbow>
+dialog.factory.treadmill_2=Acho que a gente tem que <glitch>c-com-pplet-tar</glitch> essa <glitch>ent-tr-trrega p-pra</glitch> abrir a porta. 
+dialog.factory.treadmill_3=E esse <label=button> aqui reinicia o processo caso a gente cometa um erro.
