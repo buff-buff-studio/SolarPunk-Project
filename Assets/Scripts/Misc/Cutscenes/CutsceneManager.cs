@@ -166,11 +166,10 @@ namespace Solis.Misc.Cutscenes
         {
             if(!isEnding)
             {
-                GameManager.Instance.SaveData.currentLevel++;
+                if(HasAuthority) GameManager.Instance.SaveData.currentLevel++;
                 GameManager.Instance.LoadLevel();
             }
-            else
-                GameManager.Instance.ButtonLeaveGame();
+            else GameManager.Instance.ButtonLeaveGame();
         }
         #endregion
     }
