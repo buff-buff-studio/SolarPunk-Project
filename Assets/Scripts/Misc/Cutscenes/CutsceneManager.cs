@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NetBuff;
 using NetBuff.Components;
 using NetBuff.Interface;
 using NetBuff.Misc;
 using Solis.Audio;
 using Solis.Core;
+using Solis.Data;
+using Solis.Interface.Input;
 using Solis.Packets;
+using Solis.Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +24,9 @@ namespace Solis.Misc.Cutscenes
         #region Inspector Fields
         [Header("REFERENCES")]
         public TMP_Text labelDone;
-        public Button buttonDone;
+        public Animator skipAnimator;
+        public CutsceneObject cutscene;
+        public bool isEnding = false;
         
         [Header("STATE")]
         [ServerOnly]
@@ -36,15 +42,28 @@ namespace Solis.Misc.Cutscenes
             
             doneCount.OnValueChanged += _OnDoneCountChanged;
             playerCount.OnValueChanged += _OnDoneCountChanged;
+            cutscene.OnCutsceneEnd += MarkFinished;
+
+            PacketListener.GetPacketListener<PlayerInputPacket>().AddServerListener(OnSkip);
             
             _OnDoneCountChanged(0, doneCount.Value);
+            cutscene.Play();
         }
         
         private void OnDisable()
         {
             doneCount.OnValueChanged -= _OnDoneCountChanged;
             playerCount.OnValueChanged -= _OnDoneCountChanged;
+            cutscene.OnCutsceneEnd -= MarkFinished;
+            PacketListener.GetPacketListener<PlayerInputPacket>().RemoveServerListener(OnSkip);
         }
+
+        private void Update()
+        {
+            if(SolisInput.GetKeyDown("Skip"))
+                SendPacket(new PlayerInputPacket { Key = KeyCode.Return, Id = Id, CharacterType = CharacterType.Human}, true);
+        }
+
         #endregion
         
         #region Network Callbacks
@@ -84,13 +103,31 @@ namespace Solis.Misc.Cutscenes
                     doneList.Remove(clientId);
                     doneCount.Value = doneList.Count;
                 }
-                
+
                 if(doneList.Count >=  NetworkManager.Instance.Transport.GetClientCount())
                 {
                     // All players have finished the cutscene
                     _OnEveryoneFinished();
                 }
             }
+        }
+
+        private bool OnSkip(PlayerInputPacket arg1, int arg2)
+        {
+            Debug.Log($"Cutscene: OnInput {arg1.Key}");
+            if (!doneList.Contains(arg2))
+            {
+                doneList.Add(arg2);
+                doneCount.Value = doneList.Count;
+            }
+
+            if(doneList.Count >=  NetworkManager.Instance.Transport.GetClientCount())
+            {
+                // All players have finished the cutscene
+                _OnEveryoneFinished();
+            }
+
+            return false;
         }
         #endregion
 
@@ -102,7 +139,7 @@ namespace Solis.Misc.Cutscenes
         [ClientOnly]
         public void MarkFinished()
         {
-            buttonDone.interactable = false;
+            //skipAnimator.SetTrigger("Skip");
             var packet = new CutsceneStatePacket
             {
                 Id = Id,
@@ -120,9 +157,13 @@ namespace Solis.Misc.Cutscenes
         
         private void _OnEveryoneFinished()
         {
-            var audio = "CutScene" + Random.Range(1, 4);
-            AudioSystem.Instance.PlayVfx(audio);
-            GameManager.Instance.LoadLevel();
+            if(!isEnding)
+            {
+                GameManager.Instance.SaveData.currentLevel++;
+                GameManager.Instance.LoadLevel();
+            }
+            else
+                GameManager.Instance.ButtonLeaveGame();
         }
         #endregion
     }
